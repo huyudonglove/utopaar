@@ -54,6 +54,12 @@
             {{moduleTypeList.length?moduleTypeList.filter(v=>v.code==scope.row.category)[0].description:''}}
           </template>
         </el-table-column>
+        <el-table-column prop="provinceCityArea" label="所属地区" align="center">
+          <template slot-scope="scope">
+            <div style="white-space:pre-line;">{{scope.row.provinceCityArea.split(',').slice(0,2).join('\n')}}</div>
+            <div style="cursor:pointer;" v-if="scope.row.provinceCityArea.split(',').length>2" @click="showCity(scope)">...</div>
+          </template>
+        </el-table-column>
         <el-table-column prop="title" label="标题" align="center"></el-table-column>
         <el-table-column prop="effectFrom" label="投放时段" sortable align="center">
           <template slot-scope="scope">
@@ -87,6 +93,9 @@
         </el-table-column>
       </el-table>
       <pagination v-if="showPagination"></pagination>
+      <el-dialog :visible.sync="cityShow" width="200px" :destroy-on-close="true" center>
+        <div style="white-space:pre-line;text-align:center;">{{this.citys}}</div>
+      </el-dialog>
     </div>
     <div>
       <router-view></router-view>
@@ -116,6 +125,8 @@ export default {
       tableHeight:0,
       putTime:'',
       sort:{},
+      cityShow:false,
+      citys:'',
     }
   },
   computed:{
@@ -161,6 +172,10 @@ export default {
     }
   },
   methods:{
+    showCity(scope){
+      this.cityShow=true;
+      this.citys = scope.row.provinceCityArea.split(',').join('\n');
+    },
     listData(){//列表
       getModuleList(this.$route.query).then(res=>{
         this.moduleList = res.data.items;

@@ -277,6 +277,13 @@ export default {
       }
       this.appList();
     },
+    inputPosition(){
+      if(this.positionPage!=1){
+        this.positionPage=1;
+      }
+      this.getPositionList(this.clickTreeId);
+      this.clashPosition();
+    },
     playType(){
       if(this.playPage!=1){
         this.playPage=1;
