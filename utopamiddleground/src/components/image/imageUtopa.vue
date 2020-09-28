@@ -264,7 +264,7 @@
     <div>
       <el-dialog title="新建识别图" :visible.sync="dialogVisible" width="40%" @close="cancle()">
         <div><span style="color: #f56c6c;margin-right: 2px;">*</span>识别图名称：
-        <el-input v-model="imageName" maxlength="50"></el-input>
+          <el-input v-model="imageName" maxlength="50"></el-input>
         </div>
         <div>
           <span style="color: #f56c6c;margin-right: 2px;">*</span>上传识别图：
@@ -382,233 +382,233 @@
   import { Base64 } from 'js-base64';
   import {mapState,mapActions} from 'vuex'
   export default {
-        name: "imageUtopa",
-        data(){
-          return{
-              activeName:'first',
-              currentPage:1,
-              total:0,
-              page:1,
-              showPagination:false,
-              items:[],
-              dialogVisible:false,
-              imageName:'',
-              imageUrl:'',
-              header:{
-                Authorization:this.$cookies.get('middlegroundToken')
-              },
-            treeData:[],
-            filterText:'',
-            props: {
-              label: "name",
-              children: 'children',
-              value:'id',
-            },
-            positionId:'',
-            imageWidth:'',
-            imageId:'',
-            editName:false,
-            editId:'',
-            searchName:'',
-            treeHeight:'',
-            state:'',
-            positionX:'',
-            positionY:'',
-            positionZ:'',
-            relationX:'',
-            relationY:'',
-            relationZ:''
-          }
+    name: "imageUtopa",
+    data(){
+      return{
+        activeName:'first',
+        currentPage:1,
+        total:0,
+        page:1,
+        showPagination:false,
+        items:[],
+        dialogVisible:false,
+        imageName:'',
+        imageUrl:'',
+        header:{
+          Authorization:this.$cookies.get('middlegroundToken')
         },
-        components: {
-          navMenu,
-          headNav
+        treeData:[],
+        filterText:'',
+        props: {
+          label: "name",
+          children: 'children',
+          value:'id',
         },
-       computed:{
-          ...mapState('currentUserPower',['mapListPower'])
-       },
-       inject:['replace','reload'],
-       methods:{
-         ...mapActions('currentUserPower',['getUserPower']),
-         handleClick(tab, event) {
-           console.log(tab, event);
-           this.currentPage=1;
-           this.getImage();
-         },
-         getImage(){
-           let checkState='';
-           this.activeName=="first"?(()=>{
-              checkState='';
-           })():'';
-           this.activeName=="second"?(()=>{
-             checkState=1;
-           })():'';
-           this.activeName=="third"?(()=>{
-             checkState=2;
-           })():'';
-           this.activeName=="fourth"?(()=>{
-             checkState=3;
-           })():'';
-
-           let msg={
-             name:this.searchName,
-             'checkState':checkState,
-             pageNum:this.currentPage,
-             pageSize:5,
-             source:'Middleground',
-             middleGroundAssertId:this.positionId
-           }
-          getImage(msg).then(res=>{
-            //console.log(res,999)
-            res.code?this.$message.error(res.msg):(()=>{
-              res.data.items.map(v=>v.webUrl=Base64.decode(v.pic))
-              console.log(res.data.items,88888)
-              this.items=res.data.items;
-              this.total=res.data.total;
-            })();
-          })
-         },
-         pageChange(val){
-          console.log(val)
-           this.currentPage=val;
-         } ,
-         handleAvatarSuccess(res, file) {
-           console.log(res,file,777777);
-           this.imageId=res.data.fileId;
-           this.imageUrl = URL.createObjectURL(file.raw);
-         },
-         beforeAvatarUpload(file) {
-           console.log(file,999999)
-           const isJPG = file.type === 'image/jpeg'||file.type==='image/png';
-           //const isPng=file.type==='image/png';
-           const isLt2M = file.size / 1024 / 1024 < 2;
-           if (!isJPG) {
-             this.$message.error('上传图片只能是 JPG/PNG 格式!');
-           }
-           if (!isLt2M) {
-             this.$message.error('上传图片大小不能超过 2MB!');
-           }
-           return isJPG && isLt2M;
-         },
-         handleNodeClick(data) {
-           console.log(data);
-           data.type==6?(()=>{
-             this.currentPage=1;
-             this.searchName='';
-             this.positionId=data.id;
-             this.getImage();
-           })():(()=>{
-             this.positionId=''
-           })();
-         },
-         filterNode(value, data) {
-           if (!value) return true;
-           return data.name.indexOf(value) !== -1;
-         },
-         createImage(){
-           let msg={
-             name:this.imageName,
-             pic:this.imageId,
-             type:2,
-             middleGroundAssertId:this.positionId,
-             width:this.imageWidth,
-             height:'',
-            positionX: this.positionX,
-            positionY: this.positionY,
-            positionZ: this.positionZ,
-            relationX: this.relationX,
-            relationY: this.relationY,
-            relationZ: this.relationZ
-           }
-           msg.name?(()=>{
-             msg.pic?(()=>{
-               msg.middleGroundAssertId?(()=>{
-                 msg.positionY&&msg.positionY&&msg.positionZ?(()=>{
-                   msg.relationX&&msg.relationY&&msg.relationZ?(()=>{
-                     createImage(msg).then(res=>{res.code?this.$message.error(res.msg):(()=>{
-                       this.$message.success(res.msg)
-                       this.cancle();
-                       this.getImage();
-                       this.dialogVisible=false;
-                     })();})
-                   })():this.$message.error('方向不能为空')
-
-                 })():this.$message.error('坐标不能为空')
-               })():this.$message.error('地理位置不能为空');
-             })():this.$message.error('识别图不能为空');
-           })():this.$message.error('识别图名称不能为空');
-         },
-         cancle(){
-           this.imageId='';
-           this.imageName='';
-           this.imageWidth='';
-           this.editId='';
-           this.imageUrl='';
-           this.positionX='';
-           this.positionY='';
-           this.positionZ='';
-           this.relationX='';
-           this.relationY='';
-           this.relationZ='';
-         },
-         editImgName(){
-           let msg={
-             name:this.imageName,
-             id:this.editId,
-             width:this.imageWidth,
-             positionX: this.positionX,
-             positionY: this.positionY,
-             positionZ: this.positionZ,
-             relationX: this.relationX,
-             relationY: this.relationY,
-             relationZ: this.relationZ
-           };
-           msg.id&&msg.name?(()=>{
-             this.positionX&&this.positionY&&this.positionZ?(()=>{
-               this.relationX&&this.relationY&&this.relationZ?(()=>{
-                 editImgName(msg).then(res=>{
-                   res.code?this.$message.error(res.msg):this.$message.success(res.msg);
-                   this.getImage();
-                   this.cancle();
-                   this.editName=false;
-                 })
-               })():this.$message.error('方向不能为空')
-             })():this.$message.error('坐标不能为空')
-           })():this.$message.error('名称不能为空')
-         },
-         deleteImg(id){
-           deleteImg(id).then(res=>{
-             this.getImage();
-           })
-         }
-       },
-       watch:{
-         filterText(val) {
-           this.$refs.tree.filter(val);
-         },
-         searchName(){
-             this.currentPage=1;
-             this.showPagination=false;
-             this.getImage();
-             this.showPagination=true;
-         },
-         currentPage(){
-           this.getImage();
-         }
-       },
-      created() {
-          this.currentPage=1;
-          this.$nextTick(()=>{
-            this.currentPage=1;
-          //分页显示隐藏
-            this.getImage();
-            putInTree({source:'Middleground'}).then(res=>{
-              this.treeData=res.data
-            })
-          this.showPagination=true;
-        })
-        this.getUserPower();
+        positionId:'',
+        imageWidth:'',
+        imageId:'',
+        editName:false,
+        editId:'',
+        searchName:'',
+        treeHeight:'',
+        state:'',
+        positionX:'',
+        positionY:'',
+        positionZ:'',
+        relationX:'',
+        relationY:'',
+        relationZ:''
+      }
+    },
+    components: {
+      navMenu,
+      headNav
+    },
+    computed:{
+      ...mapState('currentUserPower',['mapListPower'])
+    },
+    inject:['replace','reload'],
+    methods:{
+      ...mapActions('currentUserPower',['getUserPower']),
+      handleClick(tab, event) {
+        console.log(tab, event);
+        this.currentPage=1;
+        this.getImage();
       },
+      getImage(){
+        let checkState='';
+        this.activeName=="first"?(()=>{
+          checkState='';
+        })():'';
+        this.activeName=="second"?(()=>{
+          checkState=1;
+        })():'';
+        this.activeName=="third"?(()=>{
+          checkState=2;
+        })():'';
+        this.activeName=="fourth"?(()=>{
+          checkState=3;
+        })():'';
+
+        let msg={
+          name:this.searchName,
+          'checkState':checkState,
+          pageNum:this.currentPage,
+          pageSize:5,
+          source:'Middleground',
+          middleGroundAssertId:this.positionId
+        }
+        getImage(msg).then(res=>{
+          //console.log(res,999)
+          res.code?this.$message.error(res.msg):(()=>{
+            res.data.items.map(v=>v.webUrl=Base64.decode(v.pic))
+            console.log(res.data.items,88888)
+            this.items=res.data.items;
+            this.total=res.data.total;
+          })();
+        })
+      },
+      pageChange(val){
+        console.log(val)
+        this.currentPage=val;
+      } ,
+      handleAvatarSuccess(res, file) {
+        console.log(res,file,777777);
+        this.imageId=res.data.fileId;
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      beforeAvatarUpload(file) {
+        console.log(file,999999)
+        const isJPG = file.type === 'image/jpeg'||file.type==='image/png';
+        //const isPng=file.type==='image/png';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isJPG) {
+          this.$message.error('上传图片只能是 JPG/PNG 格式!');
+        }
+        if (!isLt2M) {
+          this.$message.error('上传图片大小不能超过 2MB!');
+        }
+        return isJPG && isLt2M;
+      },
+      handleNodeClick(data) {
+        console.log(data);
+        data.type==6?(()=>{
+          this.currentPage=1;
+          this.searchName='';
+          this.positionId=data.id;
+          this.getImage();
+        })():(()=>{
+          this.positionId=''
+        })();
+      },
+      filterNode(value, data) {
+        if (!value) return true;
+        return data.name.indexOf(value) !== -1;
+      },
+      createImage(){
+        let msg={
+          name:this.imageName,
+          pic:this.imageId,
+          type:2,
+          middleGroundAssertId:this.positionId,
+          width:this.imageWidth,
+          height:'',
+          positionX: this.positionX,
+          positionY: this.positionY,
+          positionZ: this.positionZ,
+          relationX: this.relationX,
+          relationY: this.relationY,
+          relationZ: this.relationZ
+        }
+        msg.name?(()=>{
+          msg.pic?(()=>{
+            msg.middleGroundAssertId?(()=>{
+              msg.positionY&&msg.positionY&&msg.positionZ?(()=>{
+                msg.relationX&&msg.relationY&&msg.relationZ?(()=>{
+                  createImage(msg).then(res=>{res.code?this.$message.error(res.msg):(()=>{
+                    this.$message.success(res.msg)
+                    this.cancle();
+                    this.getImage();
+                    this.dialogVisible=false;
+                  })();})
+                })():this.$message.error('方向不能为空')
+
+              })():this.$message.error('坐标不能为空')
+            })():this.$message.error('地理位置不能为空');
+          })():this.$message.error('识别图不能为空');
+        })():this.$message.error('识别图名称不能为空');
+      },
+      cancle(){
+        this.imageId='';
+        this.imageName='';
+        this.imageWidth='';
+        this.editId='';
+        this.imageUrl='';
+        this.positionX='';
+        this.positionY='';
+        this.positionZ='';
+        this.relationX='';
+        this.relationY='';
+        this.relationZ='';
+      },
+      editImgName(){
+        let msg={
+          name:this.imageName,
+          id:this.editId,
+          width:this.imageWidth,
+          positionX: this.positionX,
+          positionY: this.positionY,
+          positionZ: this.positionZ,
+          relationX: this.relationX,
+          relationY: this.relationY,
+          relationZ: this.relationZ
+        };
+        msg.id&&msg.name?(()=>{
+          this.positionX&&this.positionY&&this.positionZ?(()=>{
+            this.relationX&&this.relationY&&this.relationZ?(()=>{
+              editImgName(msg).then(res=>{
+                res.code?this.$message.error(res.msg):this.$message.success(res.msg);
+                this.getImage();
+                this.cancle();
+                this.editName=false;
+              })
+            })():this.$message.error('方向不能为空')
+          })():this.$message.error('坐标不能为空')
+        })():this.$message.error('名称不能为空')
+      },
+      deleteImg(id){
+        deleteImg(id).then(res=>{
+          this.getImage();
+        })
+      }
+    },
+    watch:{
+      filterText(val) {
+        this.$refs.tree.filter(val);
+      },
+      searchName(){
+        this.currentPage=1;
+        this.showPagination=false;
+        this.getImage();
+        this.showPagination=true;
+      },
+      currentPage(){
+        this.getImage();
+      }
+    },
+    created() {
+      this.currentPage=1;
+      this.$nextTick(()=>{
+        this.currentPage=1;
+        //分页显示隐藏
+        this.getImage();
+        putInTree({source:'Middleground'}).then(res=>{
+          this.treeData=res.data
+        })
+        this.showPagination=true;
+      })
+      this.getUserPower();
+    },
     updated(){
       this.$nextTick(()=>{
         this.treeHeight = window.innerHeight - this.$refs.tree.$el.offsetTop -10;
@@ -618,74 +618,74 @@
 </script>
 
 <style scoped>
-.ten{
-  width: 400px;
-  height: 350px;
-  /*background: #614a4d;*/
-  padding: 10px 18px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-}
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.avatar-uploader .el-upload:hover {
-  border-color: #409EFF;
-}
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
-  text-align: center;
-}
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-.el-main{
-  padding-top: 10px;
-}
-.pa_body .body-menu{
-  position:absolute;
-  top:60px;
-  left:0;
-  bottom:0;
-  width:300px;
-  padding-left:55px;
-  /*background-color:#545c64;*/
-  background: url("../../assets/menu-bg.jpg") repeat-y ;
-}
- .body-content{
-  position:absolute;
-  top:66px;
-  left:355px;
-  right:0;
-  background-color:#fff;
-  bottom:0;
-  overflow:auto;
-  border-left: 1px solid #eeeeee;
-}
-.cur{ cursor: pointer;}
-.tac span {
-  font-size:14px;
-  color:#606266;
-  padding-left: 5px;
-  padding-right: 10px;
-}
-.time{
-  color: #999;
-  font-family: "PingFang SC","Microsoft YaHei",arial,"Hiragino Sans GB","Hiragino Sans GB W3";
-  font-size: 12px;
-  margin-top: 2px;
-  margin-bottom: 2px;
-}
+  .ten{
+    width: 400px;
+    height: 350px;
+    /*background: #614a4d;*/
+    padding: 10px 18px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+  .el-main{
+    padding-top: 10px;
+  }
+  .pa_body .body-menu{
+    position:absolute;
+    top:60px;
+    left:0;
+    bottom:0;
+    width:300px;
+    padding-left:55px;
+    /*background-color:#545c64;*/
+    background: url("../../assets/menu-bg.jpg") repeat-y ;
+  }
+  .body-content{
+    position:absolute;
+    top:66px;
+    left:355px;
+    right:0;
+    background-color:#fff;
+    bottom:0;
+    overflow:auto;
+    border-left: 1px solid #eeeeee;
+  }
+  .cur{ cursor: pointer;}
+  .tac span {
+    font-size:14px;
+    color:#606266;
+    padding-left: 5px;
+    padding-right: 10px;
+  }
+  .time{
+    color: #999;
+    font-family: "PingFang SC","Microsoft YaHei",arial,"Hiragino Sans GB","Hiragino Sans GB W3";
+    font-size: 12px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+  }
   .title{
     height: 20px;
     line-height: 20px;
@@ -696,16 +696,16 @@
     white-space:nowrap;
     width:280px;
   }
-.foot{
-  height: 29px;
-  line-height: 29px;
-  color: #333;
-  font-size: 14px;
-}
-.span-ellipsis {
-    width:100%;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
+  .foot{
+    height: 29px;
+    line-height: 29px;
+    color: #333;
+    font-size: 14px;
+  }
+  .span-ellipsis {
+      width:100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+  }
 </style>
