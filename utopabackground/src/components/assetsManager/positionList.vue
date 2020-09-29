@@ -185,7 +185,7 @@ export default {
       cityListC:[],//城市列表创建
       areaListC:[],//地区列表创建
       treedataC:[],//树形结构创建
-      clickId:-1,//当前点击的树状id
+      clickId:'',//当前点击的树状id
       treeId:'',//记录当前点击的树id
       // selectDialog:false,
       selectParent:'',//选择的上级名
@@ -201,6 +201,7 @@ export default {
       editId:'',
       tableHeight:0,//表格的高度
       treeHeight:0,//树的高度
+      tableAreaId:'',//保存区id，用来查询项目
     }
   },
   watch:{
@@ -296,27 +297,27 @@ export default {
       return data.name.indexOf(value) !== -1;
     },
     nodeClick(arr){
-      if(!arr.children||!arr.children.length){
+      if(!arr.children||!arr.children.length){//操作最后一级
         if(arr.type==5){
-          this.typeId = arr.type+1;//保存上级机构种类id
+          this.typeId = arr.type+1;//当前点击种类下级
           this.clickTypeId = arr.type;//保存种类id
           this.selectParentId=arr.id;//保存选择的上级id
           this.selectParent = arr.name;//选择的上级名
           this.positionBelong=arr.provinceCityArea;//保存选择的位置所属
-          this.selectBelongIdList.provinceId=arr.provinceId;//保存省id
-          this.selectBelongIdList.cityId=arr.cityId;//保存市id
-          this.selectBelongIdList.areaId=arr.areaId;//保存区id
+          // this.selectBelongIdList.provinceId=arr.provinceId;//保存省id
+          // this.selectBelongIdList.cityId=arr.cityId;//保存市id
+          // this.selectBelongIdList.areaId=arr.areaId;//保存区id
           this.clickId = arr.id;//保存当前点击的id
           this.treeId = arr.id;
         }else{
-          this.typeId = arr.type+1;//保存上级机构种类id
+          this.typeId = arr.type+1;//当前点击种类下级
           this.clickTypeId = arr.type;//保存种类id
           this.selectParentId=arr.id;//保存选择的上级id
           this.selectParent = arr.name;//选择的上级名
           this.positionBelong=arr.provinceCityArea;//保存选择的位置所属
-          this.selectBelongIdList.provinceId=arr.provinceId;//保存省id
-          this.selectBelongIdList.cityId=arr.cityId;//保存市id
-          this.selectBelongIdList.areaId=arr.areaId;//保存区id
+          // this.selectBelongIdList.provinceId=arr.provinceId;//保存省id
+          // this.selectBelongIdList.cityId=arr.cityId;//保存市id
+          // this.selectBelongIdList.areaId=arr.areaId;//保存区id
           this.clickId = arr.id;//保存当前点击的id
           this.treeId = arr.id;
         }
@@ -325,29 +326,56 @@ export default {
       }
     },
     treeExpand(arr){//节点展开
-      this.typeId = arr.type+1;//保存上级机构种类id
-      this.clickTypeId = arr.type;//保存种类id
-      this.selectParentId=arr.id;//保存选择的上级id
-      this.selectParent = arr.name;//选择的上级名
-      this.positionBelong=arr.provinceCityArea;//保存选择的位置所属
-      this.selectBelongIdList.provinceId=arr.provinceId;//保存省id
-      this.selectBelongIdList.cityId=arr.cityId;//保存市id
-      this.selectBelongIdList.areaId=arr.areaId;//保存区id
-      this.clickId = arr.id;//保存当前点击的id
-      this.treeId = arr.id;
+      if(arr.type==-1||arr.type==0){//点击省市的时候跳过
+        this.positionBelong='';
+        this.selectParent='';
+        this.selectParentId='';
+        this.typeId='';
+        this.clickTypeId='';
+        this.clickId='';
+        this.tableAreaId='';
+        if(arr.type==-1)return;
+      }else{
+        this.typeId = arr.type+1;//当前点击种类下级
+        this.clickTypeId = arr.type;//保存种类id
+        this.selectParentId=arr.id;//保存选择的上级id
+        this.selectParent = arr.name;//选择的上级名
+        this.positionBelong=arr.provinceCityArea;//保存选择的位置所属
+        // this.selectBelongIdList.provinceId=arr.provinceId;//保存省id
+        // this.selectBelongIdList.cityId=arr.cityId;//保存市id
+        // this.selectBelongIdList.areaId=arr.areaId;//保存区id
+        this.clickId = arr.id;//保存当前点击的id
+        this.treeId = arr.id;
+      }
+      if(arr.type==0){//点击省市的时候跳过
+        this.clickId = -1;
+        this.tableAreaId=arr.id;
+      }
       this.getTable(this.clickId,this.clickTypeId);
       this.isMe=false;
     },
     treeCollapse(arr){//节点关闭
+      if(arr.type==-1||arr.type==0){//点击省市的时候跳过
+        this.positionBelong='';
+        this.selectParent='';
+        this.selectParentId='';
+        this.typeId='';
+        this.clickTypeId='';
+        this.clickId='';
+        this.tableAreaId='';
+        this.treeId='';
+        return;
+      }
       this.typeId = arr.type;//清空
-      this.clickTypeId = arr.type-1;//保存种类id
+      this.clickTypeId = arr.type-1;//当前点击种类上级
       this.selectParentId=arr.parentId;//保存选择的上级id
       this.selectParent = arr.parentName;//选择的上级名
       this.positionBelong=arr.provinceCityArea;//保存选择的位置所属
-      this.selectBelongIdList.provinceId=arr.provinceId;//保存省id
-      this.selectBelongIdList.cityId=arr.cityId;//保存市id
-      this.selectBelongIdList.areaId=arr.areaId;//保存区id
-      this.clickId = arr.parentId===0?-1:arr.parentId;//保存当前点击父级的id
+      // this.selectBelongIdList.provinceId=arr.provinceId;//保存省id
+      // this.selectBelongIdList.cityId=arr.cityId;//保存市id
+      // this.selectBelongIdList.areaId=arr.areaId;//保存区id
+      this.clickId = arr.type==1?-1:arr.parentId;//保存当前点击父级的id
+      this.tableAreaId = arr.type==1?arr.areaId:'';
       this.treeId = arr.parentId;
       this.getTable(this.clickId,this.clickTypeId);
       this.isMe=false;
@@ -396,7 +424,7 @@ export default {
       })
     },
     search(){//查询位置树状结构
-      this.clickId = -1;
+      this.clickId = '';
       this.treeId='';
       this.$store.commit('pagination/setClickPage',1);
       this.$store.commit('pagination/setLimitPage',20);
@@ -416,7 +444,7 @@ export default {
       this.cityValue='',
       this.areaValue='',
       this.inputAssetsName='';
-      this.clickId = -1;
+      this.clickId = '';
       this.treeId='';
       this.$store.commit('pagination/setClickPage',1);
       this.$store.commit('pagination/setLimitPage',20);
@@ -429,13 +457,16 @@ export default {
       })
     },
     getTable(id,type,isMe){
+      if(id===''){
+        return;
+      }
       if(type==5||isMe){//判断为最后一级查自己
         getPositionInfo({id}).then(res=>{
           this.positionTable=[res.data];
           this.$store.commit('pagination/setTotal', 1);
         })
       }else{
-        getPositionList({id,"page":this.page,"limit":this.limit}).then(res=>{
+        getPositionList({"areaId":id==-1?this.tableAreaId:undefined,id,"page":this.page,"limit":this.limit}).then(res=>{
           this.positionTable = res.data.items;
           this.$store.commit('pagination/setTotal', res.data.total);
         });
@@ -539,9 +570,9 @@ export default {
       this.form.assetsType = this.typeId?this.typeId:1;
       this.form.parentName = this.selectParent;
       this.form.parentId = this.selectParentId;
-      this.form.provinceC =this.selectBelongIdList.provinceId;
-      this.form.cityC =this.selectBelongIdList.cityId;
-      this.form.areaC =this.selectBelongIdList.areaId;
+      // this.form.provinceC =this.selectBelongIdList.provinceId;
+      // this.form.cityC =this.selectBelongIdList.cityId;
+      // this.form.areaC =this.selectBelongIdList.areaId;
       this.form.positionBelong=this.positionBelong;
     },
     closeDialog(){
@@ -600,7 +631,7 @@ export default {
     this.getProvince();
     this.searchTree();//获取外边的树
     this.assetsDropDwon();//获取资产种类下拉框
-    this.getTable(this.clickId);
+    // this.getTable(this.clickId);
   },
   updated(){
     this.$nextTick(()=>{

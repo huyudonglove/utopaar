@@ -31,6 +31,7 @@
         <el-table-column type="selection" width="50"></el-table-column>
         <el-table-column prop="id" label="ID" width="280" align="center"></el-table-column>
         <el-table-column prop="name" label="应用名称" align="center"></el-table-column>
+        <el-table-column prop="provinceCityArea" label="所属地区" align="center"></el-table-column>
         <el-table-column prop="applicationTypeName" label="类型" align="center"></el-table-column>
         <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
       </el-table>

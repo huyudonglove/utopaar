@@ -42,6 +42,16 @@
               <uploadImg buttonName="图片" :isSee="isSee" :parentName="scope.row.releaseContent" :idx="scope.$index" moduleCode="ARModuleImg" @getImgId="getImgId"></uploadImg>
             </template>
           </el-table-column>
+          <el-table-column label="所属地区" align="center">
+            <template slot-scope="scope">
+              <div>
+                <div style="white-space:pre-line;">{{scope.row.provinceCityArea.split(',').slice(0,2).join('\n')}}</div>
+                <div style="cursor:pointer;" v-if="scope.row.provinceCityArea.split(',').length>2&&scope.row.relateType!='2'" @click="showCity(scope)">...</div>
+                <div style="cursor:pointer;" v-if="scope.row.provinceCityArea.split(',').length>2&&scope.row.relateType=='2'" @click="openCityDialog(scope)">...</div>
+              </div>
+              <el-button size="mini" type="primary" plain :disabled="isSee" v-if="scope.row.relateType=='2'&&scope.row.provinceCityArea.split(',').length<=2" @click="openCityDialog(scope)">选择地区</el-button>
+            </template>
+          </el-table-column>
           <el-table-column label="关联" width="420" v-if="moduleTypeX=='CyclePlay'||moduleTypeX=='Slide'||moduleTypeX=='ImageShow'" align="center">
             <template slot-scope="scope">
               <el-select :disabled="isSee" v-model="scope.row.relateType" style="width:120px;" @change="selectChange(scope.$index)">
@@ -100,6 +110,35 @@
     <div>
       <selectApplication :fSee="showApplication" @applicationClose="applicationClose" @getApplicationDtailId="getApplicationDtailId"></selectApplication>
     </div>
+    <el-dialog :visible.sync="cityShow" width="200px" :destroy-on-close="true" center>
+      <div style="white-space:pre-line;text-align:center;">{{this.citys}}</div>
+    </el-dialog>
+    <el-dialog title="选择地区" :visible.sync="cityVisible" width="500px" :close-on-click-modal="false" @close="closeDialog" :destroy-on-close="true" center>
+      <div style="overflow:hidden;">
+        <div style="float:left;width:49%;height:300px;overflow:auto;border:1px solid #ccc;">
+          <el-tree
+            :data="cityTree"
+            show-checkbox
+            node-key="id"
+            ref="cityTree"
+            highlight-current
+            @check-change="getCheckedNodes"
+            :props="cityProps">
+          </el-tree>
+        </div>
+        <div style="float:left;width:49%;height:300px;overflow:auto;border:1px solid #ccc;">
+          <div style="text-align:center;margin:5px 0;" v-for="(item,i) in cityValue" :key="i">
+            <el-tag
+              closable
+              ref="cityTags"
+              :disable-transitions="false"
+              @close="cityTagsClose(item.id)">
+              {{item.name}}
+            </el-tag>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -107,7 +146,7 @@
 import {mapState} from 'vuex'
 import selectApplication from './selectAppplication'
 import uploadImg from '../../share/uploadImg'
-import {getDropdown,getModuleDetail,createModule,editModule} from '../../http/request'
+import {getDropdown,getModuleDetail,createModule,editModule,getCityTree} from '../../http/request'
 export default {
   name:'createModule',
   inject:['reload'],
@@ -149,6 +188,16 @@ export default {
       // address:'',//自定义url地址
       applicationIndex:'',//保存选择弹窗的行索引
       loading:'',//请求数据加载框
+      cityShow:false,
+      citys:'',
+      cityTree:[],
+      cityValue:[],
+      cityProps:{
+        children:'children',
+        label:'name'
+      },
+      cityVisible:false,
+      cityIndex:''
     }
   },
   computed:{
@@ -171,6 +220,8 @@ export default {
         "relateType":this.relateType,
         "relateContent":"",
         "applicationName":"",
+        "provinceCityArea":"",
+        "cityIds":""
       }
     }
   },
@@ -178,6 +229,47 @@ export default {
     
   },
   methods:{
+    showCity(scope){
+      this.cityShow=true;
+      this.citys = scope.row.provinceCityArea.split(',').join('\n');
+    },
+    cityTagsClose(id) {
+      this.cityValue.splice(this.cityValue.map(v=>v.id).indexOf(id), 1);
+      this.$refs.cityTree.setChecked(id,false);
+    },
+    getCheckedNodes(data,checked,indeterminate){
+      // console.log(this.$refs.tree.getCheckedNodes());
+      let arr =this.$refs.cityTree.getCheckedNodes().filter(v=>v.children);
+      let brr =[];
+      arr.forEach(v=>{
+        var node1 = v.name;
+        v.children.forEach(u=>{
+          brr.push({"name":node1+'-'+u.name,"id":u.id});
+        })
+      })
+      this.cityValue=brr;
+      console.log(brr)
+    },
+    openCityDialog(scope){
+      this.cityVisible=true;
+      this.cityIndex=scope.$index;
+      let arr = scope.row.provinceCityArea.split(',');
+      let brr = scope.row.cityIds.split(',');
+      console.log(arr,12)
+      arr.forEach((v,i)=>{
+        if(v!==""){
+          this.cityValue.push({"name":v,'id':brr[i]});
+          this.$nextTick(()=>{
+            this.$refs.cityTree.setChecked(brr[i],true);
+          })
+        }
+      })
+    },
+    closeDialog(){
+      this.moduleList[this.cityIndex].provinceCityArea=this.cityValue.map(v=>v.name).join(',');
+      this.moduleList[this.cityIndex].cityIds=this.cityValue.map(v=>v.id).join(',');
+      this.cityValue=[];
+    },
     typeChange(){//模块切换清空数据
       this.form.moduleTitle='';
       this.form.subTitle='';
@@ -196,7 +288,9 @@ export default {
     },
     getApplicationDtailId(data){//获取选择的应用详情id
       this.moduleList[this.applicationIndex].relateContent=data.id;
-      this.moduleList[this.applicationIndex].applicationName = data.name
+      this.moduleList[this.applicationIndex].applicationName = data.name;
+      this.moduleList[this.applicationIndex].provinceCityArea=data.provinceCityArea;
+      this.moduleList[this.applicationIndex].cityIds=data.cityIds;
     },
     applicationClose(){//关掉应用详情弹窗
       this.showApplication = false;
@@ -245,10 +339,17 @@ export default {
     selectChange(index){//关联类型变化，清掉选的内容
       this.moduleList[index].relateContent='';
       this.moduleList[index].applicationName='';
+      this.moduleList[index].provinceCityArea='';
+      this.moduleList[index].cityIds='';
       // this.moduleList[index].effectFrom='';
       // this.moduleList[index].effectTo='';
       // this.moduleList[index].isAbleSelectTime=false;
       // this.moduleList[index].smallTime=[];
+    },
+    getTree(){
+      getCityTree().then(res=>{
+        this.cityTree=res.data;
+      })
     },
     getDetail(){
       this.loading=this.$loading({
@@ -324,6 +425,11 @@ export default {
               this.$message.error('请选择关联应用或者输入关联地址');
               return;
             }
+            var isCity = this.moduleList.some(v=>v.provinceCityArea==="");
+            if(isCity){
+              this.$message.error('请选择所属地区');
+              return;
+            }
           }
           if(this.isCreate){
             createModule({"module":this.module,"contents":this.moduleList}).then(res=>{
@@ -346,6 +452,7 @@ export default {
   },
   async created(){
     await this.getModuleType();
+    this.getTree();
     if(this.$route.query.isEdit){
       this.isEdit = true;
       this.title = '编辑';

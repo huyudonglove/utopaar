@@ -256,8 +256,9 @@ export function getPositionList(params){
   let pageNum = params.page||1;
   let pageSize = params.limit||20;
   let id = params.id;
+  let areaId= params.areaId;
   return new Promise((resolve,reject)=>{
-    http.post('/api/utopa/ar/assets/location/queryBackgroundChildAssetsLocationById',{pageNum,pageSize,id}).then(res=>{
+    http.post('/api/utopa/ar/assets/location/queryBackgroundChildAssetsLocationById',{pageNum,pageSize,id,areaId}).then(res=>{
       if(res.code){
         Message.error(res.msg);
       }else{

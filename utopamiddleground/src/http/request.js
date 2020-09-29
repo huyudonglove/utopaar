@@ -71,6 +71,20 @@ export function getModuleDetail(params){
     })
   })
 }
+/** 页面配置-获取地区树 Author:minggui*/
+export function getCityTree(params){
+  return new Promise((resolve,reject)=>{
+    http.post('/api/utopa/ar/admin//listDistrict',params).then(res=>{
+      if(res.code){
+        Message.error(res.msg);
+      }else{
+        resolve(res);
+      }
+    }).catch(err=>{
+      reject(err);
+    })
+  })
+}
 /** 页面配置-创建模块 Author:minggui*/
 export function createModule(params){
   return loadRequest('/api/utopa/ar/admin/saveModuleDetail',params,'新增',http,'post')
