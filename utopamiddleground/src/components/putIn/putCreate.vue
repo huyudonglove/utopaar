@@ -142,13 +142,13 @@
                   </el-table-column>
                   <el-table-column prop="scope.row.state" label="状态" width="120" align="center"> 
                     <template slot-scope="scope">
-                      <el-button type="text" v-if="scope.row.state==1" @click="activeAble(2,scope.$index,2)">启用</el-button>
-                      <el-button type="text" v-if="scope.row.state==2" style="color:red" @click="activeAble(1,scope.$index,2)">禁用</el-button>
+                      <el-button type="text" v-if="scope.row.state==1" @click="activeAble(2,scope.$index,scope.row,2)">启用</el-button>
+                      <el-button type="text" v-if="scope.row.state==2" style="color:red" @click="activeAble(1,scope.$index,scope.row,2)">禁用</el-button>
                     </template>
                   </el-table-column>
                    <el-table-column  label="操作" width="150" align="center">
                     <template slot-scope="scope">
-                       <el-button type="danger"  @click="del(scope.$index)">删除</el-button>
+                       <el-button type="danger"  @click="del(scope.$index,2)">删除</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -182,7 +182,7 @@
                   </el-table-column>
                    <el-table-column  label="操作" width="150" align="center">
                     <template slot-scope="scope">
-                       <el-button type="danger"  @click="del(scope.$index)">删除</el-button>
+                       <el-button type="danger"  @click="del(scope.$index,1)">删除</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -540,8 +540,13 @@ export default {
       let indx=this.allStartTime.indexOf(this.startTimeArr[this.rowIndex])
       this.allStartTime.splice(indx,1)
       this.allEndTime.splice(idx,1)
+     // startTimeArr:[],//开始时间数组
+     // endTimeArr:[],//结束时间数组
+     // allStartTime:[],//排序后的开始时间数组
+     // allEndTime:[],//排序后的结束时间数组
       this.startTimeArr.splice(this.startTimeArr.length-1,1)
       this.endTimeArr.splice(this.endTimeArr.length-1,1)
+      // console.log(this.allStartTime,this.allEndTime,333)
       this.tableData[index].effectFrom ="";
       this.tableData[index].effectTo ="";
       this.tableData[index].smallTime=null;
@@ -578,22 +583,44 @@ export default {
       this.allStartTime=[];//排序后的开始时间数组
       this.allEndTime=[];//排序后的结束时间数组
     },
-    del(index){
+    del(index,type){
       let idxS=0;
       let idxE=0;
       let indexS=0;
       let indexE=0;
       // if(!this.tableData[index].effectFrom){idxS=this.startTimeArr.indexOf(new Date(this.tableData[index].et).getTime())};
       // if(!this.tableData[index].effectTo){idxE=this.endTimeArr.indexOf(new Date(this.tableData[index].st).getTime())};
-      if(this.tableData[index].effectFrom){
+      if(this.tableData[index].effectFrom&&type==1){
         idxS=this.startTimeArr.indexOf(new Date(this.tableData[index].effectFrom).getTime()); 
         indexS=this.allStartTime.indexOf(new Date(this.tableData[index].effectFrom).getTime())
         this.startTimeArr.splice(idxS,1)
         this.allStartTime.splice(indexS,1)
       };
-      if(this.tableData[index].effectTo){
+      if(this.tableData[index].effectTo&&type==1){
         idxE=this.endTimeArr.indexOf(new Date(this.tableData[index].effectTo).getTime())
         indexE=this.allEndTime.indexOf(new Date(this.tableData[index].effectTo).getTime())
+        this.endTimeArr.splice(idxE,1)
+        this.allEndTime.splice(indexE,1)
+        };
+      if(this.tableData[index].effectFrom&&type==2){
+        let time1=/\d{2}:\d{2}:\d{2}/g.exec(this.tableData[index].effectFrom)[0]
+        let hour1 = time1.split(':')[0]
+        let min1= time1.split(':')[1]
+        let sec1 = time1.split(':')[2]
+        let s1= Number(hour1 * 3600) + Number(min1 * 60) + Number(sec1)
+        idxS=this.startTimeArr.indexOf(s1); 
+        indexS=this.allStartTime.indexOf(s1)
+        this.startTimeArr.splice(idxS,1)
+        this.allStartTime.splice(indexS,1)
+      };
+      if(this.tableData[index].effectTo&&type==2){
+        let time2=/\d{2}:\d{2}:\d{2}/g.exec(this.tableData[index].effectTo)[0]
+        let hour2 = time2.split(':')[0]
+        let min2 = time2.split(':')[1]
+        let sec2 = time2.split(':')[2]
+        let s2 = Number(hour2 * 3600) + Number(min2 * 60) + Number(sec2)
+        idxE=this.endTimeArr.indexOf(s2)
+        indexE=this.allEndTime.indexOf(s2)
         this.endTimeArr.splice(idxE,1)
         this.allEndTime.splice(indexE,1)
         };
@@ -650,12 +677,15 @@ export default {
     //   return time.getTime() < this.allStartTime[0]||time.getTime()> this.allEndTime[0]
     // },
       activeAble(num,index,row,type){
-        // console.log(this.tableData[index])
+        // console.log(num,index,row,type,'num,index,row,type')
         if(!this.tableData[index].effectFrom){
             this.$message.error('请先选择时间,再操作');
            }
         else if(num==1){
+          this.tableData[index].state =1;
+          // console.log('启用')
           if(!this.checkTime(index,type)){
+            // console.log('false')
             let indx=this.allStartTime.indexOf(this.startTimeArr[this.rowIndex])
             this.allStartTime.splice(indx,1)
             // this.allStartTime.splice(this.idxs,1)
@@ -663,19 +693,40 @@ export default {
             this.allEndTime.splice(idx,1)
             this.startTimeArr.splice(this.startTimeArr.length-1,1)
             this.endTimeArr.splice(this.endTimeArr.length-1,1)
+            this.tableData[index].state =2;
             return false;
           }
-         this.tableData[index].state =1;
+         
          this.formSize.relationCarrierList[index].state=1
         }else if(num==2){
-          let idxS=0;
-          let idxE=0;
-          let indexS=0;
-          let indexE=0;
+          // console.log('禁用')
+          let idxS=null;
+          let idxE=null;
+          let indexS=null;
+          let indexE=null;
+         if(type==1){
           if(this.tableData[index].effectFrom){idxS=this.startTimeArr.indexOf(new Date(this.tableData[index].effectFrom).getTime())};
           if(this.tableData[index].effectTo){idxE=this.endTimeArr.indexOf(new Date(this.tableData[index].effectTo).getTime())};
           if(this.tableData[index].effectFrom){indexS=this.allStartTime.indexOf(new Date(this.tableData[index].effectFrom).getTime())};
           if(this.tableData[index].effectTo){indexE=this.allEndTime.indexOf(new Date(this.tableData[index].effectTo).getTime())};
+         }
+         if(type==2){
+          //  console.log(this.allEndTime,this.allStartTime,'this.allStartTime')
+           let time1=/\d{2}:\d{2}:\d{2}/g.exec(this.tableData[index].effectFrom)[0]
+           let hour1 = time1.split(':')[0]
+           let min1= time1.split(':')[1]
+           let sec1 = time1.split(':')[2]
+           let s1= Number(hour1 * 3600) + Number(min1 * 60) + Number(sec1)
+           let time2=/\d{2}:\d{2}:\d{2}/g.exec(this.tableData[index].effectTo)[0]
+           let hour2 = time2.split(':')[0]
+           let min2 = time2.split(':')[1]
+           let sec2 = time2.split(':')[2]
+           let s2 = Number(hour2 * 3600) + Number(min2 * 60) + Number(sec2)
+           idxS=this.startTimeArr.indexOf(s1)
+           idxE=this.endTimeArr.indexOf(s2)
+           indexS=this.allStartTime.indexOf(s1)
+           indexE=this.allEndTime.indexOf(s2)
+         }
         // console.log(idxS,'idxS',idxE,'idxE',indexS,'indexS',indexE,'indexE')
           this.startTimeArr.splice(idxS,1)
           this.endTimeArr.splice(idxE,1)
@@ -683,10 +734,12 @@ export default {
           this.allEndTime.splice(indexE,1)
           this.tableData[index].state =2;
           this.formSize.relationCarrierList[index].state=2
+          // console.log(this.allStartTime,this.allEndTime,this.startTimeArr,this.endTimeArr)
         }
       },
 
       checkTime(index,type){
+        // console.log(index,type,'index,type')
         index?this.rowIndex=index:this.rowIndex=0
         var activeStart=[];
         var activeEnd=[];
@@ -698,31 +751,29 @@ export default {
         if(this.tableData[index].effectFrom){activeStart.push(new Date(this.tableData[index].effectFrom).getTime())};
         if(this.tableData[index].effectTo){activeEnd.push(new Date(this.tableData[index].effectTo).getTime())};
         }else if(type ==2 ){
-        if(!item.effectFrom){item.effectFrom=item.st;};
-        if(!item.effectTo){item.effectTo=item.et;}
-        // console.log(data,'data')
-        if(item.effectFrom){
-        let time=/\d{2}:\d{2}:\d{2}/g.exec(item.effectFrom)[0]
+        // console.log(this.tableData[index].effectFrom,'this.tableData[index].effectFrom')
+        if(this.tableData[index].effectFrom){
+        let time=/\d{2}:\d{2}:\d{2}/g.exec(this.tableData[index].effectFrom)[0]
         let hour = time.split(':')[0]
         let min = time.split(':')[1]
         let sec = time.split(':')[2]
         var s = Number(hour * 3600) + Number(min * 60) + Number(sec)
         }
-        if(item.effectTo){
+        if(this.tableData[index].effectTo){
         // console.log(item.effectTo,'item.effectTo')
-        let time2=/\d{2}:\d{2}:\d{2}/g.exec(item.effectTo)[0]
+        let time2=/\d{2}:\d{2}:\d{2}/g.exec(this.tableData[index].effectTo)[0]
         let hour2 = time2.split(':')[0]
         let min2 = time2.split(':')[1]
         let sec2 = time2.split(':')[2]
         var s2 = Number(hour2 * 3600) + Number(min2 * 60) + Number(sec2)
         }
-        if(item.effectFrom&&item.state==1){startTimeArr.push(s)};
-        if(item.effectTo&&item.state==1){endTimeArr.push(s2)};
+        if(this.tableData[index].effectFrom&&this.tableData[index].state==1){this.startTimeArr.push(s);};
+        if(this.tableData[index].effectTo&&this.tableData[index].state==1){this.endTimeArr.push(s2)};
           }
-        
+          // console.log(this.allStartTime,this.allEndTime,'this.allEndTime')
           this.allStartTime = JSON.parse(JSON.stringify(this.startTimeArr)).sort();
           this.allEndTime = JSON.parse(JSON.stringify(this.endTimeArr)).sort();
-          // console.log(this.allStartTime)
+        // console.log( this.allStartTime, 'this.allStartTime',this.allEndTime,'this.allEndTime')
             for(let i=1;i<this.allStartTime.length;i++){
               if (this.allStartTime[i] <= this.allEndTime[i-1]){
                   this.$message.error('时间有重叠,请重新选择时间,再启动');
@@ -777,8 +828,8 @@ export default {
     }
     
     if(type==2){
-      this.allStartTime = this.startTimeArr.sort(function(a, b){return a - b});
-      this.allEndTime =this.endTimeArr.sort(function(a, b){return a - b});
+      this.allStartTime =  JSON.parse(JSON.stringify(this.startTimeArr)).sort(function(a, b){return a - b});
+      this.allEndTime = JSON.parse(JSON.stringify(this.endTimeArr)).sort(function(a, b){return a - b});
     }
     // console.log(this.allStartTime,this.allEndTime,'this.allEndTime')
     for(let i=1;i<this.allStartTime.length;i++){
