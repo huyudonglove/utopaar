@@ -45,9 +45,9 @@
           <span> 投放状态：
             <el-select v-model="timeState" placeholder="请选择">
                 <el-option label="全部" value></el-option>
-                <el-option label="未投放" value="1"></el-option>
-                <el-option label="投放中" value="2"></el-option>
-                <el-option label="结束" value="2"></el-option>
+                <el-option label="未投放" value=1></el-option>
+                <el-option label="投放中" value=2></el-option>
+                <el-option label="结束" value=3></el-option>
               </el-select>
             </span>
           <span>投放时间：<singleTime></singleTime></span>
