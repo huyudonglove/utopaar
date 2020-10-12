@@ -239,7 +239,7 @@
       <el-button @click="createApp" v-if="type=='revise'" type="primary">确定</el-button>
       <el-button @click="goTo">返回</el-button>
     </div>
-    <el-dialog title="选择地址" :visible.sync="positionShow" style="width: 2200px">
+    <el-dialog title="选择地址" :visible.sync="positionShow" style="width: 2200px" @close="searchWord='';getPosition();">
       <div>
         <el-input placeholder="请输入资产位置关键字" style="width: 250px" v-model="searchWord" @input="changeWord"><el-button slot="append" icon="el-icon-search"></el-button></el-input>
       </div>
