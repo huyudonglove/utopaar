@@ -19,7 +19,7 @@ export function getModuleList(params){
   let containTitle = params.containTitle||'';
   let status = params.status||'';
   let effectDate = params.putTime||'';
-  let ReleaseStatus = params.ReleaseStatus||'';
+  let releaseStatus = params.releaseStatus||'';
   let fromCreateTime = params.fromCreateTime||'';
   let toCreateTime = params.toCreateTime||'';
   let pageIndex = params.pageIndex||1;
@@ -28,7 +28,7 @@ export function getModuleList(params){
   let sortColumn = !params.sortColumn||params.order===null?'rank':params.sortColumn;
   let order = params.order||params.order===null||params.order===''||params.order===undefined?true:false;
   return new Promise((resolve,reject)=>{
-    http.post('/api/utopa/ar/admin/pageListModule',{category,containTitle,status,effectDate,ReleaseStatus,fromCreateTime,toCreateTime,pageIndex,pageSize,pageReturnType,sortColumn,order}).then(res=>{
+    http.post('/api/utopa/ar/admin/pageListModule',{category,containTitle,status,effectDate,releaseStatus,fromCreateTime,toCreateTime,pageIndex,pageSize,pageReturnType,sortColumn,order}).then(res=>{
       if(res.code){
         Message.error(res.msg);
       }else{

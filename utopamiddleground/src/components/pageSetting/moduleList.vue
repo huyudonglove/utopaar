@@ -150,7 +150,7 @@ export default {
     },
     putTypeX(){
       this.$store.commit('pagination/setClickPage',1);//重置第1页
-      this.replace('ReleaseStatus',this.putTypeX);
+      this.replace('releaseStatus',this.putTypeX);
     },
     stateX(){
       this.$store.commit('pagination/setClickPage',1);//重置第1页
@@ -236,7 +236,7 @@ export default {
     let limitRecord = this.$route.query.pageSize||20;//记录上一次limit操作
     this.inputX=this.$route.query.containTitle||'';
     this.moduleTypeX=this.$route.query.category||'';
-    this.putTypeX=this.$route.query.ReleaseStatus||'';
+    this.putTypeX=this.$route.query.releaseStatus||'';
     this.stateX=this.$route.query.status||'';
     this.putTime = this.$route.query.putTime||'';
     this.$route.query.sortColumn?this.sort ={"sortColumn":this.$route.query.sortColumn,"order":this.$route.query.order}:null;
