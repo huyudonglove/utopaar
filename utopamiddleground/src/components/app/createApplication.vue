@@ -66,7 +66,7 @@
               <div style="margin-bottom: 20px;">
                 <span class="labelSpan"><span style="color: #f56c6c;margin-right: 2px;">*</span>投放位置</span>
                 <div style="margin-left: 50px;min-height: 80px;margin-top: 10px;margin-bottom:10px;font-size: 14px;color: #606266;" >
-                  <div style="height: 30px;line-height: 30px"><span class="positionSpan">ID</span><span class="positionSpan">所属地区</span><span class="positionSpan">位置资产</span><span class="positionSpan">操作</span></div>
+                  <div style="height: 30px;line-height: 30px"><span class="positionSpan">ID</span><span class="positionSpan">所属地区</span><span class="positionSpan">资产位置</span><span class="positionSpan">操作</span></div>
                   <div>
                     <div v-for="item in positionData" :key="item.id" v-if="item.checked" style="height: 30px;line-height: 30px;margin-left: 60px">
                       <span class="positionSpan">{{item.positionId}}</span>
@@ -240,11 +240,14 @@
       <el-button @click="goTo">返回</el-button>
     </div>
     <el-dialog title="选择地址" :visible.sync="positionShow" style="width: 2200px">
+      <div>
+        <el-input placeholder="请输入资产位置关键字" style="width: 250px" v-model="searchWord" @input="changeWord"><el-button slot="append" icon="el-icon-search"></el-button></el-input>
+      </div>
       <div style="border-bottom: 1px solid #dcdfe6;line-height: 40px">
         <span class="positionSpan"></span>
         <span class="positionSpan">ID</span>
         <span class="positionSpan">所属地区</span>
-        <span class="positionSpan">位置资产</span>
+        <span class="positionSpan">资产位置</span>
       </div>
       <div>
         <div v-for="(item,index) in positionData" :key="item.id">
@@ -361,7 +364,8 @@
         settingThumbnail:'',
         settingTitle:'',
         settingContent:'',
-        isMark:1
+        isMark:1,
+        searchWord:''
       }
     },
     methods:{
@@ -563,30 +567,34 @@
       },
       getPosition(){
         let msg={
-          name:'',
+          name:this.searchWord,
           backgroundAppId:this.appId,
           page:1,
           limit:10000
         }
-        getPosition(msg).then(res=>{
-          //console.log(res,9999)
-          res.code?this.$message.error(res.msg):(()=>{
-            let apple=res.data.items;
-            this.total=res.data.total;
-            this.positionData=apple.map(v=>{v.checked=false;v.positionId=v.id;v.positionDesc=v.name;return v;});
-            this.id?(()=>{
-              let ban=[];
-              this.positionChecked.map(v=>ban.push(v.positionId))
-              console.log(ban,'ban')
-              //判断是否选中
-              this.positionData.map(r=>{
-                ban.includes(r.id)?r.checked=true:r.checked=false;
-                return r;
-              })
-            })():'';
-            //console.log(this.positionData,789)
-          })();
+        return new Promise((resolve,reject)=>{
+          getPosition(msg).then(res=>{
+            //console.log(res,9999)
+            res.code?this.$message.error(res.msg):(()=>{
+              let apple=res.data.items;
+              this.total=res.data.total;
+              this.positionData=apple.map(v=>{v.checked=false;v.positionId=v.id;v.positionDesc=v.name;return v;});
+              this.id?(()=>{
+                let ban=[];
+                this.positionChecked.map(v=>ban.push(v.positionId))
+                console.log(ban,'ban')
+                //判断是否选中
+                this.positionData.map(r=>{
+                  ban.includes(r.id)?r.checked=true:r.checked=false;
+                  return r;
+                })
+                resolve();
+              })():'';
+              //console.log(this.positionData,789)
+            })();
+          })
         })
+
       },
       limitChange(val){
         this.limit=val*1;
@@ -690,6 +698,9 @@
           this.$message.error('上传图片大小不能超过 300Kb!');
         }
         return isJPG && isLt2M;
+      },
+      changeWord(){
+        this.getPosition();
       }
     },
     watch:{
