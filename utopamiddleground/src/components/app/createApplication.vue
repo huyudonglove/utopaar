@@ -251,7 +251,7 @@
       </div>
       <div>
         <div v-for="(item,index) in positionData" :key="item.id">
-          <div v-if="index>page*5-6&&index<page*5" style="border-bottom: 1px dashed #dcdfe6;line-height: 40px">
+          <div v-if="index>page*limit-(limit+1)&&index<page*limit" style="border-bottom: 1px dashed #dcdfe6;line-height: 40px">
             <span class="positionSpan"><el-checkbox v-model="item.checked"></el-checkbox></span>
             <span class="positionSpan">{{item.id}}</span>
             <span class="positionSpan">{{item.provinceCityArea}}</span>
@@ -261,7 +261,8 @@
       </div>
       <div style="margin-top: 10px">
         <el-pagination @size-change="limitChange" @current-change="pageChange" :current-page="1"  :page-size="5"
-                       layout="total, prev, pager, next, jumper"
+                       :page-sizes="[5, 10, 15, 20]"
+                       layout="total,sizes,prev, pager, next, jumper"
                        :total="total">
         </el-pagination>
       </div>
