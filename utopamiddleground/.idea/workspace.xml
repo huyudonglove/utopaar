@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4649e887-9a3a-499d-a99a-17666bd54e4b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/components/app/createApplication.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/app/createApplication.vue" afterDir="false" />
-    </list>
+    <list default="true" id="4649e887-9a3a-499d-a99a-17666bd54e4b" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -40,7 +38,7 @@
         <entry file="file://$PROJECT_DIR$/src/components/app/createApplication.vue">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="245">
-              <caret line="717" column="8" lean-forward="true" selection-start-line="717" selection-start-column="8" selection-end-line="717" selection-end-column="8" />
+              <caret line="669" column="58" lean-forward="true" selection-start-line="669" selection-start-column="58" selection-end-line="669" selection-end-column="58" />
               <folding>
                 <element signature="n#style#0;n#el-button#0;n#div#0;n#div#3;n#div#0;n#div#3;n#el-tab-pane#0;n#el-tabs#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#el-dialog#0;n#div#0;n#template#0;n#!!top" expanded="true" />
@@ -144,7 +142,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-10" />
     <option name="y" value="-10" />
     <option name="width" value="980" />
@@ -221,15 +219,15 @@
       <updated>1600673026190</updated>
       <workItem from="1600673027471" duration="995000" />
       <workItem from="1601358555173" duration="1236000" />
-      <workItem from="1602494407316" duration="11975000" />
+      <workItem from="1602494407316" duration="13662000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14206000" />
+    <option name="totallyTimeSpent" value="15893000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.167107" />
@@ -325,7 +323,7 @@
     <entry file="file://$PROJECT_DIR$/src/components/app/createApplication.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="245">
-          <caret line="717" column="8" lean-forward="true" selection-start-line="717" selection-start-column="8" selection-end-line="717" selection-end-column="8" />
+          <caret line="669" column="58" lean-forward="true" selection-start-line="669" selection-start-column="58" selection-end-line="669" selection-end-column="58" />
           <folding>
             <element signature="n#style#0;n#el-button#0;n#div#0;n#div#3;n#div#0;n#div#3;n#el-tab-pane#0;n#el-tabs#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#el-dialog#0;n#div#0;n#template#0;n#!!top" expanded="true" />
