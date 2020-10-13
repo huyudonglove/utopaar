@@ -88,7 +88,7 @@
     <el-container>
       <div class="asideTree">
         <div>
-          <el-tree :data="treedata" @node-click="showTable" :props="defaulProps" >
+          <el-tree :data="treedata" highlight-current @node-click="showTable" :props="defaulProps" >
             <span class="span-ellipsis" slot-scope="{ node }">
               <span :title="node.label">{{ node.label }}</span>
             </span>
@@ -121,6 +121,7 @@
             >
               <el-button slot="append" icon="el-icon-search" @click="tree">搜索</el-button>
             </el-input>
+            <el-button type="info" @click="resetSearchPosition">重置</el-button>
             <!-- <el-button type="primary" @click="selectPositionLot">批量选择</el-button>
             <el-button type="info" @click="clearPosition">批量取消</el-button> -->
           </el-row>
@@ -281,8 +282,10 @@ export default {
       if(this.positionPage!=1){
         this.positionPage=1;
       }
-      this.getPositionList(this.clickTreeId);
-      this.clashPosition();
+      if(this.clickTreeId){
+        this.getPositionList(this.clickTreeId);
+        this.clashPosition();
+      }
     },
     playType(){
       if(this.playPage!=1){
@@ -389,6 +392,17 @@ export default {
           }
         }
       })
+    },
+    resetSearchPosition(){
+      this.provinceValue='',
+      this.cityValue='',
+      this.areaValue='',
+      this.inputPosition='';
+      this.clickTreeId= '';
+      this.tree();
+      this.positionTableTotal=[];
+      this.positionTable=[];
+      this.positionTotal=0;
     },
     clashAPP(){//将选择应用的行高亮
       let selectAllRow=[];
