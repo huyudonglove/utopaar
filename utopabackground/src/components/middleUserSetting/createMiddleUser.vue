@@ -402,7 +402,7 @@ export default {
       this.tree();
       this.positionTableTotal=[];
       this.positionTable=[];
-      this.positionTotal=0
+      this.positionTotal=0;
     },
     clashAPP(){//将选择应用的行高亮
       let selectAllRow=[];
