@@ -75,7 +75,7 @@
                       <span class="positionSpan"><el-button @click="item.checked=false;" type="text">删除</el-button></span>
                     </div>
                   </div>
-                  <el-button @click="positionShow=true" style="width:850px;margin-left: 160px" >+</el-button>
+                  <el-button @click="showButton" style="width:850px;margin-left: 160px" >+</el-button>
                 </div>
               </div>
             </div>
@@ -239,7 +239,7 @@
       <el-button @click="createApp" v-if="type=='revise'" type="primary">确定</el-button>
       <el-button @click="goTo">返回</el-button>
     </div>
-    <el-dialog title="选择地址" :visible.sync="positionShow" style="width: 2200px" @close="searchWord='';getPosition();">
+    <el-dialog title="选择地址" :visible.sync="positionShow" style="width: 2200px" >
       <div>
         <el-input placeholder="请输入资产位置关键字" style="width: 250px" v-model="searchWord" @input="changeWord"><el-button slot="append" icon="el-icon-search"></el-button></el-input>
       </div>
@@ -250,8 +250,8 @@
         <span class="positionSpan">资产位置</span>
       </div>
       <div>
-        <div v-for="(item,index) in positionData" :key="item.id">
-          <div v-if="index>page*5-6&&index<page*5" style="border-bottom: 1px dashed #dcdfe6;line-height: 40px">
+        <div v-for="(item,index) in positionDataCopy" :key="item.id">
+          <div v-if="index>page*limit-(limit+1)&&index<page*limit" style="border-bottom: 1px dashed #dcdfe6;line-height: 40px">
             <span class="positionSpan"><el-checkbox v-model="item.checked"></el-checkbox></span>
             <span class="positionSpan">{{item.id}}</span>
             <span class="positionSpan">{{item.provinceCityArea}}</span>
@@ -260,13 +260,18 @@
         </div>
       </div>
       <div style="margin-top: 10px">
-        <el-pagination @size-change="limitChange" @current-change="pageChange" :current-page="1"  :page-size="5"
-                       layout="total, prev, pager, next, jumper"
+        <el-pagination @size-change="limitChange" @current-change="pageChange" :current-page="page"  :page-size="5"
+                       :page-sizes="[5, 10, 15, 20]"
+                       layout="total,sizes,prev, pager, next, jumper"
                        :total="total">
         </el-pagination>
       </div>
-      <!--        <el-button @click="addPosition()">确定</el-button>-->
-      <!--        <el-button @click="positionShow=false">取消</el-button>-->
+      <div style="padding-top: 10px">
+        <div style="text-align: right">
+          <el-button @click="surePos" type="primary" >确定</el-button>
+          <el-button @click="positionShow=false;">取消</el-button>
+        </div>
+      </div>
     </el-dialog>
     <el-dialog  :visible.sync="appType" width="60%" >
       <div>
@@ -365,7 +370,8 @@
         settingTitle:'',
         settingContent:'',
         isMark:1,
-        searchWord:''
+        searchWord:'',
+        positionDataCopy:[]
       }
     },
     methods:{
@@ -567,7 +573,7 @@
       },
       getPosition(){
         let msg={
-          name:this.searchWord,
+          name:'',
           backgroundAppId:this.appId,
           page:1,
           limit:10000
@@ -577,7 +583,6 @@
             //console.log(res,9999)
             res.code?this.$message.error(res.msg):(()=>{
               let apple=res.data.items;
-              this.total=res.data.total;
               this.positionData=apple.map(v=>{v.checked=false;v.positionId=v.id;v.positionDesc=v.name;return v;});
               this.id?(()=>{
                 let ban=[];
@@ -587,7 +592,9 @@
                 this.positionData.map(r=>{
                   ban.includes(r.id)?r.checked=true:r.checked=false;
                   return r;
-                })
+                });
+                this.positionDataCopy=JSON.parse(JSON.stringify(this.positionData));
+                this.total=this.positionDataCopy.length;
                 resolve();
               })():'';
               //console.log(this.positionData,789)
@@ -700,7 +707,34 @@
         return isJPG && isLt2M;
       },
       changeWord(){
-        this.getPosition();
+        this.page=1;
+        this.positionDataCopy=JSON.parse(JSON.stringify(
+          this.positionData.filter(data=>{
+            return data.name.toLowerCase().includes(this.searchWord.toLowerCase());
+          })
+        ))
+        this.total=this.positionDataCopy.length;
+        console.log(this.positionDataCopy,99999)
+      },
+      surePos(){
+        this.positionDataCopy.map(v=>{
+          this.positionData.map(u=>{
+            if(u.id==v.id){
+              u.checked=v.checked;
+            }
+          })
+        });
+        this.positionShow=false;
+      },
+      showButton(){
+        this.positionDataCopy=JSON.parse(JSON.stringify(this.positionData));
+        this.total=this.positionDataCopy.length;
+        this.$nextTick(()=>{
+          this.page=1;
+          this.limit=5;
+          this.positionShow=true;
+        });
+        this.searchWord='';
       }
     },
     watch:{
