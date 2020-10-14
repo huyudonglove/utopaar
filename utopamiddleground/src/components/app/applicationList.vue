@@ -44,7 +44,11 @@
       </el-table-column>
       <el-table-column prop="provinceCityArea" label="所属地区" align="center" >
       </el-table-column>
-      <el-table-column prop="position" label="位置" align="center" >
+      <el-table-column prop="position" label="地理位置" align="center" >
+        <template slot-scope="scope">
+          <div style="white-space:pre-line;">{{scope.row.position.split(',').slice(0,2).join('\n')}}</div>
+          <div style="cursor:pointer;" v-if="scope.row.position.split(',').length>2" @click="showCity(scope)">...</div>
+        </template>
       </el-table-column>
       <el-table-column prop="loadingLine" label="渲染管道" width="200" align="center">
       </el-table-column>
@@ -66,6 +70,9 @@
       </el-table-column>
     </el-table>
     <pagination v-if="showPagination"></pagination>
+    <el-dialog :visible.sync="cityShow" width="200px" :destroy-on-close="true" center>
+      <div style="white-space:pre-line;text-align:center;">{{this.citys}}</div>
+    </el-dialog>
   </div>
 </template>
 
@@ -96,7 +103,9 @@
         load:[],
         loadValue:'',
         wordState:'',
-        upS:''
+        upS:'',
+        cityShow:false,
+        citys:''
       }
     },
     methods:{
@@ -162,8 +171,11 @@
         state.order=='ascending'&&(()=>{this.upS='true'})();
         state.order=='descending'&&(()=>{this.upS='false'})();
         this.getList();
-      }
-
+      },
+      showCity(scope){
+        this.cityShow=true;
+        this.citys = scope.row.position.split(',').join('\n');
+      },
     },
     watch:{
       clickPage(){
