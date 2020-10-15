@@ -17,12 +17,13 @@
                 :data="treeData"
                 :props="props"
                 accordion
-                :filter-node-method="filterNode"
                 @node-click="handleNodeClick"
                 ref="tree"
                 node-key="id"
                 :default-expanded-keys="expandedKeys"
                 :highlight-current="true"
+                :render-content="renderContent"
+                :default-expand-all="true"
                 >
                 <span class="span-ellipsis" slot-scope="{ node, data }">
                 <span :title="node.label">{{ node.label }}</span>
@@ -36,7 +37,7 @@
         <el-main>
           <div style="height:50px;border-bottom:1px solid #DFDCDC;margin-bottom:10px">
           <span style="font-size:24px;font-weight:bold;color:#614a4d;">投放列表</span>
-           <el-button type="primary" style="float:right"  @click="$router.push({path:'/putManage/putList/putCreate',query:{assetId:assetId,msg:JSON.stringify($route.query)}})" :disabled="ableShow||!putInPower[0].isCheck">添加投放</el-button>
+           <el-button type="primary" style="float:right"  @click="$router.push({path:'/putManage/putList/putCreate',query:{assetId:assetId,msg:JSON.stringify($route.query)}})" :disabled="ableShow||!putInPower[0].isCheck||isValid==2">添加投放</el-button>
         </div>
         <el-row class="tac" >
           <span>应用名称：<el-input v-model="wd" style="width: 15%" suffix-icon="el-icon-search" maxlength="50" placeholder="输入关键字"></el-input></span>
@@ -45,9 +46,9 @@
           <span> 投放状态：
             <el-select v-model="timeState" placeholder="请选择">
                 <el-option label="全部" value></el-option>
-                <el-option label="未投放" value=1></el-option>
-                <el-option label="投放中" value=2></el-option>
-                <el-option label="结束" value=3></el-option>
+                <el-option label="未投放" value="1"></el-option>
+                <el-option label="投放中" value="2"></el-option>
+                <el-option label="结束" value="3"></el-option>
               </el-select>
             </span>
           <span>投放时间：<singleTime></singleTime></span>
@@ -118,6 +119,7 @@
             <template slot-scope="scope">
                <el-button
                 type="success"
+                :disabled="isValid==2"
                 size="mini"
                 @click="$router.push({path:'/putManage/putList/putInfo',query:{id:scope.row.id,msg:JSON.stringify($route.query)}})"
               >查看</el-button>
@@ -125,11 +127,11 @@
                 type="primary"
                 size="mini"
                 @click="$router.push({path:'/putManage/putList/putCreate',query:{id:scope.row.id,ableLength:ableLength,msg:JSON.stringify($route.query)}})"
-              :disabled="!putInPower[1].isCheck">编辑</el-button>
+              :disabled="!putInPower[1].isCheck||isValid==2">编辑</el-button>
               <el-button
                 type="danger"
                 size="mini"
-               :disabled="scope.row.status==2||!putInPower[3].isCheck"
+               :disabled="scope.row.status==2||!putInPower[3].isCheck||isValid==2"
                @click="del(scope.row.id)"
               >删除</el-button>
             </template>
@@ -178,7 +180,8 @@ export default {
     showPagination:false,
     tableHeight:0,
     timeScope:[],
-    expandedKeys:[37]
+    expandedKeys:[],
+    isValid:null,
     };
   },
   async created(){
@@ -191,6 +194,7 @@ export default {
   this.state=query.state||'',//使用状态
   this.q=query.q||'',
   this.wd=query.wd||'',
+  this.isValid=query.isValid
   this.assetId=query.assetId||''
   this.filterText=query.filterText||''
   this.expandedKeys=[parseInt(query.assetId)]
@@ -211,7 +215,7 @@ export default {
       this.$store.commit('pagination/setClickPage',pageRecord);
       this.$store.commit('pagination/setLimitPage',limitRecord);
       this.showPagination = true;//加载分页组件
-      this.$refs.tree?this.$refs.tree.filter(this.filterText):null;
+      // this.$refs.tree?this.$refs.tree.filter(this.filterText):null;
       // this.$refs.tree.filter(this.filterText);
      
     })
@@ -231,18 +235,26 @@ export default {
   },
   methods: {
     ...mapActions('currentUserPower',['getUserPower']),
+    renderContent(h, { node, data, store }) {
+      if (data.isValid == 2) {
+        return <span style="background:#ccc">{node.label}</span>;
+      } else {
+        return <span>{node.label}</span>;
+      }
+    },
     handleNodeClick(data) {
       if(data.type==6){
         this.assetId=data.id
+        this.isValid=data.isValid
         this.expandedKeys=[this.assetId]
         this.ableShow=false
         // this.listData()
       }
       },
-    filterNode(value, data) {
-    if (!value) return true;
-    return data.name.indexOf(value) !== -1;
-  },
+  //   filterNode(value, data) {
+  //   if (!value) return true;
+  //   return data.name.indexOf(value) !== -1;
+  // },
   //请求列表数据
     listData(){
       putInList({assetId:this.assetId,...this.$route.query}).then(res=>{
@@ -281,7 +293,7 @@ export default {
     },
     treeDataTable(){
       return new Promise((resolve,reject)=>{
-        putInTree({}).then(res=>{
+        putInTree({name:this.filterText}).then(res=>{
           if(res.code){
             this.$message.error(res.msg);
           }else{
@@ -296,8 +308,12 @@ export default {
   },
    watch: {
       filterText(val) {
-        this.replace('filterText',this.filterText);
-        this.$refs.tree?this.$refs.tree.filter(val):null;
+        // this.replace('filterText',this.filterText);
+        // this.$refs.tree?this.$refs.tree.filter(val):null;
+        this.treeDataTable()
+      },
+      isValid(){
+        this.replace('isValid',this.isValid);
       },
       time(){
         this.$store.commit('pagination/setClickPage',1);
