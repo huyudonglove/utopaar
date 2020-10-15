@@ -28,7 +28,7 @@
     <el-container>
       <div class="asideTree">
         <div :style="{'overflow':'auto','height':treeHeight+'px'}">
-          <el-tree ref="bigTree" class="filter-tree" :data="treedata" @node-click="showTable" :props="defaulProps" :filter-node-method="filterNode" default-expand-all>
+          <el-tree ref="bigTree" highlight-current class="filter-tree" :data="treedata" @node-click="showTable" :props="defaulProps" :filter-node-method="filterNode" default-expand-all>
             <span class="span-ellipsis" slot-scope="{ node }">
               <span :title="node.label">{{ node.label }}</span>
             </span>
