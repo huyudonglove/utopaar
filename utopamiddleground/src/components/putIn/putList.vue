@@ -13,6 +13,7 @@
                 placeholder="输入关键字进行过滤"
                 v-model="filterText">
               </el-input>
+              <div v-if="isShowTree">
                 <el-tree
                 :data="treeData"
                 :props="props"
@@ -23,12 +24,13 @@
                 :default-expanded-keys="expandedKeys"
                 :highlight-current="true"
                 :render-content="renderContent"
-                :default-expand-all="true"
+                :default-expand-all="isExpand"
                 >
                 <span class="span-ellipsis" slot-scope="{ node, data }">
                 <span :title="node.label">{{ node.label }}</span>
               </span>
               </el-tree>
+              </div>
             </div>
             </el-col>
           </el-row>
@@ -182,6 +184,8 @@ export default {
     timeScope:[],
     expandedKeys:[],
     isValid:null,
+    isShowTree:true,
+    isExpand:false
     };
   },
   async created(){
@@ -298,6 +302,14 @@ export default {
             this.$message.error(res.msg);
           }else{
             this.treeData=res.data;
+            this.isExpand = false;
+            this.isShowTree =false;
+            if(this.filterText!==''){ 
+              this.isExpand = true
+            }
+            this.$nextTick(()=>{
+              this.isShowTree=true;
+            })
           } 
           resolve();
         }).catch(err=>{
@@ -305,6 +317,7 @@ export default {
         })
       })
     },
+
   },
    watch: {
       filterText(val) {
