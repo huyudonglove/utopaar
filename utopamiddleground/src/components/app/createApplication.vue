@@ -254,7 +254,11 @@
           <div v-if="index>page*limit-(limit+1)&&index<page*limit" style="border-bottom: 1px dashed #dcdfe6;line-height: 40px">
             <span class="positionSpan"><el-checkbox v-model="item.checked"></el-checkbox></span>
             <span class="positionSpan">{{item.id}}</span>
-            <span class="positionSpan">{{item.provinceCityArea}}</span>
+            <span class="positionSpan" >
+              <el-tooltip class="item" effect="dark" :content="item.parentNameUrl" placement="top-start">
+                <el-button type="text" >{{item.provinceCityArea}}</el-button>
+              </el-tooltip>
+            </span>
             <span class="positionSpan">{{item.name}}</span>
           </div>
         </div>
