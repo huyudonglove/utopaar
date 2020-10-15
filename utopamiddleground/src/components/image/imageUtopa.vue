@@ -15,10 +15,11 @@
                 :data="treeData"
                 :props="props"
                 accordion
-                :filter-node-method="filterNode"
                 @node-click="handleNodeClick"
+                :default-expanded-keys="expandedKeys"
                 ref="tree"
                 :render-content="renderContent"
+                :default-expand-all="true"
               >
                 <span class="span-ellipsis" slot-scope="{node}">
                   <span :title="node.label"> {{ node.label }}</span>
@@ -645,7 +646,11 @@
        },
        watch:{
          filterText(val) {
-           this.$refs.tree.filter(val);
+          //  this.$refs.tree.filter(val);
+           this.treeDataTable()
+         },
+         isValid(){
+         this.replace('isValid',this.isValid);
          },
          searchName(){
              this.currentPage=1;
@@ -658,6 +663,9 @@
          }
        },
       created() {
+          let query=this.$route.query
+          this.filterText=query.filterText||''
+          this.isValid=query.isValid
           this.currentPage=1;
           this.$nextTick(()=>{
             this.currentPage=1;
