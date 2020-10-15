@@ -13,22 +13,24 @@
                 placeholder="输入关键字进行过滤"
                 v-model="filterText">
               </el-input>
+              <div v-if="isShowTree">
                 <el-tree
                 :data="treeData"
                 :props="props"
                 accordion
-                :filter-node-method="filterNode"
                 @node-click="handleNodeClick"
                 ref="tree"
                 node-key="id"
                 :default-expanded-keys="expandedKeys"
                 :highlight-current="true"
                 :render-content="renderContent"
+                :default-expand-all="isExpand"
                 >
                 <span class="span-ellipsis" slot-scope="{ node, data }">
                 <span :title="node.label">{{ node.label }}</span>
               </span>
               </el-tree>
+              </div>
             </div>
             </el-col>
           </el-row>
@@ -48,7 +50,7 @@
                 <el-option label="全部" value></el-option>
                 <el-option label="未投放" value="1"></el-option>
                 <el-option label="投放中" value="2"></el-option>
-                <el-option label="结束" value="2"></el-option>
+                <el-option label="结束" value="3"></el-option>
               </el-select>
             </span>
           <span>投放时间：<singleTime></singleTime></span>
@@ -180,8 +182,10 @@ export default {
     showPagination:false,
     tableHeight:0,
     timeScope:[],
-    expandedKeys:[37],
+    expandedKeys:[],
     isValid:null,
+    isShowTree:true,
+    isExpand:false
     };
   },
   async created(){
@@ -194,6 +198,7 @@ export default {
   this.state=query.state||'',//使用状态
   this.q=query.q||'',
   this.wd=query.wd||'',
+  this.isValid=query.isValid
   this.assetId=query.assetId||''
   this.filterText=query.filterText||''
   this.expandedKeys=[parseInt(query.assetId)]
@@ -214,7 +219,7 @@ export default {
       this.$store.commit('pagination/setClickPage',pageRecord);
       this.$store.commit('pagination/setLimitPage',limitRecord);
       this.showPagination = true;//加载分页组件
-      this.$refs.tree?this.$refs.tree.filter(this.filterText):null;
+      // this.$refs.tree?this.$refs.tree.filter(this.filterText):null;
       // this.$refs.tree.filter(this.filterText);
      
     })
@@ -250,10 +255,10 @@ export default {
         // this.listData()
       }
       },
-    filterNode(value, data) {
-    if (!value) return true;
-    return data.name.indexOf(value) !== -1;
-  },
+  //   filterNode(value, data) {
+  //   if (!value) return true;
+  //   return data.name.indexOf(value) !== -1;
+  // },
   //请求列表数据
     listData(){
       putInList({assetId:this.assetId,...this.$route.query}).then(res=>{
@@ -292,11 +297,19 @@ export default {
     },
     treeDataTable(){
       return new Promise((resolve,reject)=>{
-        putInTree({}).then(res=>{
+        putInTree({name:this.filterText}).then(res=>{
           if(res.code){
             this.$message.error(res.msg);
           }else{
             this.treeData=res.data;
+            this.isExpand = false;
+            this.isShowTree =false;
+            if(this.filterText!==''){ 
+              this.isExpand = true
+            }
+            this.$nextTick(()=>{
+              this.isShowTree=true;
+            })
           } 
           resolve();
         }).catch(err=>{
@@ -304,11 +317,16 @@ export default {
         })
       })
     },
+
   },
    watch: {
       filterText(val) {
-        this.replace('filterText',this.filterText);
-        this.$refs.tree?this.$refs.tree.filter(val):null;
+        // this.replace('filterText',this.filterText);
+        // this.$refs.tree?this.$refs.tree.filter(val):null;
+        this.treeDataTable()
+      },
+      isValid(){
+        this.replace('isValid',this.isValid);
       },
       time(){
         this.$store.commit('pagination/setClickPage',1);

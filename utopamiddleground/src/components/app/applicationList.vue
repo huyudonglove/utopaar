@@ -43,6 +43,10 @@
         </template>
       </el-table-column>
       <el-table-column prop="provinceCityArea" label="所属地区" align="center" >
+        <template slot-scope="scope">
+          <div style="white-space:pre-line;">{{scope.row.provinceCityArea.split(',').slice(0,2).join('\n')}}</div>
+          <div style="cursor:pointer;" v-if="scope.row.provinceCityArea.split(',').length>2" @click="showCity(scope)">...</div>
+        </template>
       </el-table-column>
       <el-table-column prop="position" label="地理位置" align="center" >
         <template slot-scope="scope">
@@ -174,7 +178,7 @@
       },
       showCity(scope){
         this.cityShow=true;
-        this.citys = scope.row.position.split(',').join('\n');
+        this.citys = scope.row.provinceCityArea.split(',').join('\n');
       },
     },
     watch:{
