@@ -28,7 +28,7 @@
     <el-container>
       <div class="asideTree">
         <div :style="{'overflow':'auto','height':treeHeight+'px'}">
-          <el-tree ref="bigTree" highlight-current class="filter-tree" :data="treedata" @node-click="showTable" :props="defaulProps" :filter-node-method="filterNode" default-expand-all>
+          <el-tree ref="bigTree" highlight-current class="filter-tree" :data="treedata" @node-click="showTable" :props="defaulProps" :filter-node-method="filterNode" :render-content="renderContent">
             <span class="span-ellipsis" slot-scope="{ node }">
               <span :title="node.label">{{ node.label }}</span>
             </span>
@@ -38,9 +38,9 @@
       <el-main>
         <div>
           <el-row class="tac" style="border-bottom:1px solid #eeeeee; padding-bottom:15px;">
-            <el-button v-if="isCreate" type="primary" @click="createDialog" :disabled="!positionPower[0].isCheck">新增</el-button>
-            <el-button v-if="isCreate" type="success" @click="open" :disabled="!positionPower[1].isCheck">启用</el-button>
-            <el-button v-if="isCreate" type="danger" @click="close" :disabled="!positionPower[1].isCheck">禁用</el-button>
+            <el-button v-if="isCreate" type="primary" @click="createDialog" :disabled="!positionPower[0].isCheck||!isValid">新增</el-button>
+            <el-button v-if="isCreate" type="success" @click="open" :disabled="!positionPower[1].isCheck||!isValid">启用</el-button>
+            <el-button v-if="isCreate" type="danger" @click="close" :disabled="!positionPower[1].isCheck||!isValid">禁用</el-button>
           </el-row>
         </div>
         <div>
@@ -67,7 +67,7 @@
             <el-table-column label="最后修改人" prop="updateUser" align="center"></el-table-column>
             <el-table-column fixed="right" label="操作" width="100" align="center">
               <template slot-scope="scope">
-                <el-button type="primary" size="mini" @click="positionInfo(scope.row.id)" :disabled="!positionPower[1].isCheck">编辑</el-button>
+                <el-button type="primary" size="mini" @click="positionInfo(scope.row.id)" :disabled="!positionPower[1].isCheck||!isValid">编辑</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -198,7 +198,8 @@ export default {
       clickTypeId:'',//专用列表判断种类id
       editId:'',
       tableHeight:0,
-      treeHeight:0
+      treeHeight:0,
+      isValid:false,
     }
   },
   watch:{
@@ -242,7 +243,8 @@ export default {
         "provinceId":this.provinceValue,
         "cityId":this.cityValue,
         "areaId":this.areaValue,
-        "source":"Middleground"
+        "source":"Middleground",
+        "name":this.inputAssetsName
       }
     }
   },
@@ -253,6 +255,7 @@ export default {
     },
     showTable(arr){
       if(arr.type==5){
+        this.isValid = arr.isValid==1;
         this.getTable(arr.id);
         this.isCreate=true;
         this.typeId = 6//保存需要创建的种类id
@@ -298,6 +301,13 @@ export default {
         };
         this.positionTable=[];
       })
+    },
+    renderContent(h, { node, data, store }) {
+      if (data.isValid == 2) {
+        return <span style="background:#ccc">{node.label}</span>;
+      } else {
+        return <span>{node.label}</span>;
+      }
     },
     resetSearch(){
       this.provinceValue='',

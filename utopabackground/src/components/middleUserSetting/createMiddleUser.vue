@@ -87,8 +87,8 @@
     </div>
     <el-container>
       <div class="asideTree">
-        <div>
-          <el-tree :data="treedata" highlight-current @node-click="showTable" :props="defaulProps" >
+        <div :style="{'overflow':'auto','height':'500px'}" v-if="isShowTree">
+          <el-tree :data="treedata" highlight-current @node-click="showTable" :default-expand-all="isExpand" :props="defaulProps" >
             <span class="span-ellipsis" slot-scope="{ node }">
               <span :title="node.label">{{ node.label }}</span>
             </span>
@@ -113,14 +113,16 @@
                 <el-option v-for="(item,idx) in areaList" :key="idx" :label="item.name" :value="item.id"></el-option>
               </el-select>
             </span>
-            <el-input
+            <el-input v-model="inputPosition" style="width:200px;" maxlength="50" placeholder="请输入内容"></el-input>
+            <el-button type="primary" @click="tree">搜索</el-button>
+            <!-- <el-input
               placeholder="请输入内容"
               class="input-with-select"
               v-model="inputPosition"
               style="width: 20%;"
             >
               <el-button slot="append" icon="el-icon-search" @click="tree">搜索</el-button>
-            </el-input>
+            </el-input> -->
             <el-button type="info" @click="resetSearchPosition">重置</el-button>
             <!-- <el-button type="primary" @click="selectPositionLot">批量选择</el-button>
             <el-button type="info" @click="clearPosition">批量取消</el-button> -->
@@ -205,6 +207,8 @@ export default {
       areaValue:'',
       areaList:[],//地区列表
       clickTreeId:'',//当前点击的树节点id
+      isShowTree:true,
+      isExpand:false
     }
   },
   computed:{
@@ -236,7 +240,8 @@ export default {
         "provinceId":this.provinceValue?this.provinceValue:null,
         "cityId":this.cityValue?this.cityValue:null,
         "areaId":this.areaValue?this.areaValue:null,
-        "source":"Background"
+        "source":"Background",
+        "name":this.inputPosition
       }
     },
     positionParams(){
@@ -245,7 +250,6 @@ export default {
         // "limit":this.positionLimit,
         "userId":parseInt(this.$route.query.id),
         "status":'',
-        "name":this.inputPosition,
       }
     }
   },
@@ -277,15 +281,6 @@ export default {
         this.playPage=1;
       }
       this.appList();
-    },
-    inputPosition(){
-      if(this.positionPage!=1){
-        this.positionPage=1;
-      }
-      if(this.clickTreeId){
-        this.getPositionList(this.clickTreeId);
-        this.clashPosition();
-      }
     },
     playType(){
       if(this.playPage!=1){
@@ -400,9 +395,6 @@ export default {
       this.inputPosition='';
       this.clickTreeId= '';
       this.tree();
-      this.positionTableTotal=[];
-      this.positionTable=[];
-      this.positionTotal=0;
     },
     clashAPP(){//将选择应用的行高亮
       let selectAllRow=[];
@@ -466,6 +458,17 @@ export default {
     tree(){
       getMiddleTree(this.treeParams).then(res=>{
         this.treedata =res.data;
+        this.isExpand = false;
+        this.isShowTree =false;
+        if(this.inputPosition!==''){ 
+          this.isExpand = true
+        }
+        this.$nextTick(()=>{
+          this.isShowTree=true;
+        })
+        this.positionTableTotal=[];
+        this.positionTable=[];
+        this.positionTotal=0;
       })
     },
     getPositionList(parentId){

@@ -201,7 +201,7 @@ export default {
       editId:'',
       tableHeight:0,//表格的高度
       treeHeight:0,//树的高度
-      tableAreaId:'',//保存区id，用来查询项目
+      tableAreaId:'',//保存区id，用来查询项目,
     }
   },
   watch:{
@@ -288,6 +288,7 @@ export default {
         "provinceId":this.provinceValue,
         "cityId":this.cityValue,
         "areaId":this.areaValue,
+        "name":this.inputAssetsName
       }
     }
   },
@@ -454,6 +455,9 @@ export default {
     searchTree(){//创建里查询树状结构
       getPositionTree({}).then(res=>{
         this.treedata=this.treedataC = res.data;
+        this.$nextTick(()=>{
+          this.$refs.bigTree.setCurrentKey(this.treeId);
+        })
       })
     },
     getTable(id,type,isMe){
