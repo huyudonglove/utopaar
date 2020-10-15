@@ -11,20 +11,21 @@
                 placeholder="输入关键字进行过滤"
                 v-model="filterText">
               </el-input>
+              <div v-if="isShowTree">
               <el-tree
                 :data="treeData"
                 :props="props"
                 accordion
                 @node-click="handleNodeClick"
-                :default-expanded-keys="expandedKeys"
                 ref="tree"
                 :render-content="renderContent"
-                :default-expand-all="true"
+               :default-expand-all="isExpand"
               >
                 <span class="span-ellipsis" slot-scope="{node}">
                   <span :title="node.label"> {{ node.label }}</span>
                 </span>
               </el-tree>
+              </div>
             </div>
           </el-col>
         </el-row>
@@ -461,6 +462,8 @@
               {name:'locus',val:2}
             ],
             isValid:null,
+            isShowTree:true,
+            isExpand:false
           }
         },
         components: {
@@ -647,7 +650,17 @@
        watch:{
          filterText(val) {
           //  this.$refs.tree.filter(val);
-           this.treeDataTable()
+           putInTree({source:'Middleground',name:this.filterText}).then(res=>{
+              this.treeData=res.data
+              this.isExpand = false;
+              this.isShowTree =false;
+              if(this.filterText!==''){ 
+                this.isExpand = true
+              }
+                this.$nextTick(()=>{
+                this.isShowTree=true;
+                })
+            })
          },
          isValid(){
          this.replace('isValid',this.isValid);
@@ -671,8 +684,16 @@
             this.currentPage=1;
           //分页显示隐藏
             this.getImage();
-            putInTree({source:'Middleground'}).then(res=>{
+            putInTree({source:'Middleground',name:this.filterText}).then(res=>{
               this.treeData=res.data
+              this.isExpand = false;
+              this.isShowTree =false;
+              if(this.filterText!==''){ 
+                this.isExpand = true
+              }
+             
+                this.isShowTree=true;
+             
             })
           this.showPagination=true;
         })
@@ -680,7 +701,7 @@
       },
     updated(){
       this.$nextTick(()=>{
-        this.treeHeight = window.innerHeight - this.$refs.tree.$el.offsetTop -10;
+        // this.treeHeight = window.innerHeight - this.$refs.tree.$el.offsetTop -10;
       })
     }
   }
