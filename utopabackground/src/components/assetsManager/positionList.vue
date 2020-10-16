@@ -219,6 +219,7 @@ export default {
         this.getCity(newValue);
         this.cityValue = '';
         this.areaValue = '';
+        this.areaList=[];
       }
     },
     cityValue(newValue){
@@ -234,6 +235,7 @@ export default {
           if(oldvalue!=''&&newValue!=''){
             this.form.cityC = '';
             this.form.areaC = '';
+            this.areaListC=[];
           }
         }
       },
@@ -288,7 +290,6 @@ export default {
         "provinceId":this.provinceValue,
         "cityId":this.cityValue,
         "areaId":this.areaValue,
-        "name":this.inputAssetsName
       }
     }
   },
@@ -446,10 +447,18 @@ export default {
       this.areaValue='',
       this.inputAssetsName='';
       this.clickId = '';
+      this.clickTypeId='';
+      this.typeId='';
       this.treeId='';
+      this.selectParent='';
+      this.selectParentId='';
+      this.tableAreaId='';
+      this.editId='';
       this.$store.commit('pagination/setClickPage',1);
       this.$store.commit('pagination/setLimitPage',20);
-      this.getTable(this.clickId);
+      // this.getTable(this.clickId);
+      this.positionTable = [];
+      this.$store.commit('pagination/setTotal', 0);
       this.searchTree();
     },
     searchTree(){//创建里查询树状结构
