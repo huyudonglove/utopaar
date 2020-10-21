@@ -238,14 +238,10 @@ export default {
       this.$refs.cityTree.setChecked(id,false);
     },
     getCheckedNodes(data,checked,indeterminate){
-      // console.log(this.$refs.tree.getCheckedNodes());
-      let arr =this.$refs.cityTree.getCheckedNodes().filter(v=>v.children);
+      let arr =this.$refs.cityTree.getCheckedNodes().filter(v=>v.children===undefined);
       let brr =[];
       arr.forEach(v=>{
-        var node1 = v.name;
-        v.children.forEach(u=>{
-          brr.push({"name":node1+'-'+u.name,"id":u.id});
-        })
+        brr.push({"name":this.$refs.cityTree.getNode(v.parentId).data.name+'-'+v.name,"id":v.id});
       })
       this.cityValue=brr;
       console.log(brr)
