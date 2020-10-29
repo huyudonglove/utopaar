@@ -12,19 +12,22 @@
                 v-model="filterText">
               </el-input>
               <div v-if="isShowTree">
-              <el-tree
-                :data="treeData"
-                :props="props"
-                accordion
-                @node-click="handleNodeClick"
-                ref="tree"
-                :render-content="renderContent"
-               :default-expand-all="isExpand"
-              >
-                <span class="span-ellipsis" slot-scope="{node}">
-                  <span :title="node.label"> {{ node.label }}</span>
-                </span>
-              </el-tree>
+                <el-tree
+                  :data="treeData"
+                  :props="props"
+                  accordion
+                  @node-click="handleNodeClick"
+                  ref="tree"
+                  node-key="id"
+                  :default-expanded-keys="expandedKeys"
+                  :highlight-current="true"
+                  :render-content="renderContent"
+                  :default-expand-all="isExpand"
+                >
+                  <span class="span-ellipsis" slot-scope="{ node, data }">
+                                <span :title="node.label">{{ node.label }}</span>
+                              </span>
+                </el-tree>
               </div>
             </div>
           </el-col>
@@ -33,6 +36,15 @@
     </div>
     <div class="body-content">
       <el-main>
+        <div>
+          <div v-if="positionData.id">
+            <el-radio-group v-model="recongizeType" style="padding-bottom: 10px">
+              <el-radio-button :label="0" >图像云识别</el-radio-button>
+              <el-radio-button :label="1" >图像本地识别</el-radio-button>
+              <el-radio-button :label="2" >空间识别</el-radio-button>
+            </el-radio-group>
+          </div>
+        </div>
         <div style="width: 100%">
           <el-tabs v-model="activeName" type="card" @tab-click="handleClick();">
             <el-tab-pane label="全部" name="first"></el-tab-pane>
@@ -463,7 +475,11 @@
             ],
             isValid:null,
             isShowTree:true,
-            isExpand:false
+            isExpand:false,
+            recongizeType:0,
+            positionData:{},
+            expandedKeys:[],
+            assetId:''
           }
         },
         components: {
@@ -549,11 +565,12 @@
          handleNodeClick(data) {
            console.log(data);
            data.type==6?(()=>{
+             this.assetId=data.id
              this.currentPage=1;
              this.searchName='';
              this.isValid=data.isValid
              this.positionId=data.id;
-             this.getImage();
+             this.positionData=data;
            })():(()=>{
              this.positionId=''
            })();
@@ -673,13 +690,23 @@
          },
          currentPage(){
            this.getImage();
-         }
+         },
+         assetId(){
+           // console.log('assetId',this.assetId)
+           this.currentPage=1;
+           this.showPagination=false;
+           this.replace('assetId',this.assetId);
+           this.getImage();
+           this.showPagination=true;
+         },
        },
       created() {
           let query=this.$route.query
           this.filterText=query.filterText||''
-          this.isValid=query.isValid
+          this.isValid=query.isValid;
+          this.assetId=query.assetId||''
           this.currentPage=1;
+          //this.expandedKeys=[parseInt(query.assetId)]
           this.$nextTick(()=>{
             this.currentPage=1;
           //分页显示隐藏
