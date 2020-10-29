@@ -285,7 +285,7 @@ import pagination from '../../share/pagination'
 import upload from './upload'
 import VueCookies from 'vue-cookies'
 import { Base64 } from 'js-base64';
-import {jazzbarName} from "../token";
+// import {jazzbarName} from "../token";
 
 export default {
   name: "identify",
@@ -402,7 +402,7 @@ export default {
   //   },
     myHeader(){
     return {
-        "Authorization":VueCookies.get(jazzbarName)
+        "Authorization":VueCookies.get('backgroundToken')
     }
 },
   },

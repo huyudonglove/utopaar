@@ -92,14 +92,14 @@ const actions={
       })
     })
   },
-  //详情
-  info({ commit }, params) {
+   //详情
+   info({ commit }, params) {
     return new Promise((resovle, reject) => {
      identifyInfo(params).then(res => {
         if (res.code !== 0) {
           Message.error(res.msg);
         } else {
-          resovle()
+          resovle(res)
           commit('currentRow', res)
         }
       }).catch(err => {
