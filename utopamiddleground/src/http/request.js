@@ -795,6 +795,24 @@ export function applicationConfigList(params) {
   return http.get('/api/utopa/ar/material/config/list', params)
 }
 
+/** 中台用户配置-位置树 w*/
+export function getMiddleTree(params){
+  return new Promise((resolve,reject)=>{
+    http.post('/api/utopa/ar/assets/location/middlegroundTree',params).then(res=>{
+      if(res.code){
+        Message.error(res.msg);
+      }else{
+        resolve(res);
+      }
+    }).catch(err=>{
+      reject(err);
+    })
+  })
+}
+/** 中台用户配置-用户选择位置列表 w*/
+export function selectpositionList(params){
+  return http.post('/api/utopa/ar/assets/location/queryBackgroundChildAssetsLocationById',params)
+}
 /** 玩法详情 w*/
 export function playInfo(params) {
   return http.get('/api/utopa/ar/play/info', params)

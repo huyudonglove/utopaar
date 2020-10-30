@@ -239,13 +239,17 @@ export default {
   },
   methods: {
     ...mapActions('currentUserPower',['getUserPower']),
-    renderContent(h, { node, data, store }) {
-      if (data.isValid == 2) {
-        return <span style="background:#ccc">{node.label}</span>;
-      } else {
-        return <span>{node.label}</span>;
-      }
-    },
+    renderContent(h, { node, data, store }) {
+      if (data.isValid == 2) {
+        return <span class="span-ellipsis">
+                <span title={node.label} style="background:#ccc">{node.label}</span>
+               </span>
+      } else {
+        return <span class="span-ellipsis">
+                <span title={node.label}>{ node.label }</span>
+               </span>
+      }
+    },
     handleNodeClick(data) {
       if(data.type==6){
         this.assetId=data.id
