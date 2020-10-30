@@ -61,6 +61,14 @@
               </template>
             </el-table-column>
             <el-table-column label="资产位置" prop="provinceCityArea" align="center"></el-table-column>
+            <el-table-column label="地图" v-if="positionTable[0]&&positionTable[0].type==5" prop="type" align="center">
+              <template slot-scope="scope">
+                <div style="margin:0 auto 10px;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
+                :style="{'background-color':scope.row.easyarMapId&&scope.row.easyarName?'#0074e4':scope.row.easyarMapId||scope.row.easyarName?'#ffdf25':'#ccc'}">EasyAR</div>
+                <div style="margin:0 auto;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
+                :style="{'background-color':scope.row.locusMapId&&scope.row.locusName?'#0074e4':scope.row.locusMapId||scope.row.locusName?'#ffdf25':'#ccc'}">LocusAR</div>
+              </template>
+            </el-table-column>
             <el-table-column label="创建时间" prop="createTime" align="center"></el-table-column>
             <el-table-column label="创建人" prop="createUser" align="center"></el-table-column>
             <el-table-column label="最后修改时间" prop="updateTime" align="center"></el-table-column>
@@ -91,6 +99,22 @@
             </el-form-item>
             <el-form-item label="资产名称" prop="assetsName">
               <el-input v-model="form.assetsName" style="width:200px;" maxlength="50"></el-input>
+            </el-form-item>
+            <el-form-item v-if="form.assetsType==5" label="地图">
+              <el-table ref="mapTable" :data="mapList" tooltip-effect="dark" border>
+                <el-table-column label="id" prop="id" width="50" align="center"></el-table-column>
+                <el-table-column label="平台类型" prop="type" align="center"></el-table-column>
+                <el-table-column label="地图名称" align="center">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.mapName"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column label="地图ID" align="center">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.mapId"></el-input>
+                  </template>
+                </el-table-column>
+              </el-table>
             </el-form-item>
             <el-form-item label="位置所属" v-if="form.assetsType==1" prop="areaC">
               <span class="myWords">省
@@ -202,6 +226,10 @@ export default {
       tableHeight:0,//表格的高度
       treeHeight:0,//树的高度
       tableAreaId:'',//保存区id，用来查询项目,
+      mapList:[
+        {id:1,type:'EasyAR',mapName:'',mapId:''},
+        {id:2,type:'LocusAR',mapName:'',mapId:''}
+      ]
     }
   },
   watch:{
@@ -282,7 +310,11 @@ export default {
         "areaId":this.form.areaC,
         "state":this.form.status,
         "type":this.form.assetsType,
-        "provinceCityArea":this.form.positionBelong
+        "provinceCityArea":this.form.positionBelong,
+        "locusName":this.mapList[1].mapName,
+        "locusMapId":this.mapList[1].mapId,
+        "easyarName":this.mapList[0].mapName,
+        "easyarMapId":this.mapList[0].mapId,
       }
     },
     searchParams(){
@@ -562,6 +594,10 @@ export default {
           this.form.areaC =res.data.areaId;
           this.form.positionBelong=res.data.provinceCityArea;
           this.form.status=res.data.state;
+          this.mapList[0].mapId=res.data.easyarMapId;
+          this.mapList[0].mapName=res.data.easyarName;
+          this.mapList[1].mapId=res.data.locusMapId;
+          this.mapList[1].mapName=res.data.locusName;
         }
       })
     },
@@ -592,6 +628,10 @@ export default {
       this.isEdit=false;
       this.showAssetsDialog=false;
       this.resetForm('form');
+      this.mapList=[
+        {id:1,type:'EasyAR',mapName:'',mapId:''},
+        {id:2,type:'LocusAR',mapName:'',mapId:''}
+      ];
       // this.selectParent='',
       // this.selectParentId='',
       // this.positionBelong='',

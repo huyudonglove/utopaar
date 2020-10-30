@@ -16,10 +16,10 @@
         <el-input type="password" v-model="password" autocomplete="new-password"></el-input>
       </el-form-item>
       <el-form-item label="中台显示《UtopaAR APP》管理菜单" :required="true">
-        <el-switch v-model="isActive" :active-value="1" :inactive-value="2"></el-switch>
+        <el-switch v-model="isActive" :active-value="1" :inactive-value="2" inactive-color="#ccc"></el-switch>
       </el-form-item>
       <el-form-item label="中台显示《AR眼镜 APP》管理菜单" :required="true">
-        <el-switch v-model="status" :active-value="1" :inactive-value="2"></el-switch>
+        <el-switch v-model="status" :active-value="1" :inactive-value="2" inactive-color="#ccc"></el-switch>
       </el-form-item>
     </el-form>
     <div>
@@ -132,7 +132,16 @@
           <el-table ref="multiplePosition" border :cell-style="positionCellStyle" :data="positionTable" tooltip-effect="dark" @select="positionSelect" @select-all="positionSelectAll">
             <el-table-column type="selection" width="50"></el-table-column>
             <el-table-column prop="id" label="ID" width="200" align="center"></el-table-column>
-            <el-table-column label="位置名称" prop="name" align="center"></el-table-column>
+            <el-table-column label="单元名称" prop="name" align="center"></el-table-column>
+            <el-table-column label="地图" align="center">
+              <template slot-scope="scope">
+                <div style="display:inline-block;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
+                :style="{'background-color':scope.row.easyarMapId&&scope.row.easyarName?'#0074e4':scope.row.easyarMapId||scope.row.easyarName?'#ffdf25':'grey'}">EasyAR</div>
+                <div style="display:inline-block;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
+                :style="{'background-color':scope.row.locusMapId&&scope.row.locusName?'#0074e4':scope.row.locusMapId||scope.row.locusName?'#ffdf25':'grey'}">LocusAR</div>
+                <div><el-button type="text" @click="showMap(scope.row)">查看</el-button></div>
+              </template>
+            </el-table-column>
             <el-table-column fixed="right" label="状态" width="200" align="center">
               <template slot-scope="scope">
                 <span v-if="positionIdList.indexOf(scope.row.id)!=-1">已选择</span>
@@ -159,6 +168,14 @@
       <el-button type="primary" @click="addOrEdit">确定</el-button>
       <el-button @click="$router.push({path:'/middleusersetting/middleuserlist',query:JSON.parse($route.query.oldQuery)});">取消</el-button>
     </div>
+    <el-dialog title="地图" :visible.sync="mapVisible" width="500px">
+      <el-table ref="mapTable" :data="mapList" tooltip-effect="dark" border>
+        <el-table-column label="id" prop="id" width="50" align="center"></el-table-column>
+        <el-table-column label="平台类型" prop="type" align="center"></el-table-column>
+        <el-table-column label="地图名称" prop="mapName" align="center"></el-table-column>
+        <el-table-column label="地图ID" prop="mapId" align="center"></el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -208,7 +225,12 @@ export default {
       areaList:[],//地区列表
       clickTreeId:'',//当前点击的树节点id
       isShowTree:true,
-      isExpand:false
+      isExpand:false,
+      mapVisible:false,
+      mapList:[
+        {id:1,type:'EasyAR',mapName:'',mapId:''},
+        {id:2,type:'LocusAR',mapName:'',mapId:''}
+      ]
     }
   },
   computed:{
@@ -321,6 +343,13 @@ export default {
     },
   },
   methods:{
+    showMap(row){
+      this.mapVisible=true;
+      this.mapList[0].mapId=row.easyarMapId;
+      this.mapList[0].mapName=row.easyarName;
+      this.mapList[1].mapId=row.locusMapId;
+      this.mapList[1].mapName=row.locusName;
+    },
     appCellStyle({row, column, rowIndex, columnIndex}){//将选择的应用行高亮
       if(this.appIdList.indexOf(row.id)!=-1){
         return {

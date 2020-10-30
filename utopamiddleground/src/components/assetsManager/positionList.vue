@@ -61,6 +61,14 @@
               </template>
             </el-table-column>
             <el-table-column label="资产位置" prop="provinceCityArea" align="center"></el-table-column>
+            <el-table-column label="地图" prop="type" align="center">
+              <template slot-scope="scope">
+                <div style="margin:0 auto 10px;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
+                :style="{'background-color':scope.row.easyarMapId&&scope.row.easyarName?'#0074e4':scope.row.easyarMapId||scope.row.easyarName?'#ffdf25':'#ccc'}">EasyAR</div>
+                <div style="margin:0 auto;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
+                :style="{'background-color':scope.row.locusMapId&&scope.row.locusName?'#0074e4':scope.row.locusMapId||scope.row.locusName?'#ffdf25':'#ccc'}">LocusAR</div>
+              </template>
+            </el-table-column>
             <el-table-column label="创建时间" prop="createTime" align="center"></el-table-column>
             <el-table-column label="创建人" prop="createUser" align="center"></el-table-column>
             <el-table-column label="最后修改时间" prop="updateTime" align="center"></el-table-column>
@@ -91,6 +99,12 @@
             </el-form-item>
             <el-form-item label="资产名称" prop="assetsName">
               <el-input v-model="form.assetsName" style="width:200px;" maxlength="50"></el-input>
+            </el-form-item>
+            <el-form-item label="识别方式">
+              <div style="display:inline-block;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
+              :style="{'background-color':easyarMapId&&easyarName?'#0074e4':easyarMapId||easyarName?'#ffdf25':'#ccc'}">EasyAR</div>
+              <div style="display:inline-block;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
+              :style="{'background-color':locusMapId&&locusName?'#0074e4':locusMapId||locusName?'#ffdf25':'#ccc'}">LocusAR</div>
             </el-form-item>
             <!-- <el-form-item label="位置所属" v-if="form.assetsType==1" prop="areaC">
               <span>省
@@ -200,6 +214,10 @@ export default {
       tableHeight:0,
       treeHeight:0,
       isValid:false,
+      easyarMapId:'',
+      easyarName:'',
+      locusMapId:'',
+      locusName:'',
     }
   },
   watch:{
@@ -236,6 +254,10 @@ export default {
         "source":'Middleground',
         "state":this.form.status,
         "type":this.form.assetsType,
+        "locusName":this.locusName,
+        "locusMapId":this.locusMapId,
+        "easyarName":this.easyarName,
+        "easyarMapId":this.easyarMapId,
       }
     },
     searchParams(){
@@ -262,6 +284,10 @@ export default {
         this.selectParentId=arr.id;//保存选择的上级id
         this.selectParent = arr.name;//选择的上级名
         this.clickId = arr.id;//保存当前点击的id
+        this.easyarMapId=arr.easyarMapId;
+        this.easyarName=arr.easyarName;
+        this.locusMapId=arr.locusMapId;
+        this.locusName=arr.locusName;
       }else{
         this.typeId='';
         this.isCreate=false;
@@ -304,9 +330,13 @@ export default {
     },
     renderContent(h, { node, data, store }) {
       if (data.isValid == 2) {
-        return <span style="background:#ccc">{node.label}</span>;
+        return <span class="span-ellipsis">
+                <span title={node.label} style="background:#ccc">{node.label}</span>
+               </span>
       } else {
-        return <span>{node.label}</span>;
+        return <span class="span-ellipsis">
+                <span title={node.label}>{ node.label }</span>
+               </span>
       }
     },
     resetSearch(){
