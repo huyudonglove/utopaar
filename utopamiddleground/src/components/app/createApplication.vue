@@ -45,7 +45,7 @@
             <span class="labelSpan">投放单位</span>
             <el-button @click="showTree=true">+</el-button>
           </div>
-          <tree   @closeBox="toshow" v-if="showTree"></tree>
+          <tree   @closeBox="toshow" v-if="showTree" :pId="assetUnitId"></tree>
           <div>
             <div>
               <div style="height: 80px;">
@@ -592,7 +592,8 @@
 
       },
       toshow(val){
-        this.showTree=val;
+        this.assetUnitId=val;
+        this.showTree=false;
       },
       goTo(){
         this.$router.push({

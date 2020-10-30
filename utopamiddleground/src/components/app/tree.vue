@@ -45,14 +45,18 @@
           </el-row>
         </div>
         <div>
-          <el-table ref="multiplePosition" border :cell-style="positionCellStyle" :data="positionTable" tooltip-effect="dark" @select="positionSelect" @select-all="positionSelectAll">
+          <el-table ref="multiplePosition" border :cell-style="positionCellStyle" row-key="id" :data="positionTable" tooltip-effect="dark" @select="select" @select-all="selectAll">
             <el-table-column type="selection" width="50"></el-table-column>
             <el-table-column prop="id" label="ID" width="200" align="center"></el-table-column>
+            <el-table-column label="上级机构" prop="parentName" align="center"></el-table-column>
             <el-table-column label="位置名称" prop="name" align="center"></el-table-column>
+            <el-table-column label="种类" align="center">
+              单元
+            </el-table-column>
             <el-table-column fixed="right" label="状态" width="200" align="center">
               <template slot-scope="scope">
-                <span v-if="positionIdList.indexOf(scope.row.id)!=-1">已选择</span>
-                <span v-if="positionIdList.indexOf(scope.row.id)==-1">未选择</span>
+                <span v-if="scope.row.state==1">启用</span>
+                <span v-if="scope.row.state==2">禁用</span>
               </template>
             </el-table-column>
           </el-table>
@@ -81,7 +85,7 @@
 <script>
 import {getMiddleTree,selectpositionList,getDistrictList} from '../../http/request'
 export default {
-  props: [""],
+  props: ["pId"],
   inject:['reload'],
   data() {
     return {
@@ -90,7 +94,6 @@ export default {
       isExpand:false,
       defaulProps:{"label":"name"},
       positionTable:[],//位置列表
-      positionTableTotal:[],
       provinceValue:'',
       provinceList:[],//省列表
       cityValue:'',
@@ -103,70 +106,65 @@ export default {
       positionTotal:0,
       positionIdList:[],
       isShowTree:false,
-      showTree:true
+      showTree:true,
+      selectId:'',
     };
   },
   created() {
    this.tree();
+   this.selectId=this.pId;
    this.getProvince();
   },
   methods: {
     close(){
-      this.$emit("closeBox",false)
+      this.$emit("closeBox",this.selectId)
     },
     positionCurrentChange(value){
       this.positionPage = value;
     },
     positionSizeChange(value){
-        this.positionLimit = value;
-      },
-    positionSelect(arr,row){
-        if(arr.map(v=>v.id).indexOf(row.id)==-1){
-          this.positionIdList = this.positionIdList.filter(v=>v!=row.id);
-        }else{
-          this.positionIdList.push(row.id);
-        }
-      },
-    positionSelectAll(arr){
-      if(arr.length){
-        this.positionIdList=this.positionIdList.filter(v=>arr.map(v=>v.id).indexOf(v)==-1);
-        this.positionIdList=this.positionIdList.concat(arr.map(v=>v.id))
-      }else{
-        this.positionIdList=this.positionTable.filter(v=>arr.map(v=>v.id).indexOf(v)==-1);
-      }
+      this.positionLimit = value;
     },
-  positionCellStyle({row, column, rowIndex, columnIndex}){//将选择的位置行高亮
-      if(this.positionIdList.indexOf(row.id)!=-1){
+    positionCellStyle({row, column, rowIndex, columnIndex}){//将选择的位置行高亮
+      if(this.selectId==row.id){
         return {
           background: '#ccc',
           color: '#FFF'
         }
       }
     },
-  showTable(data) {
-      this.clickTreeId =data.id;//保存当前点击的树节点id
-      this.getPositionList(data.id);
+    showTable(data) {
+      if(data.type==4){
+        this.clickTreeId =data.id;//保存当前点击的树节点id
+        this.getPositionList(data.id);
+      }
     },
-  getPositionList(parentId){
-      selectpositionList({parentId,...this.positionParams}).then(res=>{
+    select(val){
+      if(val.length>1){
+        this.$refs.multiplePosition.toggleRowSelection(val[0],false);
+        val.splice(0,1);
+      }
+      this.selectId=val.length?val[val.length-1].id:'';
+    },
+    selectAll(val){
+      if(val.length>1){
+        this.$refs.multiplePosition.toggleRowSelection(val[0],false);
+        val.splice(0,1);
+      }
+      this.selectId=val.length?val[val.length-1].id:'';
+    },
+    getPositionList(id){
+      selectpositionList({id,...this.positionParams}).then(res=>{
         if(res.code){
           this.$message.error(res.msg);
         }else{
           if(res.data){
-            this.positionTableTotal =res.data;
-            this.positionTable = res.data.filter((item,index)=>index>=(this.positionPage-1)*this.positionLimit && index<this.positionPage*this.positionLimit)
-            this.positionTotal=res.data.length;
-            let selectAllRow=[];
-            for(let i=0;i<this.positionIdList.length;i++){
-              var row=this.positionTable.find(v=>v.id==this.positionIdList[i]);
-              if(row){
-                selectAllRow.push(row);
+            this.positionTable =res.data.items;
+            this.positionTotal=res.data.total;
+            this.positionTable.forEach(v=>{
+              if(this.selectId==v.id){
+                this.$nextTick(()=>{this.$refs.multiplePosition.toggleRowSelection(v,true);})
               }
-            };
-            this.$nextTick(()=>{
-              selectAllRow.forEach(v=>{
-                this.$refs.multiplePosition.toggleRowSelection(v,true); 
-              })
             })
           }
         }
@@ -187,7 +185,7 @@ export default {
         this.areaList = res.data;
       })
     },
-   tree(){
+    tree(){
       getMiddleTree(this.treeParams).then(res=>{
         this.treedata =res.data;
         this.isExpand = false;
@@ -198,7 +196,6 @@ export default {
         this.$nextTick(()=>{
           this.isShowTree=true;
         })
-        this.positionTableTotal=[];
         this.positionTable=[];
         this.positionTotal=0;
       })
@@ -211,7 +208,6 @@ export default {
       this.clickTreeId= '';
       this.tree();
     },
-    
   },
   computed: {
    treeParams(){
@@ -219,19 +215,16 @@ export default {
         "provinceId":this.provinceValue?this.provinceValue:null,
         "cityId":this.cityValue?this.cityValue:null,
         "areaId":this.areaValue?this.areaValue:null,
-        "source":"Background",
-        "name":this.inputPosition
+        "source":"Middleground",
+        "name":this.inputPosition,
+        "lastLevel":4,
       }
     },
     positionParams(){
-  // let id = params.id;
-  // let areaId= params.areaId;
       return{
         "name":this.inputPosition,
         "pageNum":this.positionPage,
         "pageSize":this.positionLimit,
-        "id":"",
-        "areaId":""
       }
     }
   },
@@ -240,15 +233,13 @@ export default {
       console.log(111,2222,333)
     },
     positionPage(){
-      this.positionTable = this.positionTableTotal.filter((item,index)=>index>=(this.positionPage-1)*this.positionLimit && index<this.positionPage*this.positionLimit);
-      this.clashPosition();
+      this.getPositionList(this.clickTreeId);
     },
     positionLimit(){
       if(this.positionPage!=1){
         this.positionPage=1;
       }
-      this.positionTable = this.positionTableTotal.filter((item,index)=>index>=(this.positionPage-1)*this.positionLimit && index<this.positionPage*this.positionLimit);
-      this.clashPosition();
+      this.getPositionList(this.clickTreeId);
     },
     provinceValue(newValue){
       if(newValue!=''){
