@@ -29,6 +29,23 @@
             <el-option label="禁用" value="2"></el-option>
           </el-select>
         </span>
+         <span class="myWords">
+            识别方式：
+            <el-select v-model="recognizeType" placeholder="请选择" style="width:150px;height:30px;">
+              <el-option label="全部" value></el-option>
+              <el-option label="图像云识别" value="1"></el-option>
+              <el-option label="图像本地识别" value="0"></el-option>
+            </el-select>
+          </span>
+          <span class="myWords">
+            识别平台：
+            <el-select v-model="platformType" placeholder="请选择" style="width:150px;height:30px;">
+              <el-option label="全部" value></el-option>
+              <el-option label="vuforia" value="0"></el-option>
+              <el-option label="EasyAR" value="1"></el-option>
+              <el-option label="LocusAR" value="2"></el-option>
+            </el-select>
+          </span>
       <el-button type="primary">查询</el-button>
       <el-button type="info" @click="replace('reset');reload();">重置</el-button>
     </el-row>
@@ -109,7 +126,9 @@
         wordState:'',
         upS:'',
         cityShow:false,
-        citys:''
+        citys:'',
+        recognizeType:'',
+        platformType:''
       }
     },
     methods:{
@@ -123,7 +142,9 @@
           status:this.$route.query.type||'',
           loadingLine:this.$route.query.loadValue||'',
           sortColumn:this.wordState,
-          order:this.upS
+          order:this.upS,
+          recognizeType:this.recognizeType,
+          platformType:this.platformType
         }
         //console.log(msg,999)
         getAppList(msg).then(res=>{
@@ -199,6 +220,13 @@
         this.$store.commit('pagination/setClickPage',1);
         this.replace('type',this.type);
       },
+      platformType(){
+        this.replace('platformType',this.platformType);
+      },
+      recognizeType(){
+        this.$store.commit('pagination/setClickPage',1);
+        this.replace('recognizeType',this.recognizeType);
+      },
       relateApplicationId(){
         this.$store.commit('pagination/setClickPage',1);
         this.replace('relateApplicationId',this.relateApplicationId)
@@ -224,6 +252,8 @@
       let typeRecord=this.$route.query.type||'';
       this.appName=this.$route.query.appName||'';
       this.relateApplicationId=this.$route.query.relateApplicationId*1||'';
+      this.recognizeType=this.$route.query.recognizeType||'';
+      this.platformType=this.$route.query.platformType||'';
       console.log(typeof this.relateApplicationId)
       this.$nextTick(()=>{
         this.$store.commit('pagination/setLimitPage',limitRecord);

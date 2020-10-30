@@ -15,15 +15,24 @@
             ></el-input>
           </span>
 		      <span>
-            类别：
+            识别方式：
             <el-select v-model="type" placeholder="请选择">
               <el-option label="全部" value></el-option>
-              <el-option label="云识别" value="1"></el-option>
-              <el-option label="本地识别" value="2"></el-option>
+              <el-option label="图像云识别" value="1"></el-option>
+              <el-option label="图像本地识别" value="0"></el-option>
+            </el-select>
+          </span>
+          <span>
+            识别平台：
+            <el-select v-model="platformType" placeholder="请选择">
+              <el-option label="全部" value></el-option>
+              <el-option label="vuforia" value="0"></el-option>
+              <el-option label="EasyAR" value="1"></el-option>
+              <el-option label="LocusAR" value="2"></el-option>
             </el-select>
           </span>
            <span>
-            所属渠道:
+            中台用户:
             <el-select v-model="saasCode" placeholder="请选择">
             <el-option
               v-for="item in listSaasAccount"
@@ -66,8 +75,8 @@
           <el-table-column prop="targetId" :label="'识别图ID'" width align="center"></el-table-column>
           <el-table-column prop="state" label="类别" width="120" align="center">
             <template slot-scope="scope">
-              <span v-if="scope.row.type==1">云识别</span>
-              <span v-if="scope.row.type==2">本地识别</span>
+              <span v-if="scope.row.recognizeType==1">图像云识别</span>
+              <span v-if="scope.row.recognizeType==0">图像本地识别</span>
             </template>
           </el-table-column>
 		      <el-table-column prop="type" label="审核" width="120" align="center">
@@ -77,7 +86,7 @@
               <span v-if="scope.row.checkState==3" style="color:#FF644E">不通过</span>
             </template>
           </el-table-column>
-           <el-table-column prop="saasCodeName" label="中台渠道" width="" align="center">
+           <el-table-column prop="saasCodeName" label="中台用户" width="" align="center">
           </el-table-column>
           <el-table-column prop="createTime" label="上传时间" width="" align="center" ></el-table-column>
 
@@ -294,7 +303,8 @@ export default {
 	  return{
 		status:"",
 		type:"",
-		wd:"",
+    wd:"",
+    platformType:'',
 		showPagination:false,
 		multipleSelection:[],
 		multipleSelectionId:[],
@@ -343,6 +353,7 @@ export default {
   let pageRecord = query.page;//记录上一次页码操作
   let limitRecord = query.limit;//记录上一次limit操作
   this.wd=query.wd?query.wd:'';
+  this.platformType=query.platformType?query.platformType:'';
 	this.status=query.status?query.status:'';
   this.type=query.type?query.type:'';
   this.saasCode=query.saasCode?query.saasCode:'';
@@ -552,6 +563,10 @@ export default {
       this.$store.commit('pagination/setClickPage',1);
       this.replace('type',this.type);
   },
+  platformType(){
+      this.$store.commit('pagination/setClickPage',1);
+      this.replace('platformType',this.platformType);
+  },
   saasCode(){
       this.$store.commit('pagination/setClickPage',1);
       this.replace('saasCode',this.saasCode);
@@ -595,6 +610,7 @@ export default {
         this.status=""
         this.type=""
         this.wd=""
+        this.platformType=''
         this.saasCode=''
         this.$store.commit('pagination/setClickPage',1);
         this.$store.commit('pagination/setLimitPage',20);
