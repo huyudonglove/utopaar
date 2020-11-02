@@ -25,6 +25,27 @@
               <i v-else class="el-icon-plus avatar-uploader-icon" style="border: 1px dashed #d9d9d9;"></i>
             </el-upload>
           </div>
+          <div style="margin:40px 0px" >
+            <span class="labelSpan"><span style="color: #f56c6c;margin-right: 2px;">*</span>平台类型</span>
+            <el-radio-group v-model="platformType">
+            <el-radio :label="0">Vuforia</el-radio>
+            <el-radio :label="1">EasyAR</el-radio>
+            <el-radio :label="2">LocusAR</el-radio>
+          </el-radio-group>
+          </div>
+           <div  style="margin:40px 0px" >
+            <span class="labelSpan"><span style="color: #f56c6c;margin-right: 2px;">*</span>识别方式</span>
+            <el-radio-group v-model="recognizeType">
+            <el-radio :label="0">图像本地识别</el-radio>
+            <el-radio :label="1">图像云识别</el-radio>
+            <el-radio :label="2" :disabled="parseInt(platformType)===0">空间识别</el-radio>
+          </el-radio-group>
+          </div>
+           <div style="margin:40px 0px" v-if="parseInt(recognizeType)==2">
+            <span class="labelSpan">投放单位</span>
+            <el-button @click="showTree=true">+</el-button>
+          </div>
+          <tree   @closeBox="toshow" v-if="showTree" :pId="assetUnitId"></tree>
           <div>
             <div>
               <div style="height: 80px;">
@@ -305,6 +326,7 @@
       </div>
 
     </el-dialog>
+    
   </div>
 </template>
 
@@ -312,7 +334,8 @@
   //import uploadFile from "../../share/uploadFile";
   import E from 'wangeditor';
   import { Base64 } from 'js-base64';
-  import {getPlay,addPut,getDetail,getAppId,getPosition,getLoad} from "../../http/request";
+  import tree   from './tree'
+  import {getPlay,addPut,getDetail,getAppId,getPosition,getLoad,getMiddleTree} from "../../http/request";
   export default {
     name: "createApplication",
     data(){
@@ -375,7 +398,11 @@
         settingContent:'',
         isMark:1,
         searchWord:'',
-        positionDataCopy:[]
+        positionDataCopy:[],
+        platformType:0,
+        recognizeType:0,
+        assetUnitId:'',
+        showTree:false
       }
     },
     methods:{
@@ -409,7 +436,10 @@
           settingTitle: this.settingTitle,
           settingContent: this.settingContent,
           settingThumbnail:this.settingThumbnail,
-          isMark:this.isMark
+          isMark:this.isMark,
+          recognizeType:this.recognizeType,
+          platformType:this.platformType,
+          assetUnitId:this.assetUnitId,
         }
         msg.name?(()=>{
           msg.coverImage?(()=>{
@@ -560,6 +590,10 @@
         })():this.$message.error('应用名称不能为空')
 
 
+      },
+      toshow(val){
+        this.assetUnitId=val;
+        this.showTree=false;
       },
       goTo(){
         this.$router.push({
@@ -739,7 +773,7 @@
           this.positionShow=true;
         });
         this.searchWord='';
-      }
+      },
     },
     watch:{
       appId(){
@@ -783,6 +817,11 @@
         //   this.shareTitle='';
         // })();
       }
+    },
+    computed:{
+    },
+    components:{
+    tree
     },
     created() {
       //this.getPlay();

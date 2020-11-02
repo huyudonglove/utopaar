@@ -23,11 +23,12 @@ const actions={
     let pageSize = params.limit ? params.limit : 20;
     let name = params.wd ? params.wd : '';
     let checkState = params.checkState ? params.checkState : '';
-    let type = params.type ? params.type : '';
+    let recognizeType  = params.type ? params.type : '';
     let source = params.source ? params.source :'Middleground'
     let saasCode = params.saasCode ? params.saasCode : ''
+    let platformType = params.platformType ? params.platformType : ''
     return new Promise((resovle, reject) => {
-      identifyList({ pageNum, pageSize, name, checkState, type, source, saasCode}).then(res => {
+      identifyList({ pageNum, pageSize, name, checkState, recognizeType , source, saasCode,platformType}).then(res => {
         if (res.code) {
           Message.error(res.msg);
         } else {
@@ -92,14 +93,14 @@ const actions={
       })
     })
   },
-  //详情
-  info({ commit }, params) {
+   //详情
+   info({ commit }, params) {
     return new Promise((resovle, reject) => {
      identifyInfo(params).then(res => {
         if (res.code !== 0) {
           Message.error(res.msg);
         } else {
-          resovle()
+          resovle(res)
           commit('currentRow', res)
         }
       }).catch(err => {

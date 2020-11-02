@@ -313,6 +313,30 @@ export default new Router({
               component:createArContent,
             }
           ]
+        },
+        {
+          path: '/application/assetsList/content/9/:appId',//AR宠物（手机端）
+          name: 'arContentList',
+          component: arContentList,
+          children:[
+            {
+              path:'/application/assetsList/content/9/:appId/createarcontent',
+              name:'createArContent',
+              component:createArContent,
+            }
+          ]
+        },
+        {
+          path: '/application/assetsList/content/10/:appId',//AR宠物（眼镜端）
+          name: 'arContentList',
+          component: arContentList,
+          children:[
+            {
+              path:'/application/assetsList/content/10/:appId/createarcontent',
+              name:'createArContent',
+              component:createArContent,
+            }
+          ]
         }
       ],
     },
