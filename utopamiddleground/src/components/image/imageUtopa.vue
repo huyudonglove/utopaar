@@ -651,7 +651,7 @@
              recognizeType: this.recognizeType,
             platformType: this.platformType
            }
-           if(!msg.platformType){
+           if(msg.platformType==undefined){
              this.$message.error('平台类型不能为空')
              return;
            }
@@ -685,7 +685,7 @@
            this.relationX='';
            this.relationY='';
            this.relationZ='';
-           this.platformType='';
+           this.platformType=null;
          },
          editImgName(){
            let msg={
