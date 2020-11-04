@@ -38,10 +38,10 @@
       <el-main>
         <div>
           <div v-if="positionData.id">
-            <el-radio-group v-model="recongizeType" style="padding-bottom: 10px">
+            <el-radio-group v-model="recognizeType" style="padding-bottom: 10px">
               <el-radio-button :label="0" >图像云识别</el-radio-button>
               <el-radio-button :label="1" >图像本地识别</el-radio-button>
-              <el-radio-button :label="2" >空间识别</el-radio-button>
+              <el-radio-button :label="2" v-if="space">空间识别</el-radio-button>
             </el-radio-group>
           </div>
         </div>
@@ -59,7 +59,7 @@
 
         <div>
           <div style="display: flex;justify-content: space-between">
-            <div class="ten" style="text-align: center;line-height: 300px;cursor: pointer;" @click="mapListPower[0].isCheck?dialogVisible=true:dialogVisible=false;" v-if="positionId&&activeName=='first'&&isValid==1">
+            <div class="ten" style="text-align: center;line-height: 300px;cursor: pointer;" @click="mapListPower[0].isCheck?dialogVisible=true:dialogVisible=false;" v-if="positionId&&activeName=='first'&&isValid==1&&recognizeType!=2">
               <img src="@/assets/addI.png" alt="" width="200px" height="200px" style="margin-top: 40px">
             </div>
             <div class="ten" v-else style="text-align: center;line-height: 300px;cursor: not-allowed;">
@@ -69,9 +69,12 @@
               <div style="display: flex;justify-content: space-between">
                 <span>ID  {{items[0].id}} </span>
                 <span>
-                  <span v-if="items[0].mapEngine.includes('0')" class="h-button">高通</span>
-                  <span v-if="items[0].mapEngine.includes('1')" class="h-button">Easyar</span>
-                  <span v-if="items[0].mapEngine.includes('2')" class="h-button">Locus</span>
+                  <span v-if="recognizeType==0" class="title">图像本地识别</span>
+                  <span v-if="recognizeType==1" class="title">图像云识别</span>
+                  <span v-if="recognizeType==2" class="title">空间识别</span>
+                  <span v-if="items[0].platformType==0" class="h-button">Vuforia</span>
+                  <span v-if="items[0].platformType==1" class="h-button">Easyar</span>
+                  <span v-if="items[0].platformType==2" class="h-button">Locus</span>
                 </span>
               </div>
               <div class="title">名称
@@ -103,7 +106,7 @@
                   <span v-if="items[0].checkState==3"><span style="font-family:'Helvetica Regular', 'Helvetica';font-size:14px;color:red;">● </span>不通过</span>
                 </div>
                 <div>
-                  <el-button type="text" size="small" @click="editName = true;editId=items[0].id;imageName=items[0].name;imageWidth=items[0].width;state=items[0].checkState;positionX=items[0].positionX;positionY=items[0].positionY;positionZ=items[0].positionZ;relationX=items[0].relationX;relationY=items[0].relationY;relationZ=items[0].relationZ"
+                  <el-button type="text" size="small" @click="editImgBox(items[0])"
                              :disabled="!mapListPower[1].isCheck||isValid==2">编辑</el-button>
                   <el-button type="text" size="small" @click="deleteImg(items[0].id)" :disabled="!mapListPower[3].isCheck||isValid==2">删除</el-button>
                 </div>
@@ -114,9 +117,12 @@
               <div style="display: flex;justify-content: space-between">
                 <span>ID  {{items[1].id}} </span>
                 <span>
-                  <span v-if="items[1].mapEngine.includes('0')" class="h-button">高通</span>
-                  <span v-if="items[1].mapEngine.includes('1')" class="h-button">Easyar</span>
-                  <span v-if="items[1].mapEngine.includes('2')" class="h-button">Locus</span>
+                  <span v-if="recognizeType==0" class="title">图像本地识别</span>
+                  <span v-if="recognizeType==1" class="title">图像云识别</span>
+                  <span v-if="recognizeType==2" class="title">空间识别</span>
+                  <span v-if="items[1].platformType==0" class="h-button">Vuforia</span>
+                  <span v-if="items[1].platformType==1" class="h-button">Easyar</span>
+                  <span v-if="items[1].platformType==2" class="h-button">Locus</span>
                 </span>
               </div>
               <div class="title">名称
@@ -148,7 +154,7 @@
                   <span v-if="items[1].checkState==3"><span style="font-family:'Helvetica Regular', 'Helvetica';font-size:14px;color:red;">● </span>不通过</span>
                 </div>
                 <div>
-                  <el-button type="text" size="small" @click="editName = true;editId=items[1].id;imageName=items[1].name;imageWidth=items[1].width;state=items[1].checkState;positionX=items[1].positionX;positionY=items[1].positionY;positionZ=items[1].positionZ;relationX=items[1].relationX;relationY=items[1].relationY;relationZ=items[1].relationZ"
+                  <el-button type="text" size="small" @click="editImgBox(items[1])"
                              :disabled="!mapListPower[1].isCheck||isValid==2">编辑</el-button>
                   <el-button type="text" size="small" @click="deleteImg(items[1].id)" :disabled="!mapListPower[3].isCheck||isValid==2">删除</el-button>
                 </div>
@@ -161,9 +167,12 @@
               <div style="display: flex;justify-content: space-between">
                 <span>ID  {{items[2].id}} </span>
                 <span>
-                  <span v-if="items[2].mapEngine.includes('0')" class="h-button">高通</span>
-                  <span v-if="items[2].mapEngine.includes('1')" class="h-button">Easyar</span>
-                  <span v-if="items[2].mapEngine.includes('2')" class="h-button">Locus</span>
+                  <span v-if="recognizeType==0" class="title">图像本地识别</span>
+                  <span v-if="recognizeType==1" class="title">图像云识别</span>
+                  <span v-if="recognizeType==2" class="title">空间识别</span>
+                 <span v-if="items[2].platformType==0" class="h-button">Vuforia</span>
+                  <span v-if="items[2].platformType==1" class="h-button">Easyar</span>
+                  <span v-if="items[2].platformType==2" class="h-button">Locus</span>
                 </span>
               </div>
               <div class="title">名称
@@ -195,7 +204,7 @@
                   <span v-if="items[2].checkState==3"><span style="font-family:'Helvetica Regular', 'Helvetica';font-size:14px;color:red;">● </span>不通过</span>
                 </div>
                 <div>
-                  <el-button type="text" size="small" @click="editName = true;editId=items[2].id;imageName=items[2].name;imageWidth=items[2].width;state=items[2].checkState;positionX=items[2].positionX;positionY=items[2].positionY;positionZ=items[2].positionZ;relationX=items[2].relationX;relationY=items[2].relationY;relationZ=items[2].relationZ"
+                  <el-button type="text" size="small" @click="editImgBox(items[2])"
                              :disabled="!mapListPower[1].isCheck||isValid==2">编辑</el-button>
                   <el-button type="text" size="small" @click="deleteImg(items[2].id)" :disabled="!mapListPower[3].isCheck||isValid==2">删除</el-button>
                 </div>
@@ -206,9 +215,12 @@
               <div style="display: flex;justify-content: space-between">
                 <span>ID  {{items[3].id}} </span>
                 <span>
-                  <span v-if="items[3].mapEngine.includes('0')" class="h-button">高通</span>
-                  <span v-if="items[3].mapEngine.includes('1')" class="h-button">Easyar</span>
-                  <span v-if="items[3].mapEngine.includes('2')" class="h-button">Locus</span>
+                  <span v-if="recognizeType==0" class="title">图像本地识别</span>
+                  <span v-if="recognizeType==1" class="title">图像云识别</span>
+                  <span v-if="recognizeType==2" class="title">空间识别</span>
+                  <span v-if="items[3].platformType==0" class="h-button">Vuforia</span>
+                  <span v-if="items[3].platformType==1" class="h-button">Easyar</span>
+                  <span v-if="items[3].platformType==2" class="h-button">Locus</span>
                 </span>
               </div>
               <div class="title">名称
@@ -240,7 +252,7 @@
                   <span v-if="items[3].checkState==3"><span style="font-family:'Helvetica Regular', 'Helvetica';font-size:14px;color:red;">● </span>不通过</span>
                 </div>
                 <div>
-                  <el-button type="text" size="small" @click="editName = true;editId=items[3].id;imageName=items[3].name;imageWidth=items[3].width;state=items[3].checkState;positionX=items[3].positionX;positionY=items[3].positionY;positionZ=items[3].positionZ;relationX=items[3].relationX;relationY=items[3].relationY;relationZ=items[3].relationZ"
+                  <el-button type="text" size="small" @click="editImgBox(items[3])"
                              :disabled="!mapListPower[1].isCheck||isValid==2">编辑</el-button>
                   <el-button type="text" size="small" @click="deleteImg(items[3].id)" :disabled="!mapListPower[3].isCheck||isValid==2">删除</el-button>
                 </div>
@@ -251,9 +263,12 @@
               <div style="display: flex;justify-content: space-between">
                 <span>ID  {{items[4].id}} </span>
                 <span>
-                  <span v-if="items[4].mapEngine.includes('0')" class="h-button">高通</span>
-                  <span v-if="items[4].mapEngine.includes('1')" class="h-button">Easyar</span>
-                  <span v-if="items[4].mapEngine.includes('2')" class="h-button">Locus</span>
+                  <span v-if="recognizeType==0" class="title">图像本地识别</span>
+                  <span v-if="recognizeType==1" class="title">图像云识别</span>
+                  <span v-if="recognizeType==2" class="title">空间识别</span>
+                  <span v-if="items[4].platformType==0" class="h-button">Vuforia</span>
+                  <span v-if="items[4].platformType==1"  class="h-button">EasyAR</span>
+                  <span v-if="items[4].platformType==2"  class="h-button">LocusAR</span>
                 </span>
               </div>
               <div class="title">名称
@@ -285,7 +300,7 @@
                   <span v-if="items[4].checkState==3"><span style="font-family:'Helvetica Regular', 'Helvetica';font-size:14px;color:red;">● </span>不通过</span>
                 </div>
                 <div>
-                  <el-button type="text" size="small" @click="editName = true;editId=items[4].id;imageName=items[4].name;imageWidth=items[4].width;state=items[4].checkState;positionX=items[4].positionX;positionY=items[4].positionY;positionZ=items[4].positionZ;relationX=items[4].relationX;relationY=items[4].relationY;relationZ=items[4].relationZ"
+                  <el-button type="text" size="small" @click="editImgBox(items[4])"
                              :disabled="!mapListPower[1].isCheck||isValid==2">编辑</el-button>
                   <el-button type="text" size="small" @click="deleteImg(items[4].id)" :disabled="!mapListPower[3].isCheck||isValid==2">删除</el-button>
                 </div>
@@ -304,11 +319,16 @@
     <div>
       <el-dialog title="新建识别图" :visible.sync="dialogVisible" width="40%" @close="cancle()">
         <div>
-          <p><span style="color: #f56c6c;margin-right: 2px;">*</span>识别引擎选择（可多选）：</p>
+          <p><span style="color: #f56c6c;margin-right: 2px;">*</span>平台类型：</p>
           <p>
-            <el-checkbox-group v-model="mapEngine" size="medium" @change="aa()">
-              <el-checkbox-button v-for="item in engine" :label="item.val" :key="item.val">{{item.name}}</el-checkbox-button>
-            </el-checkbox-group>
+<!--            <el-checkbox-group v-model="mapEngine" size="medium" @change="aa()">-->
+<!--              <el-checkbox-button v-for="item in engine" :label="item.val" :key="item.val">{{item.name}}</el-checkbox-button>-->
+<!--            </el-checkbox-group>-->
+            <el-select v-model="platformType">
+              <el-option label="Vuforia" :value="0"></el-option>
+              <el-option label="EasyAR" :value="1"></el-option>
+              <el-option label="LocusAR" :value="2"></el-option>
+            </el-select>
           </p>
         </div>
         <div><span style="color: #f56c6c;margin-right: 2px;">*</span>识别图名称：
@@ -326,6 +346,12 @@
             <img v-if="imageUrl" :src="imageUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon" style="border: 1px dashed #d9d9d9;"></i>
           </el-upload>
+        </div>
+        <div style="padding-top: 10px;padding-bottom: 10px">
+          <span style="color: #f56c6c;margin-right: 2px;">*</span>识别方式：
+          <span v-if="recognizeType==0">图像本地识别</span>
+          <span v-if="recognizeType==1">图像云识别</span>
+          <span v-if="recognizeType==2">空间识别</span>
         </div>
         <div>
           宽度：
@@ -373,8 +399,24 @@
     </div>
     <div>
       <el-dialog title="修改识别图" :visible.sync="editName" width="40%"  @close="cancle()">
+        <div>
+          <p><span style="color: #f56c6c;margin-right: 2px;">*</span>平台类型：</p>
+          <p>
+            <el-select v-model="platformType" :disabled="true">
+              <el-option label="Vuforia" :value="0"></el-option>
+              <el-option label="EasyAR" :value="1"></el-option>
+              <el-option label="LocusAR" :value="2"></el-option>
+            </el-select>
+          </p>
+        </div>
         <div><span style="color: #f56c6c;margin-right: 2px;">*</span>识别图名称：
           <el-input v-model="imageName" maxlength="50"></el-input>
+        </div>
+        <div style="padding: 10px 0">
+          <span><span style="color: #f56c6c;margin-right: 2px;">*</span>识别方式:</span>
+            <span v-if="recognizeType==0">图像本地识别</span>
+            <span v-if="recognizeType==1">图像云识别</span>
+            <span v-if="recognizeType==2">空间识别</span>
         </div>
         <div>
           <span style="color: #f56c6c;margin-right: 2px;">*</span>坐标：
@@ -476,10 +518,12 @@
             isValid:null,
             isShowTree:true,
             isExpand:false,
-            recongizeType:0,
+            recognizeType:0,
             positionData:{},
             expandedKeys:[],
-            assetId:''
+            assetId:'',
+            platformType:null,
+            space:true
           }
         },
         components: {
@@ -494,13 +538,9 @@
          ...mapActions('currentUserPower',['getUserPower']),
         renderContent(h, { node, data, store }) {
           if (data.isValid == 2) {
-            return <span class="span-ellipsis">
-                    <span title={node.label} style="background:#ccc">{node.label}</span>
-                   </span>
+            return <span class="span-ellipsis"><span title={node.label} style="background:#ccc">{node.label}</span></span>
           } else {
-            return <span class="span-ellipsis">
-                    <span title={node.label}>{ node.label }</span>
-                   </span>
+            return <span class="span-ellipsis"><span title={node.label}>{ node.label }</span></span>
           }
         },
          handleClick(tab, event) {
@@ -529,7 +569,8 @@
              pageNum:this.currentPage,
              pageSize:5,
              source:'Middleground',
-             middleGroundAssertId:this.positionId
+             middleGroundAssertId:this.positionId,
+             recognizeType:this.recognizeType
            }
           getImage(msg).then(res=>{
             //console.log(res,999)
@@ -575,6 +616,7 @@
              this.isValid=data.isValid
              this.positionId=data.id;
              this.positionData=data;
+             this.space=data.easyarMapId||data.easyarName||data.locusMapId||data.locusName;
            })():(()=>{
              this.positionId=''
            })();
@@ -584,10 +626,10 @@
            return data.name.indexOf(value) !== -1;
          },
          createImage(){
-           if(!this.mapEngine.length){
-             this.$message.error('识别引擎不能为空')
-             return
-           }
+           // if(!this.mapEngine.length){
+           //   this.$message.error('识别引擎不能为空')
+           //   return
+           // }
            let msg={
              name:this.imageName,
              pic:this.imageId,
@@ -601,7 +643,13 @@
             relationX: this.relationX,
             relationY: this.relationY,
             relationZ: this.relationZ,
-            mapEngine: this.mapEngine.join(',')
+            //mapEngine: this.mapEngine.join(',')
+             recognizeType: this.recognizeType,
+            platformType: this.platformType
+           }
+           if(!msg.platformType){
+             this.$message.error('平台类型不能为空')
+             return;
            }
            msg.name?(()=>{
              msg.pic?(()=>{
@@ -633,6 +681,7 @@
            this.relationX='';
            this.relationY='';
            this.relationZ='';
+           this.platformType='';
          },
          editImgName(){
            let msg={
@@ -666,6 +715,20 @@
          },
          aa(){
            console.log(this.mapEngine,77777777)
+         },
+         editImgBox(item){
+           this.editName = true;
+           this.editId=item.id;
+           this.imageName=item.name;
+           this.imageWidth=item.width;
+           this.state=item.checkState;
+           this.positionX=item.positionX;
+           this.positionY=item.positionY;
+           this.positionZ=item.positionZ;
+           this.relationX=item.relationX;
+           this.relationY=item.relationY;
+           this.relationZ=item.relationZ;
+           this.platformType=item.platformType;
          }
        },
        watch:{
@@ -703,6 +766,12 @@
            this.getImage();
            this.showPagination=true;
          },
+         recognizeType(){
+           this.currentPage=1;
+           this.showPagination=false;
+           this.getImage();
+           this.showPagination=true;
+         }
        },
       created() {
           let query=this.$route.query
@@ -823,12 +892,12 @@
   color: #333;
   font-size: 14px;
 }
-.span-ellipsis {
+/* .span-ellipsis {
     width:100%;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-}
+} */
   .h-button{
     border-left: 1px solid #dcdfe6;
     border-radius: 4px 0 0 4px;

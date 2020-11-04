@@ -85,7 +85,7 @@
 <script>
 import {getMiddleTree,selectpositionList,getDistrictList} from '../../http/request'
 export default {
-  props: ["pId"],
+  props: ["pId","assetUnitName"],
   inject:['reload'],
   data() {
     return {
@@ -108,16 +108,18 @@ export default {
       isShowTree:false,
       showTree:true,
       selectId:'',
-    };
+      parentNameUrl:''
+      };
   },
   created() {
    this.tree();
    this.selectId=this.pId;
+   this.parentNameUrl=this.assetUnitName
    this.getProvince();
   },
   methods: {
     close(){
-      this.$emit("closeBox",this.selectId)
+      this.$emit("closeBox",{selectId:this.selectId,parentNameUrl:this.parentNameUrl})
     },
     positionCurrentChange(value){
       this.positionPage = value;
@@ -145,6 +147,8 @@ export default {
         val.splice(0,1);
       }
       this.selectId=val.length?val[val.length-1].id:'';
+      this.parentNameUrl=val.length?val[val.length-1].parentNameUrl:'';
+      this.$emit("closeBox",{selectId:this.selectId,parentNameUrl:this.parentNameUrl})
     },
     selectAll(val){
       if(val.length>1){
@@ -152,6 +156,8 @@ export default {
         val.splice(0,1);
       }
       this.selectId=val.length?val[val.length-1].id:'';
+      this.parentNameUrl=val.length?val[val.length-1].parentNameUrl:'';
+      this.$emit("closeBox",{selectId:this.selectId,parentNameUrl:this.parentNameUrl})
     },
     getPositionList(id){
       selectpositionList({id,...this.positionParams}).then(res=>{
@@ -230,7 +236,6 @@ export default {
   },
   watch: {
     showTree(){
-      console.log(111,2222,333)
     },
     positionPage(){
       this.getPositionList(this.clickTreeId);
