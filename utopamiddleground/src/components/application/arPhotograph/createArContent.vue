@@ -291,7 +291,7 @@ export default {
         background: 'rgba(0, 0, 0, 0.7)'
       })
       return new Promise((resolve,reject)=>{
-        getArTypeDropDown({"playId":parseInt(this.$route.path.slice(32,33))}).then(res=>{
+        getArTypeDropDown({"playId":parseInt(this.$route.path.substring(32,this.$route.path.substring(0,this.$route.path.lastIndexOf('\/')).lastIndexOf('\/')))}).then(res=>{
           this.loading.close();
           if(res.code){
             this.$message.error(res.msg);
