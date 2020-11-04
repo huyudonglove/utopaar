@@ -56,8 +56,10 @@
         </el-table-column>
         <el-table-column prop="provinceCityArea" label="所属地区" align="center">
           <template slot-scope="scope">
-            <div style="white-space:pre-line;">{{scope.row.provinceCityArea.split(',').slice(0,2).join('\n')}}</div>
-            <div style="cursor:pointer;" v-if="scope.row.provinceCityArea.split(',').length>2" @click="showCity(scope)">...</div>
+            <div v-if="scope.row.provinceCityArea">
+              <div style="white-space:pre-line;">{{scope.row.provinceCityArea.split(',').slice(0,2).join('\n')}}</div>
+              <div style="cursor:pointer;" v-if="scope.row.provinceCityArea.split(',').length>2" @click="showCity(scope)">...</div>
+            </div>
           </template>
         </el-table-column>
         <el-table-column prop="title" label="标题" align="center"></el-table-column>

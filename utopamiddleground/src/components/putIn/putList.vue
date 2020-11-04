@@ -241,13 +241,9 @@ export default {
     ...mapActions('currentUserPower',['getUserPower']),
     renderContent(h, { node, data, store }) {
       if (data.isValid == 2) {
-        return <span class="span-ellipsis">
-                <span title={node.label} style="background:#ccc">{node.label}</span>
-               </span>
+        return <span class="span-ellipsis"><span title={node.label} style="background:#ccc">{node.label}</span></span>
       } else {
-        return <span class="span-ellipsis">
-                <span title={node.label}>{ node.label }</span>
-               </span>
+        return <span class="span-ellipsis"><span title={node.label}>{ node.label }</span></span>
       }
     },
     handleNodeClick(data) {
@@ -429,10 +425,10 @@ export default {
   padding-left: 5px;
   padding-right: 10px;
 }
-.span-ellipsis {
+/* .span-ellipsis {
   width:100%;
   overflow:hidden;
   white-space:nowrap;
   text-overflow:ellipsis;
-}
+} */
 </style>

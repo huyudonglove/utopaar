@@ -27,7 +27,7 @@
           </div>
           <div style="margin:40px 0px" >
             <span class="labelSpan"><span style="color: #f56c6c;margin-right: 2px;">*</span>平台类型</span>
-            <el-radio-group v-model="platformType">
+            <el-radio-group v-model="platformType" @change="changePlatformType">
             <el-radio :label="0">Vuforia</el-radio>
             <el-radio :label="1">EasyAR</el-radio>
             <el-radio :label="2">LocusAR</el-radio>
@@ -35,7 +35,7 @@
           </div>
            <div  style="margin:40px 0px" >
             <span class="labelSpan"><span style="color: #f56c6c;margin-right: 2px;">*</span>识别方式</span>
-            <el-radio-group v-model="recognizeType">
+            <el-radio-group v-model="recognizeType" @change="changeRecognizeType">
             <el-radio :label="0">图像本地识别</el-radio>
             <el-radio :label="1">图像云识别</el-radio>
             <el-radio :label="2" :disabled="parseInt(platformType)===0">空间识别</el-radio>
@@ -44,8 +44,9 @@
            <div style="margin:40px 0px" v-if="parseInt(recognizeType)==2">
             <span class="labelSpan">投放单位</span>
             <el-button @click="showTree=true">+</el-button>
+            <el-tag v-if="assetUnitId">{{parentNameUrl}}</el-tag>
           </div>
-          <tree   @closeBox="toshow" v-if="showTree" :pId="assetUnitId"></tree>
+          <tree   @closeBox="toshow" v-if="showTree" :pId="assetUnitId" :assetUnitName="parentNameUrl"></tree>
           <div>
             <div>
               <div style="height: 80px;">
@@ -402,7 +403,9 @@
         platformType:0,
         recognizeType:0,
         assetUnitId:'',
-        showTree:false
+        parentNameUrl:'',
+        showTree:false,
+        assetUnitIdCopy:''
       }
     },
     methods:{
@@ -592,8 +595,13 @@
 
       },
       toshow(val){
-        this.assetUnitId=val;
+        this.assetUnitId=val.selectId;
+        this.parentNameUrl=val.parentNameUrl
         this.showTree=false;
+        console.log(this.assetUnitIdCopy,this.assetUnitId)
+        if(this.assetUnitIdCopy!==this.assetUnitId){
+          this.positionData=[]
+        }
       },
       goTo(){
         this.$router.push({
@@ -774,6 +782,12 @@
         });
         this.searchWord='';
       },
+      changePlatformType(){
+        this.positionData=[]
+      },
+      changeRecognizeType(){
+        this.positionData=[]
+      }
     },
     watch:{
       appId(){
@@ -880,6 +894,11 @@
               this.isMark=res.data.isMark||1;
               this.imageUrlSetting=`/static/${Base64.decode(res.data.settingThumbnail)}`;
               editor.txt.html(this.editorContent)
+              this.platformType=res.data.platformType
+              this.recognizeType=res.data.recognizeType
+              this.assetUnitId=res.data.assetUnitId
+              this.assetUnitIdCopy=res.data.assetUnitId
+              this.parentNameUrl=res.data.assetUnitName
             }
           }
         )

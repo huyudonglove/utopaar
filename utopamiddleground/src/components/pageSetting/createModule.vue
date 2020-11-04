@@ -27,7 +27,7 @@
           end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
-      <el-form-item :label="moduleTypeX=='CyclePlay'||moduleTypeX=='Slide'||moduleTypeX=='ImageShow'?'投放内容':'投放应用'">
+      <el-form-item :label="moduleTypeX=='CyclePlay'||moduleTypeX=='Slide'||moduleTypeX=='ImageShow'?'投放内容':'投放应用'" required>
         <el-table ref="multipleTable"
         :data="moduleList"
         tooltip-effect="dark"
@@ -410,6 +410,10 @@ export default {
     addOrEdit(type){
       this.$refs.form.validate((valid) => {
         if (valid) {
+          if(this.moduleList.length<1){
+            this.$message.error(`请添加${this.moduleTypeX=='CyclePlay'||this.moduleTypeX=='Slide'||this.moduleTypeX=='ImageShow'?'投放内容':'投放应用'}`);
+            return;
+          }
           if(this.moduleList.length>0){
             // var isTimeOk = this.moduleList.some(v=>v.effectFrom==false);
             // if(isTimeOk){
