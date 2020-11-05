@@ -1,14 +1,14 @@
 <template>
   <div style="display:inline-block;">
-    <a class="q" href="javascript:void(0)" @click="up(0)" v-if="arrayAuthority.indexOf('0') !== -1&&!arrayResource[0]"></a>
-    <a class="e" href="javascript:void(0)" @click="up(1)" v-if="arrayAuthority.indexOf('1') !== -1&&!arrayResource[1]"></a>
-    <a class="l" href="javascript:void(0)" @click="up(2)" v-if="arrayAuthority.indexOf('2') !== -1&&!arrayResource[2]"></a>
-    <a class="q_hasResource" href="javascript:void(0)" @click="up(0)" v-if="arrayAuthority.indexOf('0') !== -1&&arrayResource[0]"></a>
-    <a class="e_hasResource" href="javascript:void(0)" @click="up(1)" v-if="arrayAuthority.indexOf('1') !== -1&&arrayResource[1]"></a>
-    <a class="l_hasResource" href="javascript:void(0)" @click="up(2)" v-if="arrayAuthority.indexOf('2') !== -1&&arrayResource[2]"></a>
-    <a class="q_hasAuthority" href="javascript:void(0)" @click="up(0)" v-if="arrayAuthority.indexOf('0') == -1&&!arrayResource[0]"></a>
-    <a class="e_hasAuthority" href="javascript:void(0)" @click="up(1)" v-if="arrayAuthority.indexOf('1') == -1&&!arrayResource[1] "></a>
-    <a class="l_hasAuthority" href="javascript:void(0)" @click="up(2)" v-if="arrayAuthority.indexOf('2') == -1&&!arrayResource[2] "></a>
+    <a class="q" href="javascript:void(0)" @click="up(0)" v-if="hasAuthority==0&&!arrayResource[0]"></a>
+    <a class="e" href="javascript:void(0)" @click="up(1)" v-if="hasAuthority==1&&!arrayResource[1]"></a>
+    <a class="l" href="javascript:void(0)" @click="up(2)" v-if="hasAuthority==2&&!arrayResource[2]"></a>
+    <a class="q_hasResource" href="javascript:void(0)" @click="up(0)" v-if="hasAuthority==0&&arrayResource[0]"></a>
+    <a class="e_hasResource" href="javascript:void(0)" @click="up(1)" v-if="hasAuthority==1&&arrayResource[1]"></a>
+    <a class="l_hasResource" href="javascript:void(0)" @click="up(2)" v-if="hasAuthority==2&&arrayResource[2]"></a>
+    <a class="q_hasAuthority" href="javascript:void(0)" @click="up(0)" v-if="hasAuthority !==0&&!arrayResource[0]"></a>
+    <a class="e_hasAuthority" href="javascript:void(0)" @click="up(1)" v-if="hasAuthority !==1&&!arrayResource[1] "></a>
+    <a class="l_hasAuthority" href="javascript:void(0)" @click="up(2)" v-if="hasAuthority !==2&&!arrayResource[2] "></a>
   </div>
 </template>
 <script>
@@ -24,14 +24,15 @@ export default {
     }
   },
   created(){
-    this.arrayAuthority=this.hasAuthority?this.hasAuthority.split(','):[]
+    // this.arrayAuthority=this.hasAuthority?this.hasAuthority.split(','):[]
     this.arrayResource=this.hasResource?this.hasResource.split(','):[]
   },
   mounted(){
   },
   methods:{
-   up(mapEngine){
-     this.$emit('uploadAction',{"mapEngine":mapEngine,"id":this.id,"disabled":this.disabled,has:this.arrayAuthority.indexOf(JSON.stringify(mapEngine))==-1});
+   up(platformType){
+     console.log(platformType,'platformType',this.hasAuthority,platformType)
+     this.$emit('uploadAction',{"platformType":platformType,"id":this.id,"disabled":this.disabled,has:this.hasAuthority !==platformType});
    }
   },
   watch:{
