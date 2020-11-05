@@ -98,14 +98,13 @@
           </el-table-column>
           <el-table-column prop="pic" label="识别图地址" width align="center">
             <template slot-scope="scope">
-
-                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!mapListPower[0].isCheck" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.mapEngine" ref="identifyList" v-if="!showMoudle" :showMoudle="showMoudle"></upload>
+                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!mapListPower[0].isCheck" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="identifyList" v-if="!showMoudle" :showMoudle="showMoudle"></upload>
                  <!-- <el-button type="primary" size="small" :disabled="scope.row.type==1||!mapListPower[0].isCheck" @click="uploadAction(scope.row)">上传</el-button> -->
-                   <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!unablePower[0].isCheck" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.mapEngine" ref="state1" v-if="showMoudle=='3'" :showMoudle="showMoudle"></upload>
+                   <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!unablePower[0].isCheck" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="state1" v-if="showMoudle=='3'" :showMoudle="showMoudle"></upload>
                   <!-- <el-button type="primary"  size="small" :disabled="scope.row.type==1||!unablePower[0].isCheck" @click="uploadAction(scope.row)">上传</el-button> -->
-                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!enablePower[0].isCheck" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.mapEngine" ref="state2" v-if="showMoudle=='2'" :showMoudle="showMoudle"></upload>
+                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!enablePower[0].isCheck" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="state2" v-if="showMoudle=='2'" :showMoudle="showMoudle"></upload>
                   <!-- <el-button  type="primary" size="small" :disabled="scope.row.type==1||!enablePower[0].isCheck" @click="uploadAction(scope.row)">上传</el-button> -->
-                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!unapprovedPower[0].isCheck" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.mapEngine" ref="state3" v-if="showMoudle=='1'" :showMoudle="showMoudle"></upload>
+                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!unapprovedPower[0].isCheck" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="state3" v-if="showMoudle=='1'" :showMoudle="showMoudle"></upload>
                    <!-- <el-button type="primary" size="small" :disabled="scope.row.type==1||!unapprovedPower[0].isCheck" @click="uploadAction(scope.row)">上传</el-button> -->
 
 
@@ -246,15 +245,15 @@
         资源包上传:
         <el-button size="small" type="primary">点击上传</el-button>
         </el-upload>
-         <div style="position:absoult;bottom:20px;left:0px;" v-if="resourcePackage.androidFileName&&mapEngine==0">资源包名称：{{resourcePackage.androidFileName}}</div>
-         <div style="position:absoult;bottom:20px;left:0px;" v-if="resourcePackage.easyarFileId&&mapEngine==1">资源包名称：{{resourcePackage.easyarFileName}}</div>
-         <div style="position:absoult;bottom:20px;left:0px;" v-if="resourcePackage.locusFileId&&mapEngine==2">资源包名称：{{resourcePackage.locusFileName}}</div>
+         <div style="position:absoult;bottom:20px;left:0px;" v-if="resourcePackage.androidFileName&&platformTypeUrl==0">资源包名称：{{resourcePackage.androidFileName}}</div>
+         <div style="position:absoult;bottom:20px;left:0px;" v-if="resourcePackage.easyarFileId&&platformTypeUrl==1">资源包名称：{{resourcePackage.easyarFileName}}</div>
+         <div style="position:absoult;bottom:20px;left:0px;" v-if="resourcePackage.locusFileId&&platformTypeUrl==2">资源包名称：{{resourcePackage.locusFileName}}</div>
 
-        <div style="position:absoult;bottom:20px;left:0px;" v-if="resourcePackage.androidResourcePackageSize&&mapEngine==0">资源包大小：{{((resourcePackage.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}M</div>
+        <div style="position:absoult;bottom:20px;left:0px;" v-if="resourcePackage.androidResourcePackageSize&&platformTypeUrl==0">资源包大小：{{((resourcePackage.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}M</div>
 
-          <div style="position:absoult;bottom:20px;left:0px;" v-if="resourcePackage.easyarFileId&&mapEngine==1">资源包大小：{{((resourcePackage.easyarFileSize/(1024*1024))+'').slice(0,4)}}M</div>
+          <div style="position:absoult;bottom:20px;left:0px;" v-if="resourcePackage.easyarFileId&&platformTypeUrl==1">资源包大小：{{((resourcePackage.easyarFileSize/(1024*1024))+'').slice(0,4)}}M</div>
           
-          <div style="position:absoult;bottom:20px;left:0px;" v-if="resourcePackage.locusFileId&&mapEngine==2">资源包大小：{{((resourcePackage.locusFileSize/(1024*1024))+'').slice(0,4)}}M</div>
+          <div style="position:absoult;bottom:20px;left:0px;" v-if="resourcePackage.locusFileId&&platformTypeUrl==2">资源包大小：{{((resourcePackage.locusFileSize/(1024*1024))+'').slice(0,4)}}M</div>
 
         <div style="margin-top:15px;">
           <!-- <el-upload
@@ -279,7 +278,7 @@
         <!-- <div style="position:absoult;bottom:20px;left:0px;" v-if="resourcePackage.iosFileName||formSize.iosFileName">资源包名称：{{resourcePackage.iosFileName||formSize.iosFileName}}</div> -->
         <!-- <div style="position:absoult;bottom:20px;left:0px;" v-if="resourcePackage.iosResourcePackageSize||formSize.iosResourcePackageSize">资源包大小：{{((resourcePackage.iosResourcePackageSize/(1024*1024))+'').slice(0,4)||((formSize.iosResourcePackageSize/(1024*1024))+'').slice(0,4)}}M</div> -->
         </div>
-        <el-button size="small" type="success" @click="save({'identifiedImageId':formSize.id,'resourcePackage':resourcePackage}).then(res=>{imgVisible=false;reload()})" v-if="resourcePackage.androidResourcePackageSize&&mapEngine==0||resourcePackage.easyarFileId&&mapEngine==1||resourcePackage.locusFileId&&mapEngine==2">确定</el-button>
+        <el-button size="small" type="success" @click="save({'identifiedImageId':formSize.id,'resourcePackage':resourcePackage}).then(res=>{imgVisible=false;reload()})" v-if="resourcePackage.androidResourcePackageSize&&platformTypeUrl==0||resourcePackage.easyarFileId&&platformTypeUrl==1||resourcePackage.locusFileId&&platformTypeUrl==2">确定</el-button>
         <!-- <el-button style="margin-left: 10px;" size="small" v-if="upSuccess"  @click="quit()">取消</el-button> -->
         </el-dialog>
   <!-- 识别图上传 end -->
@@ -304,7 +303,6 @@ export default {
 		status:"",
 		type:"",
     wd:"",
-    platformType:'',
 		showPagination:false,
 		multipleSelection:[],
 		multipleSelectionId:[],
@@ -319,7 +317,8 @@ export default {
     identifiedForm:{
       imgIdentifiedName:'',
     },
-    mapEngine:null,
+    platformType:0,
+    platformTypeUrl:0,
     fileList: [],
     listSaasAccount:[],
     upSuccess:false,
@@ -385,6 +384,13 @@ export default {
   this.init({...query,source:'Background',saasCode:this.saasCode}).then(res=>{
     res.data.items.forEach(v=>v.webUrl=Base64.decode(v.pic))
     this.tableData=res.data.items
+    this.tableData.forEach(v=>{
+      if(!v.platformType){
+        v.platformType=null
+      }
+      return v
+    })
+    console.log(this.tableData,'data')
 		this.$store.commit('pagination/setTotal',this.total);
   })
 
@@ -421,11 +427,7 @@ export default {
     ...mapActions('identifyList',['init','upper','lower','info','del','save']),
     //判断是否所有的资源包已上传，显示通过按钮是否可用
     isResourcePackage(row){
-      if(row.mapEngine.split(',').length==3&&row.androidResourcePackage&&row.locusFileId&&row.easyarFileId){
-        return true
-      }else if(row.mapEngine.split(',').length==1&&row.androidResourcePackage||row.mapEngine.split(',').length==1&&row.locusFileId||row.mapEngine.split(',').length==1&&row.easyarFileId){
-        return true
-      }else if(row.mapEngine.split(',').length==2&&row.mapEngine.split(',').indexOf('0')!==-1&&row.androidResourcePackage&&row.mapEngine.split(',').indexOf('1')!==-1&&row.easyarFileId||row.mapEngine.split(',').length==2&&row.mapEngine.split(',').indexOf('0')!==-1&&row.androidResourcePackage&&row.mapEngine.split(',').indexOf('2')!==-1&&row.locusFileId||row.mapEngine.split(',').length==2&&row.mapEngine.split(',').indexOf('1')!==-1&&row.easyarFileId&&row.mapEngine.split(',').indexOf('2')!==-1&&row.locusFileId){
+      if(row.androidResourcePackage||row.locusFileId||row.easyarFileId){
         return true
       }
       return false
@@ -444,12 +446,12 @@ export default {
       let isDat=arr[arr.length-1]=='zip'
       let isLt45M = file.size / 1024 / 1024 < 45;
       if(isDat&&isLt45M){
-       if(this.mapEngine==0){
+       if(this.platformTypeUrl==0){
        this.resourcePackage.androidFileName=''
        this.resourcePackage.androidResourcePackageSize=''
        this.resourcePackage.iosFileName=''
        this.resourcePackage.iosResourcePackageSize=''
-       }else if(this.mapEngine==1){
+       }else if(this.platformTypeUrl==1){
         this.resourcePackage.androidResourcePackageSize=''
         this.resourcePackage.androidFileName=''
         this.resourcePackage.androidResourcePackage=''
@@ -469,18 +471,19 @@ export default {
       // return this.$confirm(`确定移除 ${ file.name }？`);
     },
     handleAvatarSuccess(res, file,fileList){
-      if(this.mapEngine==0){
+      console.log(1111,this.platformTypeUrl,res, file,fileList)
+      if(this.platformTypeUrl==0){
         res.code==0?this.resourcePackage.androidResourcePackageSize=res.data.size:this.resourcePackage.androidResourcePackageSize=''
         res.code==0?this.resourcePackage.androidFileName=res.data.originFileName:this.resourcePackage.androidFileName=''
         res.code==0?this.resourcePackage.androidResourcePackage=res.data.fileId:this.resourcePackage.androidResourcePackage=''
         res.code==0?this.resourcePackage.iosResourcePackageSize=res.data.size:this.resourcePackage.iosResourcePackageSize=''
         res.code==0?this.resourcePackage.iosFileName=res.data.originFileName:this.resourcePackage.iosFileName=''
         res.code==0?this.resourcePackage.iosResourcePackage=res.data.fileId:this.resourcePackage.iosResourcePackage=''
-      }else if(this.mapEngine==1){
+      }else if(this.platformTypeUrl==1){
         res.code==0?this.resourcePackage.easyarFileId=res.data.fileId:this.resourcePackage.androidResourcePackageSize=''
         res.code==0?this.resourcePackage.easyarFileName=res.data.originFileName:this.resourcePackage.androidFileName=''
         res.code==0?this.resourcePackage.easyarFileSize=res.data.size:this.resourcePackage.androidResourcePackage=''
-      }else if(this.mapEngine==2){
+      }else if(this.platformTypeUrl==2){
         res.code==0?this.resourcePackage.locusFileId=res.data.fileId:this.resourcePackage.androidResourcePackageSize=''
         res.code==0?this.resourcePackage.locusFileName=res.data.originFileName:this.resourcePackage.androidFileName=''
         res.code==0?this.resourcePackage.locusFileSize=res.data.size:this.resourcePackage.androidResourcePackage=''
@@ -520,8 +523,9 @@ export default {
      
     },
     uploadAction(params){
+      console.log(params,'params')
       this.formSize.id=params.id
-      this.mapEngine=params.mapEngine
+      this.platformTypeUrl=params.platformType
       this.info({id:params.id}).then(v=>{
       this.resourcePackage.androidFileName=v.data.androidFileName;
       this.resourcePackage.androidResourcePackage=v.data.androidResourcePackage;
