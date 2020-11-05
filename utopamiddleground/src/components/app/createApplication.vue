@@ -622,7 +622,9 @@
           name:'',
           backgroundAppId:this.appId,
           page:1,
-          limit:10000
+          limit:10000,
+          recognizeType:this.recognizeType,
+          platformType:this.platformType 
         }
         return new Promise((resolve,reject)=>{
           getPosition(msg).then(res=>{
@@ -830,6 +832,14 @@
         //   this.shareDesc='';
         //   this.shareTitle='';
         // })();
+      },
+      platformType(){
+      if(this.appId) {
+        this.getPosition()};
+      },
+      recognizeType(){
+      if(this.appId) {
+        this.recognizeType()};
       }
     },
     computed:{
