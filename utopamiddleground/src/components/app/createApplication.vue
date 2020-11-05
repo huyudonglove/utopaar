@@ -839,7 +839,7 @@
       },
       recognizeType(){
       if(this.appId) {
-        this.recognizeType()};
+        this.getPosition()};
       }
     },
     computed:{
