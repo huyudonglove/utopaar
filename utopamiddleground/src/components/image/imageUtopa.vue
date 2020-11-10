@@ -349,8 +349,8 @@
         </div>
         <div style="padding-top: 10px;padding-bottom: 10px">
           <span style="color: #f56c6c;margin-right: 2px;">*</span>识别方式：
-          <span v-if="recognizeType==0">图像本地识别</span>
-          <span v-if="recognizeType==1">图像云识别</span>
+          <span v-if="recognizeType==0">图像云识别</span>
+          <span v-if="recognizeType==1">图像本地识别</span>
           <span v-if="recognizeType==2">空间识别</span>
         </div>
         <div>
