@@ -59,6 +59,8 @@ export default {
         '/application/assetsList/3':require('../assets/icon_theater.png'),
         '/application/assetsList/5':require('../assets/icon_theater.png'),
         '/application/assetsList/6':require('../assets/icon_theater.png'),
+        '/application/assetsList/9':require('../assets/icon_theater.png'),
+        '/application/assetsList/10':require('../assets/icon_theater.png'),
         '/application/assetsList/content':require('../assets/icon_content_AD.png'),
         '/application/assetsList/assets':require('../assets/icon_material_AD.png'),
         '/app/applicationList':require('../assets/icon_app_AD.png'),

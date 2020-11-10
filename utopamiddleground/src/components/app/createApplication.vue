@@ -28,8 +28,8 @@
           <div style="margin:40px 0px" >
             <span class="labelSpan"><span style="color: #f56c6c;margin-right: 2px;">*</span>平台类型</span>
             <el-radio-group v-model="platformType" @change="changePlatformType">
-            <el-radio :label="0">Vuforia</el-radio>
-            <el-radio :label="1">EasyAR</el-radio>
+            <el-radio :label="0" :disabled="recognizeType ==2">Vuforia</el-radio>
+            <el-radio :label="1" >EasyAR</el-radio>
             <el-radio :label="2">LocusAR</el-radio>
           </el-radio-group>
           </div>
@@ -786,9 +786,15 @@
       },
       changePlatformType(){
         this.positionData=[]
+        // if(this.platformType ==1){
+        //   this.assetUnitId=''
+        // }
       },
       changeRecognizeType(){
         this.positionData=[]
+        if(this.recognizeType !==2){
+          this.assetUnitId=''
+        }
       }
     },
     watch:{
