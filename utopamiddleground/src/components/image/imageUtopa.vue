@@ -414,8 +414,8 @@
         </div>
         <div style="padding: 10px 0">
           <span><span style="color: #f56c6c;margin-right: 2px;">*</span>识别方式:</span>
-            <span v-if="recognizeType==0">图像本地识别</span>
-            <span v-if="recognizeType==1">图像云识别</span>
+            <span v-if="recognizeType==0">图像云识别</span>
+            <span v-if="recognizeType==1">图像本地识别</span>
             <span v-if="recognizeType==2">空间识别</span>
         </div>
         <div>
