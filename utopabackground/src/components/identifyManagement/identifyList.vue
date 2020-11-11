@@ -523,7 +523,7 @@ export default {
      
     },
     uploadAction(params){
-      console.log(params,'params')
+      // console.log(params,'params')
       this.formSize.id=params.id
       this.platformTypeUrl=params.platformType
       this.info({id:params.id}).then(v=>{
