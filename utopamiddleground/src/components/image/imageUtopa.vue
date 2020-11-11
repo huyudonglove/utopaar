@@ -39,8 +39,8 @@
         <div>
           <div v-if="positionData.id">
             <el-radio-group v-model="recognizeType" style="padding-bottom: 10px">
-              <el-radio-button :label="0" >图像云识别</el-radio-button>
               <el-radio-button :label="1" >图像本地识别</el-radio-button>
+              <el-radio-button :label="0" >图像云识别</el-radio-button>
               <el-radio-button :label="2" v-if="space">空间识别</el-radio-button>
             </el-radio-group>
           </div>
@@ -518,7 +518,7 @@
             isValid:null,
             isShowTree:true,
             isExpand:false,
-            recognizeType:0,
+            recognizeType:1,
             positionData:{},
             expandedKeys:[],
             assetId:'',
