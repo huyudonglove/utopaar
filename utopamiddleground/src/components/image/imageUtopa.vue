@@ -39,8 +39,8 @@
         <div>
           <div v-if="positionData.id">
             <el-radio-group v-model="recognizeType" style="padding-bottom: 10px">
-              <el-radio-button :label="1" >图像本地识别</el-radio-button>
-              <el-radio-button :label="0" >图像云识别</el-radio-button>
+              <el-radio-button :label="0" >图像本地识别</el-radio-button>
+              <el-radio-button :label="1" >图像云识别</el-radio-button>
               <el-radio-button :label="2" v-if="space">空间识别</el-radio-button>
             </el-radio-group>
           </div>
@@ -69,8 +69,8 @@
               <div style="display: flex;justify-content: space-between">
                 <span>ID  {{items[0].id}} </span>
                 <span>
-                  <span v-if="items[0].recognizeType==0" class="title">图像云识别</span>
-                  <span v-if="items[0].recognizeType==1" class="title">图像本地识别</span>
+                  <span v-if="items[0].recognizeType==1" class="title">图像云识别</span>
+                  <span v-if="items[0].recognizeType==0" class="title">图像本地识别</span>
                   <span v-if="items[0].recognizeType==2" class="title">空间识别</span>
                   <span v-if="items[0].platformType==0" class="h-button">Vuforia</span>
                   <span v-if="items[0].platformType==1" class="h-button">Easyar</span>
@@ -117,8 +117,8 @@
               <div style="display: flex;justify-content: space-between">
                 <span>ID  {{items[1].id}} </span>
                 <span>
-                  <span v-if="items[1].recognizeType==0" class="title">图像云识别</span>
-                  <span v-if="items[1].recognizeType==1" class="title">图像本地识别</span>
+                  <span v-if="items[1].recognizeType==1" class="title">图像云识别</span>
+                  <span v-if="items[1].recognizeType==0" class="title">图像本地识别</span>
                   <span v-if="items[1].recognizeType==2" class="title">空间识别</span>
                   <span v-if="items[1].platformType==0" class="h-button">Vuforia</span>
                   <span v-if="items[1].platformType==1" class="h-button">Easyar</span>
@@ -167,8 +167,8 @@
               <div style="display: flex;justify-content: space-between">
                 <span>ID  {{items[2].id}} </span>
                 <span>
-                  <span v-if="items[2].recognizeType==0" class="title">图像云识别</span>
-                  <span v-if="items[2].recognizeType==1" class="title">图像本地识别</span>
+                  <span v-if="items[2].recognizeType==1" class="title">图像云识别</span>
+                  <span v-if="items[2].recognizeType==0" class="title">图像本地识别</span>
                   <span v-if="items[2].recognizeType==2" class="title">空间识别</span>
                  <span v-if="items[2].platformType==0" class="h-button">Vuforia</span>
                   <span v-if="items[2].platformType==1" class="h-button">Easyar</span>
@@ -215,8 +215,8 @@
               <div style="display: flex;justify-content: space-between">
                 <span>ID  {{items[3].id}} </span>
                 <span>
-                  <span v-if="items[3].recognizeType==0" class="title">图像云识别</span>
-                  <span v-if="items[3].recognizeType==1" class="title">图像本地识别</span>
+                  <span v-if="items[3].recognizeType==1" class="title">图像云识别</span>
+                  <span v-if="items[3].recognizeType==0" class="title">图像本地识别</span>
                   <span v-if="items[3].recognizeType==2" class="title">空间识别</span>
                   <span v-if="items[3].platformType==0" class="h-button">Vuforia</span>
                   <span v-if="items[3].platformType==1" class="h-button">Easyar</span>
@@ -263,8 +263,8 @@
               <div style="display: flex;justify-content: space-between">
                 <span>ID  {{items[4].id}} </span>
                 <span>
-                  <span v-if="items[4].recognizeType==0" class="title">图像云识别</span>
-                  <span v-if="items[4].recognizeType==1" class="title">图像本地识别</span>
+                  <span v-if="items[4].recognizeType==1" class="title">图像云识别</span>
+                  <span v-if="items[4].recognizeType==0" class="title">图像本地识别</span>
                   <span v-if="items[4].recognizeType==2" class="title">空间识别</span>
                   <span v-if="items[4].platformType==0" class="h-button">Vuforia</span>
                   <span v-if="items[4].platformType==1"  class="h-button">EasyAR</span>
@@ -349,8 +349,8 @@
         </div>
         <div style="padding-top: 10px;padding-bottom: 10px">
           <span style="color: #f56c6c;margin-right: 2px;">*</span>识别方式：
-          <span v-if="recognizeType==0">图像云识别</span>
-          <span v-if="recognizeType==1">图像本地识别</span>
+          <span v-if="recognizeType==1">图像云识别</span>
+          <span v-if="recognizeType==0">图像本地识别</span>
           <span v-if="recognizeType==2">空间识别</span>
         </div>
         <div>
@@ -414,8 +414,8 @@
         </div>
         <div style="padding: 10px 0">
           <span><span style="color: #f56c6c;margin-right: 2px;">*</span>识别方式:</span>
-            <span v-if="recognizeType==0">图像云识别</span>
-            <span v-if="recognizeType==1">图像本地识别</span>
+            <span v-if="recognizeType==1">图像云识别</span>
+            <span v-if="recognizeType==0">图像本地识别</span>
             <span v-if="recognizeType==2">空间识别</span>
         </div>
         <div>
@@ -518,7 +518,7 @@
             isValid:null,
             isShowTree:true,
             isExpand:false,
-            recognizeType:1,
+            recognizeType:0,
             positionData:{},
             expandedKeys:[],
             assetId:'',
