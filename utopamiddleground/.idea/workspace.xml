@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4649e887-9a3a-499d-a99a-17666bd54e4b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/image/imageUtopa.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/image/imageUtopa.vue" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -19,8 +18,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/components/image/imageUtopa.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="267" column="37" selection-start-line="267" selection-start-column="37" selection-end-line="267" selection-end-column="37" />
+            <state relative-caret-position="323">
+              <caret line="705" column="24" selection-start-line="705" selection-start-column="24" selection-end-line="705" selection-end-column="24" />
               <folding>
                 <element signature="n#style#0;n#el-col#0;n#el-row#0;n#div#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#el-col#0;n#el-row#0;n#div#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
@@ -288,12 +287,12 @@
       <workItem from="1604995447282" duration="810000" />
       <workItem from="1604996791666" duration="934000" />
       <workItem from="1605077090380" duration="295000" />
-      <workItem from="1605089773373" duration="283000" />
+      <workItem from="1605089773373" duration="640000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="46310000" />
+    <option name="totallyTimeSpent" value="46667000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
@@ -349,8 +348,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/image/imageUtopa.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="267" column="37" selection-start-line="267" selection-start-column="37" selection-end-line="267" selection-end-column="37" />
+        <state relative-caret-position="323">
+          <caret line="705" column="24" selection-start-line="705" selection-start-column="24" selection-end-line="705" selection-end-column="24" />
           <folding>
             <element signature="n#style#0;n#el-col#0;n#el-row#0;n#div#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#el-col#0;n#el-row#0;n#div#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />

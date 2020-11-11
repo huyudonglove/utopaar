@@ -663,7 +663,6 @@
                        this.dialogVisible=false;
                      })();})
                    })():this.$message.error('方向不能为空')
-
                  })():this.$message.error('坐标不能为空')
                })():this.$message.error('地理位置不能为空');
              })():this.$message.error('识别图不能为空');
@@ -699,10 +698,12 @@
              this.positionX&&this.positionY&&this.positionZ?(()=>{
                this.relationX&&this.relationY&&this.relationZ?(()=>{
                  editImgName(msg).then(res=>{
-                   res.code?this.$message.error(res.msg):this.$message.success(res.msg);
-                   this.getImage();
-                   this.cancle();
-                   this.editName=false;
+                   res.code?this.$message.error(res.msg):(()=>{
+                     this.$message.success(res.msg)
+                     this.getImage();
+                     this.cancle();
+                     this.editName=false;
+                   })();
                  })
                })():this.$message.error('方向不能为空')
              })():this.$message.error('坐标不能为空')
