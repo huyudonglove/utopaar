@@ -445,16 +445,16 @@ export default {
       let isDat=arr[arr.length-1]=='zip'
       let isLt45M = file.size / 1024 / 1024 < 45;
       if(isDat&&isLt45M){
-       if(this.platformTypeUrl==0){
-       this.resourcePackage.androidFileName=''
-       this.resourcePackage.androidResourcePackageSize=''
-       this.resourcePackage.iosFileName=''
-       this.resourcePackage.iosResourcePackageSize=''
-       }else if(this.platformTypeUrl==1){
-        this.resourcePackage.androidResourcePackageSize=''
-        this.resourcePackage.androidFileName=''
-        this.resourcePackage.androidResourcePackage=''
-       }
+      //  if(this.platformTypeUrl==0){
+      //  this.resourcePackage.androidFileName=''
+      //  this.resourcePackage.androidResourcePackageSize=''
+      //  this.resourcePackage.iosFileName=''
+      //  this.resourcePackage.iosResourcePackageSize=''
+      //  }else if(this.platformTypeUrl==1){
+      //   this.resourcePackage.androidResourcePackageSize=''
+      //   this.resourcePackage.androidFileName=''
+      //   this.resourcePackage.androidResourcePackage=''
+      //  }
       }
       },
     handleRemove2(file, fileList) {
