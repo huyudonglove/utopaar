@@ -59,8 +59,8 @@
                 <!--                      :value="item.id">-->
                 <!--                    </el-option>-->
                 <!--                  </el-select>-->
-                <el-button @click="appType=true;">+</el-button>
-
+                <el-button @click="appType=true;" >+</el-button>
+                <!-- :disabled="recognizeType==2&&!assetUnitId" -->
                 <el-tag v-if="appId">{{app.filter(v=>v.id==appId)[0].name}}</el-tag>
 
               </div>
@@ -97,7 +97,7 @@
                       <span class="positionSpan"><el-button @click="item.checked=false;" type="text">删除</el-button></span>
                     </div>
                   </div>
-                  <el-button @click="showButton" style="width:850px;margin-left: 160px" >+</el-button>
+                  <el-button @click="showButton" style="width:850px;margin-left: 160px" :disabled='!appId&&recognizeType==2||!assetUnitId&&recognizeType==2'>+</el-button>
                 </div>
               </div>
             </div>
@@ -405,7 +405,8 @@
         assetUnitId:'',
         parentNameUrl:'',
         showTree:false,
-        assetUnitIdCopy:''
+        assetUnitIdCopy:'',
+        isClick:false
       }
     },
     methods:{
@@ -595,11 +596,11 @@
 
       },
       toshow(val){
+        this.isClick=true
         this.assetUnitId=val.selectId;
         this.parentNameUrl=val.parentNameUrl
         this.showTree=false;
-        console.log(this.assetUnitIdCopy,this.assetUnitId)
-        if(this.assetUnitIdCopy!==this.assetUnitId){
+        if(this.assetUnitIdCopy!==this.assetUnitId&& this.type=='revise'){
           this.positionData=[]
         }
       },
@@ -624,7 +625,8 @@
           page:1,
           limit:10000,
           recognizeType:this.recognizeType,
-          platformType:this.platformType 
+          platformType:this.platformType,
+          parentId:this.assetUnitId
         }
         return new Promise((resolve,reject)=>{
           getPosition(msg).then(res=>{
@@ -784,31 +786,59 @@
         });
         this.searchWord='';
       },
-      changePlatformType(){
-        this.positionData=[]
-        // if(this.platformType ==1){
-        //   this.assetUnitId=''
-        // }
+    changePlatformType(){
+        if(this.appId&&this.recognizeType!==2) 
+        { 
+         this.getPosition().then(res=>{
+            this.positionData=[]
+            this.positions=[]
+         })
+        }
+        else if(this.appId&&this.recognizeType==2&&this.assetUnitId){
+          this.getPosition().then(res=>{
+            this.positionData=[]
+            this.positions=[]
+         })
+        };
+        
       },
       changeRecognizeType(){
-        this.positionData=[]
-        if(this.recognizeType !==2){
-          this.assetUnitId=''
+        if(this.appId&&this.recognizeType!==2) 
+        { this.assetUnitId='';
+          this.getPosition().then(res=>{
+            this.positionData=[];
+            this.positions=[]
+         })
         }
+        else if(this.appId&&this.recognizeType==2 &&this.assetUnitId){
+          this.getPosition().then(res=>{
+            this.positionData=[]
+            this.positions=[]
+         })
+        };
       }
     },
     watch:{
+      // appId(){
+      //   // console.log(111111)
+      //   this.appId?(()=>{
+      //     //this.positionData=[];
+      //     //this.positionChecked=[];
+      //     this.getPosition();
+      //   })():(()=>{
+      //     //this.positionData=[];
+      //     //this.positionChecked=[];
+      //   })();
+      //   this.positionData=[];
+      // },
       appId(){
-        // console.log(111111)
-        this.appId?(()=>{
-          //this.positionData=[];
-          //this.positionChecked=[];
-          this.getPosition();
-        })():(()=>{
-          //this.positionData=[];
-          //this.positionChecked=[];
-        })();
-        this.positionData=[];
+       if(this.appId&&this.recognizeType!==2) 
+        {
+          this.getPosition()
+        }
+        else if(this.appId&&this.recognizeType==2 &&this.assetUnitId){
+          this.getPosition()
+        };
       },
       relatePageType(){
         console.log(this.relatePageType)
@@ -839,13 +869,35 @@
         //   this.shareTitle='';
         // })();
       },
-      platformType(){
-      if(this.appId) {
-        this.getPosition()};
-      },
-      recognizeType(){
-      if(this.appId) {
-        this.getPosition()};
+      // platformType(){
+      // if(this.appId&&this.recognizeType!==2) 
+      //   { 
+      //     this.getPosition()
+      //   }
+      //   else if(this.appId&&this.recognizeType==2&&this.assetUnitId){
+      //     this.getPosition()
+      //   };
+        
+      // },
+      // recognizeType(){
+      // if(this.appId&&this.recognizeType!==2) 
+      //   { this.assetUnitId='';
+      //     this.getPosition()
+      //   }
+      //   else if(this.appId&&this.recognizeType==2 &&this.assetUnitId){
+      //     this.getPosition()
+      //   };
+       
+      // },
+      assetUnitId(){
+        if(this.appId&&this.assetUnitId&&this.isClick) {
+        this.getPosition().then(res=>{
+            this.positionData=[]
+            this.positions=[]
+         })
+        }else if(this.appId&&this.assetUnitId) {
+        this.getPosition()
+        };
       }
     },
     computed:{

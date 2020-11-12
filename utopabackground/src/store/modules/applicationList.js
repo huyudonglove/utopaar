@@ -209,8 +209,9 @@ const actions={
     let sortField= params.sortField ? params.sortField : '';
     let sortType= params.sortType ? params.sortType : '';
     let materialFormat= params.musicTypeSelect ? params.musicTypeSelect : '';
+    let isDel= params.isDel ? params.isDel : '';
     return new Promise((resolve, reject) => {
-    return applicationlistModule({ page, limit, name, module, materialCategoryId, appId ,unityVersion,loadingLine,viewType,sortField,sortType,materialFormat}).then(res => {
+    return applicationlistModule({ page, limit, name, module, materialCategoryId, appId ,unityVersion,loadingLine,viewType,sortField,sortType,materialFormat,isDel}).then(res => {
       if (res.code) {
         Message.error(res.msg);
       } else {
