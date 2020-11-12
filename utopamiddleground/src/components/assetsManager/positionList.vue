@@ -100,7 +100,7 @@
             <el-form-item label="资产名称" prop="assetsName">
               <el-input v-model="form.assetsName" style="width:200px;" maxlength="50"></el-input>
             </el-form-item>
-            <el-form-item label="识别方式">
+            <el-form-item label="地图" required>
               <div style="display:inline-block;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
               :style="{'background-color':easyarMapId&&easyarName?'#0074e4':easyarMapId||easyarName?'#ffdf25':'#ccc'}">EasyAR</div>
               <div style="display:inline-block;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
