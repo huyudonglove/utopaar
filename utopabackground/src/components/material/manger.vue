@@ -88,8 +88,8 @@
                 <div v-for="apple in item.children" v-if="item.show">
                   <div class="el-tree-node__content" style="padding-left: 18px;"><!--二级分类-->
                     <span class="custom-tree-node" style="width: 100%;display: inline-block">
-                      <span>
-                        <span class="expanded el-tree-node__expand-icon el-icon-caret-right"></span>
+                      <span @click="apple.show=!apple.show">
+                        <span :class="apple.show?(`expanded el-tree-node__expand-icon el-icon-caret-right`):(`el-tree-node__expand-icon el-icon-caret-right`)" ></span>
                         <span>{{apple.name}}</span>
                       </span>
                      <span style="float: right">
@@ -99,7 +99,7 @@
                      </span>
                    </span>
                   </div>
-                  <div v-if="apple.children">
+                  <div v-if="apple.children&&apple.show">
                     <div v-for="i in apple.children" style="padding-left: 36px;" class="el-tree-node__content" >
                      <span class="custom-tree-node" style="width: 100%;display: inline-block">
                        <span>
@@ -261,7 +261,12 @@
             getTree(this.module).then(v=>{
               //console.log(v,999);
               v.data?(()=>{
-                v.data.map(i=>i.show=true)
+                v.data.map(i=>{
+                  i.show=true;
+                  i.children&&i.children.map(f=>{
+                    f.show=true;
+                  })
+                })
               })():'';
               this.tree=v.data;
               //console.log(tree,999)

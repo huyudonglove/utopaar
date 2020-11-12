@@ -453,7 +453,7 @@ export default {
   tagKey(){
     // console.log(this.tagKey,'tagKey')
      if(this.playId !== 7){
-     this.initListModule({...this.$route.query,module:this.tagKey,appId:this.$route.query.id}).then(res=>{
+     this.initListModule({...this.$route.query,module:this.tagKey,appId:this.$route.query.id,isDel:'0'}).then(res=>{
      this.$store.commit('pagination/setTotal',this.total);
      applicationToTree({moduleId:this.tagKey}).then(res=>{
       this.moduleTree=res.data?res.data:[]

@@ -31,7 +31,7 @@ export default {
   },
   methods:{
    up(platformType){
-     console.log(platformType,'platformType',this.hasAuthority,platformType)
+    //  console.log(platformType,'platformType',this.hasAuthority,platformType)
      this.$emit('uploadAction',{"platformType":platformType,"id":this.id,"disabled":this.disabled,has:this.hasAuthority !==platformType});
    }
   },

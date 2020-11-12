@@ -98,13 +98,13 @@
           </el-table-column>
           <el-table-column prop="pic" label="识别图地址" width align="center">
             <template slot-scope="scope">
-                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!mapListPower[0].isCheck" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="identifyList" v-if="!showMoudle" :showMoudle="showMoudle"></upload>
+                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!mapListPower[0].isCheck||scope.row.checkState==3" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="identifyList" v-if="!showMoudle" :showMoudle="showMoudle"></upload>
                  <!-- <el-button type="primary" size="small" :disabled="scope.row.type==1||!mapListPower[0].isCheck" @click="uploadAction(scope.row)">上传</el-button> -->
-                   <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!unablePower[0].isCheck" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="state1" v-if="showMoudle=='3'" :showMoudle="showMoudle"></upload>
+                   <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!unablePower[0].isCheck||scope.row.checkState==3" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="state1" v-if="showMoudle=='3'" :showMoudle="showMoudle"></upload>
                   <!-- <el-button type="primary"  size="small" :disabled="scope.row.type==1||!unablePower[0].isCheck" @click="uploadAction(scope.row)">上传</el-button> -->
-                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!enablePower[0].isCheck" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="state2" v-if="showMoudle=='2'" :showMoudle="showMoudle"></upload>
+                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!enablePower[0].isCheck||scope.row.checkState==3" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="state2" v-if="showMoudle=='2'" :showMoudle="showMoudle"></upload>
                   <!-- <el-button  type="primary" size="small" :disabled="scope.row.type==1||!enablePower[0].isCheck" @click="uploadAction(scope.row)">上传</el-button> -->
-                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!unapprovedPower[0].isCheck" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="state3" v-if="showMoudle=='1'" :showMoudle="showMoudle"></upload>
+                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!unapprovedPower[0].isCheck||scope.row.checkState==3" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="state3" v-if="showMoudle=='1'" :showMoudle="showMoudle"></upload>
                    <!-- <el-button type="primary" size="small" :disabled="scope.row.type==1||!unapprovedPower[0].isCheck" @click="uploadAction(scope.row)">上传</el-button> -->
 
 
@@ -196,8 +196,8 @@
 			<span>{{formSize.width?formSize.width:'无'}}</span>
 			</el-form-item>
 			<el-form-item label="图片类型：" :label-width="formLabelWidth">
-			<span>{{formSize.type==1?'云识别':'本地识别'}}</span>
-
+			<span>{{formSize.recognizeType==1?'图像云识别':'图像本地识别'}}</span>
+   
 			</el-form-item>
 			<el-form-item label="识别图：" :label-width="formLabelWidth">
 			 <img
@@ -206,7 +206,7 @@
           style="width: 150px;height: 150px"
           >
 			</el-form-item>
-			<div style="margin-top:30px;" v-if="formSize.type==1" >
+			<!-- <div style="margin-top:30px;" v-if="formSize.type==1" >
             <h3>
               <span><label>推荐使用：</label></span>
             </h3>
@@ -217,13 +217,13 @@
               <img  src="../../assets/startNull.png" v-for="(item,index) in ratingOther" :key="index+20" />
               </span>
             </div>
-          </div>
-			</el-form-item>
+          </div> -->
+			<!-- </el-form-item> -->
 		</el-form>
 	</el-dialog>
   <!-- 识别图详情 end -->
   <!-- 识别图上传 start-->
-        <el-dialog title="添加识别图" :visible.sync="imgVisible" width="25%" @closed="closeDialog()">
+        <el-dialog title="添加识别图" :visible.sync="imgVisible" width="25%" @closed="closeDialog()" >
         <el-upload
         class="upload-demo"
         action="/api/utopa/ar/identify/image/upload/data/package"
@@ -235,7 +235,6 @@
         :file-list="fileList"
         multiple
         :limit="1"
-        :show-file-list="false"
         :data="{'targetId':formSize.targetId}"
         :headers="myHeader"
         :on-exceed="handleExceed"
@@ -465,6 +464,7 @@ export default {
       // console.log(file);
     },
     handleExceed(files, fileList) {
+      {{files.length}}
       this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
     },
     beforeRemove(file, fileList) {
@@ -523,7 +523,7 @@ export default {
      
     },
     uploadAction(params){
-      console.log(params,'params')
+      // console.log(params,'params')
       this.formSize.id=params.id
       this.platformTypeUrl=params.platformType
       this.info({id:params.id}).then(v=>{
