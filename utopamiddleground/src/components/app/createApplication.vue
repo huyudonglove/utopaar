@@ -596,6 +596,7 @@
 
       },
       toshow(val){
+        console.log(111,222,val)
         this.isClick=true
         this.assetUnitId=val.selectId;
         this.parentNameUrl=val.parentNameUrl
@@ -787,8 +788,9 @@
         this.searchWord='';
       },
     changePlatformType(){
-        if(this.appId&&this.recognizeType!==2) 
-        { 
+<<<<<<< HEAD
+        if(this.appId&&this.recognizeType!==2)
+        {
          this.getPosition().then(res=>{
             this.positionData=[]
             this.positions=[]
@@ -800,10 +802,10 @@
             this.positions=[]
          })
         };
-        
+
       },
       changeRecognizeType(){
-        if(this.appId&&this.recognizeType!==2) 
+        if(this.appId&&this.recognizeType!==2)
         { this.assetUnitId='';
           this.getPosition().then(res=>{
             this.positionData=[];
@@ -816,6 +818,20 @@
             this.positions=[]
          })
         };
+=======
+      this.getPosition().then(res=>{
+            this.positionData=[]
+            this.positions=[]
+         })
+      this.assetUnitId='';
+      },
+      changeRecognizeType(){
+        this.assetUnitId='';
+        this.getPosition().then(res=>{
+          this.positionData=[];
+          this.positions=[]
+        })
+>>>>>>> wu
       }
     },
     watch:{
@@ -832,7 +848,7 @@
       //   this.positionData=[];
       // },
       appId(){
-       if(this.appId&&this.recognizeType!==2) 
+       if(this.appId&&this.recognizeType!==2)
         {
           this.getPosition()
         }
@@ -870,32 +886,31 @@
         // })();
       },
       // platformType(){
-      // if(this.appId&&this.recognizeType!==2) 
-      //   { 
+      // if(this.appId&&this.recognizeType!==2)
+      //   {
       //     this.getPosition()
       //   }
       //   else if(this.appId&&this.recognizeType==2&&this.assetUnitId){
       //     this.getPosition()
       //   };
-        
+
       // },
       // recognizeType(){
-      // if(this.appId&&this.recognizeType!==2) 
+      // if(this.appId&&this.recognizeType!==2)
       //   { this.assetUnitId='';
       //     this.getPosition()
       //   }
       //   else if(this.appId&&this.recognizeType==2 &&this.assetUnitId){
       //     this.getPosition()
       //   };
-       
+
       // },
       assetUnitId(){
-        if(this.appId&&this.assetUnitId&&this.isClick) {
-        this.getPosition().then(res=>{
-            this.positionData=[]
-            this.positions=[]
-         })
-        }else if(this.appId&&this.assetUnitId) {
+        if(this.appId&&this.isClick) {
+          this.positionData=[]
+          this.positions=[]
+        }
+        if(this.appId&&this.assetUnitId) {
         this.getPosition()
         };
       }

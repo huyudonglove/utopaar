@@ -59,7 +59,7 @@
 
         <div>
           <div style="display: flex;justify-content: space-between">
-            <div class="ten" style="text-align: center;line-height: 300px;cursor: pointer;" @click="mapListPower[0].isCheck?dialogVisible=true:dialogVisible=false;" v-if="positionId&&activeName=='first'&&isValid==1&&recognizeType!=2">
+            <div class="ten" style="text-align: center;line-height: 300px;cursor: pointer;" @click="mapListPower[0].isCheck?dialogVisible=true:dialogVisible=false;" v-if="positionData.id&&activeName=='first'&&isValid==1&&recognizeType!=2">
               <img src="@/assets/addI.png" alt="" width="200px" height="200px" style="margin-top: 40px">
             </div>
             <div class="ten" v-else style="text-align: center;line-height: 300px;cursor: not-allowed;">
@@ -617,8 +617,20 @@
              this.positionId=data.id;
              this.positionData=data;
              this.space=data.easyarMapId||data.easyarName||data.locusMapId||data.locusName;
+             this.getImage();
            })():(()=>{
-             this.positionId=''
+             // this.assetId=data.id
+             // this.currentPage=1;
+             // this.searchName='';
+             // this.isValid=data.isValid
+             // this.positionId='';
+             this.positionData={};
+             this.currentPage=1;
+             this.searchName='';
+             this.isValid=data.isValid
+             this.positionId=data.id;
+
+             this.getImage();
            })();
          },
          filterNode(value, data) {
