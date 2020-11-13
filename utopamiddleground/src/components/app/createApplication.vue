@@ -788,37 +788,6 @@
         this.searchWord='';
       },
     changePlatformType(){
-<<<<<<< HEAD
-        if(this.appId&&this.recognizeType!==2)
-        {
-         this.getPosition().then(res=>{
-            this.positionData=[]
-            this.positions=[]
-         })
-        }
-        else if(this.appId&&this.recognizeType==2&&this.assetUnitId){
-          this.getPosition().then(res=>{
-            this.positionData=[]
-            this.positions=[]
-         })
-        };
-
-      },
-      changeRecognizeType(){
-        if(this.appId&&this.recognizeType!==2)
-        { this.assetUnitId='';
-          this.getPosition().then(res=>{
-            this.positionData=[];
-            this.positions=[]
-         })
-        }
-        else if(this.appId&&this.recognizeType==2 &&this.assetUnitId){
-          this.getPosition().then(res=>{
-            this.positionData=[]
-            this.positions=[]
-         })
-        };
-=======
       this.getPosition().then(res=>{
             this.positionData=[]
             this.positions=[]
@@ -831,7 +800,6 @@
           this.positionData=[];
           this.positions=[]
         })
->>>>>>> wu
       }
     },
     watch:{
