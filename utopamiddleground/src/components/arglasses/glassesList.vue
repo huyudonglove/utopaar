@@ -14,6 +14,13 @@
           </el-select>
         </span> -->
         <span class="myWords">
+          端口
+          <el-select v-model="port" style="width:150px;" clearable>
+            <el-option label="眼镜" value="0"></el-option>
+            <el-option label="PC" value="1"></el-option>
+          </el-select>
+        </span>
+        <span class="myWords">
           状态
           <el-select v-model="status" style="width:150px;">
             <el-option label="全部" value=""></el-option>
@@ -38,6 +45,14 @@
             <a href="javascript:void(0);" @click="showApp(scope.row.assetId)">{{scope.row.applicationNum?scope.row.applicationNum:0}}</a>
           </template>
         </el-table-column>
+        <el-table-column prop="appPort" label="端口" align="center">
+          <template slot-scope="scope">
+            <span v-if="scope.row.appPort=='0'">眼镜</span>
+            <span v-if="scope.row.appPort=='1'">PC</span>
+            <span v-if="scope.row.appPort=='0,1'">眼镜/PC</span>
+            <span v-if="scope.row.appPort=='1,0'">眼镜/PC</span>
+          </template>  
+        </el-table-column>
         <el-table-column prop="state" label="状态" align="center">
           <template slot-scope="scope">
             <span v-if="scope.row.state==1">启用</span>
@@ -48,8 +63,8 @@
         <el-table-column prop="updateBy" label="更新人" align="center"></el-table-column>
         <el-table-column label="操作" fixed="right" width="250" align="center">
           <template slot-scope="scope">
-            <el-button type="warning" size="mini" @click="$router.push({path:'/glassesList/createGlasses',query:{assetId:scope.row.assetId,oldQuery:JSON.stringify($route.query)}})">查看</el-button>
-            <el-button type="primary" :disabled="!arGlassesAppPower[1].isCheck" size="mini" @click="$router.push({path:'/glassesList/createGlasses',query:{id:scope.row.id,assetId:scope.row.assetId,isEdit:1,oldQuery:JSON.stringify($route.query)}})">编辑</el-button>
+            <el-button type="warning" size="mini" @click="$router.push({path:'/glassesList/createGlasses',query:{assetId:scope.row.assetId,port:scope.row.appPort,oldQuery:JSON.stringify($route.query)}})">查看</el-button>
+            <el-button type="primary" :disabled="!arGlassesAppPower[1].isCheck" size="mini" @click="$router.push({path:'/glassesList/createGlasses',query:{id:scope.row.id,assetId:scope.row.assetId,port:scope.row.appPort,isEdit:1,oldQuery:JSON.stringify($route.query)}})">编辑</el-button>
             <el-button type="danger" :disabled="!arGlassesAppPower[3].isCheck" size="mini" @click="del(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
@@ -88,6 +103,7 @@ export default {
     return{
       inputX:'',
       status:'',
+      port:'',
       appValue:'',
       appList:[],
       glassesTable:[],
@@ -118,6 +134,11 @@ export default {
     status(){
       this.$store.commit('pagination/setClickPage',1);//重置第1页
       this.replace('status',this.status);
+      this.delArr=[];
+    },
+    port(){
+      this.$store.commit('pagination/setClickPage',1);//重置第1页
+      this.replace('port',this.port);
       this.delArr=[];
     },
     // appValue(){
@@ -157,6 +178,7 @@ export default {
       this.replace('reset');
       // this.inputX='';
       this.status='';
+      this.port='';
       // this.appValue='';
     },
     dropdown(){
@@ -193,6 +215,7 @@ export default {
     let limitRecord = this.$route.query.limit||20;//记录上一次limit操作
     // this.inputX = this.$route.query.name||'';
     this.status = this.$route.query.status||'';
+    this.port = this.$route.query.port||'';
     // this.appValue = this.$route.query.appValue||'';
     this.$nextTick(()=>{
       this.$store.commit('pagination/setClickPage',pageRecord);

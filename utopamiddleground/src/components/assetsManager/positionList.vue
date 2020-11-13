@@ -64,9 +64,9 @@
             <el-table-column label="地图" prop="type" align="center">
               <template slot-scope="scope">
                 <div style="margin:0 auto 10px;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
-                :style="{'background-color':scope.row.easyarMapId&&scope.row.easyarName?'#0074e4':scope.row.easyarMapId||scope.row.easyarName?'#ffdf25':'#ccc'}">EasyAR</div>
+                :style="{'background-color':easyarMapId&&easyarName?'#0074e4':easyarMapId||easyarName?'#ffdf25':'#ccc'}">EasyAR</div>
                 <div style="margin:0 auto;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
-                :style="{'background-color':scope.row.locusMapId&&scope.row.locusName?'#0074e4':scope.row.locusMapId||scope.row.locusName?'#ffdf25':'#ccc'}">LocusAR</div>
+                :style="{'background-color':locusMapId&&locusName?'#0074e4':locusMapId||locusName?'#ffdf25':'#ccc'}">LocusAR</div>
               </template>
             </el-table-column>
             <el-table-column label="创建时间" prop="createTime" align="center"></el-table-column>
@@ -100,7 +100,7 @@
             <el-form-item label="资产名称" prop="assetsName">
               <el-input v-model="form.assetsName" style="width:200px;" maxlength="50"></el-input>
             </el-form-item>
-            <el-form-item label="识别方式">
+            <el-form-item label="地图" required>
               <div style="display:inline-block;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
               :style="{'background-color':easyarMapId&&easyarName?'#0074e4':easyarMapId||easyarName?'#ffdf25':'#ccc'}">EasyAR</div>
               <div style="display:inline-block;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
@@ -254,10 +254,10 @@ export default {
         "source":'Middleground',
         "state":this.form.status,
         "type":this.form.assetsType,
-        "locusName":this.locusName,
-        "locusMapId":this.locusMapId,
-        "easyarName":this.easyarName,
-        "easyarMapId":this.easyarMapId,
+        // "locusName":this.locusName,
+        // "locusMapId":this.locusMapId,
+        // "easyarName":this.easyarName,
+        // "easyarMapId":this.easyarMapId,
       }
     },
     searchParams(){

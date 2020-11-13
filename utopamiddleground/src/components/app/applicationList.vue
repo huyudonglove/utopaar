@@ -35,10 +35,11 @@
               <el-option label="全部" value></el-option>
               <el-option label="图像云识别" value="1"></el-option>
               <el-option label="图像本地识别" value="0"></el-option>
+              <el-option label="空间识别" value="2"></el-option>
             </el-select>
           </span>
           <span class="myWords">
-            识别平台：
+            平台类型：
             <el-select v-model="platformType" placeholder="请选择" style="width:150px;height:30px;">
               <el-option label="全部" value></el-option>
               <el-option label="vuforia" value="0"></el-option>
@@ -71,7 +72,21 @@
           <div style="cursor:pointer;" v-if="scope.row.position.split(',').length>2" @click="showCity(scope)">...</div>
         </template>
       </el-table-column>
-      <el-table-column prop="loadingLine" label="渲染管道" width="200" align="center">
+      <el-table-column prop="position" label="识别方式" align="center" >
+        <template slot-scope="scope">
+          <span v-if="scope.row.recognizeType==0">图像本地识别</span>
+          <span v-if="scope.row.recognizeType==1">图像云识别</span>
+          <span v-if="scope.row.recognizeType==2">空间识别</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="position" label="平台类型" align="center" >
+        <template slot-scope="scope">
+          <span v-if="scope.row.platformType ==0">vuforia</span>
+          <span v-if="scope.row.platformType ==1">EasyAR</span>
+          <span v-if="scope.row.platformType ==2">LocusAR</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="loadingLine" label="渲染管道" width="" align="center">
       </el-table-column>
       <el-table-column prop="status" label="状态" width="80" align="center">
         <template slot-scope="scope">
@@ -80,7 +95,7 @@
       </el-table-column>
       <el-table-column prop="modifyTime" label="最新保存时间" width="160" align="center" sortable="custom">
       </el-table-column>
-      <el-table-column prop="modifyBy" label="更新人" width="200" align="center">
+      <el-table-column prop="modifyBy" label="更新人" width="" align="center">
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="280" align="center">
         <template slot-scope="scope">
@@ -141,9 +156,9 @@
           relateApplicationId:this.$route.query.relateApplicationId||'',
           status:this.$route.query.type||'',
           loadingLine:this.$route.query.loadValue||'',
-          sortColumn:this.wordState,
-          order:this.upS,
-          recognizeType:this.recognizeType,
+          sortColumn:this.wordState||'modify_time',
+          order:this.upS||'false',
+          recognizeType:parseInt(this.recognizeType),
           platformType:this.platformType
         }
         //console.log(msg,999)

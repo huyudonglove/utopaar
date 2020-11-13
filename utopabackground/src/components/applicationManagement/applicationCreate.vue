@@ -780,7 +780,7 @@ export default {
     })
     this.moduleDetail.forEach((v,index)=>{
       if(!this.isCreate){
-        this.initListModule({appId:this.$route.query.id,module:v.module,limit:999}).then(res=>{
+        this.initListModule({appId:this.$route.query.id,module:v.module,limit:999,isDel:'0'}).then(res=>{
           switch (v.module) {
             case 100:
             // console.log(res,res,'res111')

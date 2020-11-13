@@ -602,9 +602,10 @@ export function getGlassesList(params){
   let limit = params.limit||20;
   // let backgroundApplicationName = params.name||'';
   // let backgroundApplicationId = params.appValue||'';
+  let appPort = params.port||'';
   let state = params.status||'';
   return new Promise((resolve,reject)=>{
-    http.post('/api/utopa/ar/glass/admin/list',{page,limit,state}).then(res=>{
+    http.post('/api/utopa/ar/glass/admin/list',{page,limit,state,appPort}).then(res=>{
       if(res.code){
         Message.error(res.msg);
       }else{

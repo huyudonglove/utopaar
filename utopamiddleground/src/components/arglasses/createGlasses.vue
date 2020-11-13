@@ -6,6 +6,15 @@
       <el-button v-if="!isCreate&&!isEdit" @click="$router.push({path:'/glassesList',query:JSON.parse($route.query.oldQuery)});">返回</el-button>
     </div>
     <el-form label-position="right" label-width="200px" style="width: 100%">
+      <el-form-item label="端口选择">
+        <div style="position:relative;">
+          <el-checkbox-group v-model="portValue">
+            <el-checkbox-button label="0">眼镜</el-checkbox-button>
+            <el-checkbox-button label="1">&nbsp;&nbsp;PC&nbsp;&nbsp;</el-checkbox-button>
+          </el-checkbox-group>
+          <div v-if="!isCreate&&!isEdit" style="width:100%;height:110%;position:absolute;left:0;top:-10px;z-index:200"></div>
+        </div>
+      </el-form-item>
       <el-form-item label="位置选择">
         <div style="position:relative;">
           <el-tree ref="bigTree" :data="treedata" node-key="id" @node-click="showTable" :props="defaulProps" :default-expanded-keys="expandedKeys" :highlight-current="true">
@@ -82,7 +91,8 @@ export default {
       treedata:[],
       defaulProps:{label:'name'},
       selectId:'',
-      expandedKeys:[]
+      expandedKeys:[],
+      portValue:[]
     }
   },
   methods:{
@@ -111,17 +121,23 @@ export default {
 
     },
     addOrEdit(){
+      if(!this.portValue.length){
+        this.$message.error('请选择端口');
+        return;
+      }
       if(!this.selectId){
         this.$message.error('请选择位置');
         return;
       }
       if(this.isCreate){
-        addGlasses({"assetId":this.selectId}).then(res=>{
+        var appPort = this.portValue.join(',');
+        addGlasses({"assetId":this.selectId,appPort}).then(res=>{
           this.$router.push({path:'/glassesList',query:JSON.parse(this.$route.query.oldQuery)})
           this.reload();
         })
       }else if(this.isEdit){
-        editGlasses({"id":this.$route.query.id,"assetId":this.selectId}).then(res=>{
+        var appPort = this.portValue.join(',');
+        editGlasses({"id":this.$route.query.id,"assetId":this.selectId,appPort}).then(res=>{
           this.$router.push({path:'/glassesList',query:JSON.parse(this.$route.query.oldQuery)})
           this.reload();
         })
@@ -130,6 +146,9 @@ export default {
   },
   async created(){
     await this.getTree();
+    if(this.$route.query.port){
+      this.portValue = this.$route.query.port.split(',');
+    }
     if(this.$route.query.assetId){
       this.isEdit = this.$route.query.isEdit?true:false;
       this.expandedKeys =[parseInt(this.$route.query.assetId)];
