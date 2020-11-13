@@ -624,7 +624,7 @@
           page:1,
           limit:10000,
           recognizeType:this.recognizeType,
-          platformType:this.platformType 
+          platformType:this.platformType
         }
         return new Promise((resolve,reject)=>{
           getPosition(msg).then(res=>{
