@@ -596,6 +596,7 @@
 
       },
       toshow(val){
+        console.log(111,222,val)
         this.isClick=true
         this.assetUnitId=val.selectId;
         this.parentNameUrl=val.parentNameUrl
@@ -787,35 +788,18 @@
         this.searchWord='';
       },
     changePlatformType(){
-        if(this.appId&&this.recognizeType!==2) 
-        { 
-         this.getPosition().then(res=>{
+      this.getPosition().then(res=>{
             this.positionData=[]
             this.positions=[]
          })
-        }
-        else if(this.appId&&this.recognizeType==2&&this.assetUnitId){
-          this.getPosition().then(res=>{
-            this.positionData=[]
-            this.positions=[]
-         })
-        };
-        
+      this.assetUnitId='';
       },
       changeRecognizeType(){
-        if(this.appId&&this.recognizeType!==2) 
-        { this.assetUnitId='';
-          this.getPosition().then(res=>{
-            this.positionData=[];
-            this.positions=[]
-         })
-        }
-        else if(this.appId&&this.recognizeType==2 &&this.assetUnitId){
-          this.getPosition().then(res=>{
-            this.positionData=[]
-            this.positions=[]
-         })
-        };
+        this.assetUnitId='';
+        this.getPosition().then(res=>{
+          this.positionData=[];
+          this.positions=[]
+        })
       }
     },
     watch:{
@@ -890,12 +874,11 @@
        
       // },
       assetUnitId(){
-        if(this.appId&&this.assetUnitId&&this.isClick) {
-        this.getPosition().then(res=>{
-            this.positionData=[]
-            this.positions=[]
-         })
-        }else if(this.appId&&this.assetUnitId) {
+        if(this.appId&&this.isClick) {
+          this.positionData=[]
+          this.positions=[]
+        }
+        if(this.appId&&this.assetUnitId) {
         this.getPosition()
         };
       }
