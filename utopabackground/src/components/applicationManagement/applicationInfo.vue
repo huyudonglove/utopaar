@@ -484,7 +484,7 @@ export default {
 	$route(){//判断路由query变化执行请求
     if(this.$route.name=='applicationInfo'){
       //  console.log(this.$route.query,'this.$route.msg')
-    this.initListModule({...this.$route.query,module:this.tagKey,appId:this.$route.query.id}).then(res=>{
+    this.initListModule({...this.$route.query,module:this.tagKey,appId:this.$route.query.id,isDel:'0'}).then(res=>{
 		this.$store.commit('pagination/setTotal',this.total);
 		})
       }
