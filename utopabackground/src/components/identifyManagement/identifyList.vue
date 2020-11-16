@@ -98,13 +98,13 @@
           </el-table-column>
           <el-table-column prop="pic" label="识别图上传" width align="center">
             <template slot-scope="scope">
-                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!mapListPower[0].isCheck||scope.row.checkState==3" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="identifyList" v-if="!showMoudle" :showMoudle="showMoudle"></upload>
+                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!mapListPower[0].isCheck||scope.row.checkState==3" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="identifyList" v-if="!showMoudle&&showUpLoad" :showMoudle="showMoudle"></upload>
                  <!-- <el-button type="primary" size="small" :disabled="scope.row.type==1||!mapListPower[0].isCheck" @click="uploadAction(scope.row)">上传</el-button> -->
-                   <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!unablePower[0].isCheck||scope.row.checkState==3" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="state1" v-if="showMoudle=='3'" :showMoudle="showMoudle"></upload>
+                   <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!unablePower[0].isCheck||scope.row.checkState==3" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="state1" v-if="showMoudle=='3'&&showUpLoad" :showMoudle="showMoudle"></upload>
                   <!-- <el-button type="primary"  size="small" :disabled="scope.row.type==1||!unablePower[0].isCheck" @click="uploadAction(scope.row)">上传</el-button> -->
-                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!enablePower[0].isCheck||scope.row.checkState==3" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="state2" v-if="showMoudle=='2'" :showMoudle="showMoudle"></upload>
+                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!enablePower[0].isCheck||scope.row.checkState==3" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="state2" v-if="showMoudle=='2'&&showUpLoad" :showMoudle="showMoudle"></upload>
                   <!-- <el-button  type="primary" size="small" :disabled="scope.row.type==1||!enablePower[0].isCheck" @click="uploadAction(scope.row)">上传</el-button> -->
-                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!unapprovedPower[0].isCheck||scope.row.checkState==3" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="state3" v-if="showMoudle=='1'" :showMoudle="showMoudle"></upload>
+                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!unapprovedPower[0].isCheck||scope.row.checkState==3" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="state3" v-if="showMoudle=='1'&&showUpLoad" :showMoudle="showMoudle"></upload>
                    <!-- <el-button type="primary" size="small" :disabled="scope.row.type==1||!unapprovedPower[0].isCheck" @click="uploadAction(scope.row)">上传</el-button> -->
 
 
@@ -343,7 +343,8 @@ export default {
     tableHeight:0,
     showMoudle:'',
     uploadData:null,
-    title:''
+    title:'',
+    showUpLoad:false
 	  }
   },
   created(){
@@ -381,6 +382,7 @@ export default {
   // }
 
   this.init({...query,source:'Background',saasCode:this.saasCode}).then(res=>{
+    this.showUpLoad=true
     res.data.items.forEach(v=>v.webUrl=Base64.decode(v.pic))
     this.tableData=res.data.items
     this.tableData.forEach(v=>{
@@ -604,6 +606,7 @@ export default {
         break;
     }
       this.init({...this.$route.query,source:'Background',saasCode:this.saasCode}).then(res=>{
+      this.showUpLoad=true
       res.data.items.forEach(v=>v.webUrl=Base64.decode(v.pic))
       this.tableData=res.data.items
       this.$store.commit('pagination/setTotal',this.total);
