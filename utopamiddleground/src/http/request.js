@@ -146,7 +146,8 @@ const getPlay=(id)=>{
 /*保存投放h*/
 const addPut=(msg)=>{
   //return loadRequest('/api/utopa/ar/admin/saveApplications',msg,'创建',http,'post')
-  return http.post('/api/utopa/ar/admin/saveApplications',msg)
+  return loadRequest('/api/utopa/ar/admin/saveApplications',msg,'保存',http,'post')
+  // return http.post('/api/utopa/ar/admin/saveApplications',msg)
 }
 /*获取应用详情h*/
 const getDetail=(id)=>{
