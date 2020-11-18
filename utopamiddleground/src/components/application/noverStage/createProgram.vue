@@ -170,6 +170,8 @@ export default {
         "sortField":this.sortName,
         "sortType":this.sortType,
         "materialCategoryId":this.statusType,
+        "isDel":0,
+        "isValid":0
       }
     }
   },

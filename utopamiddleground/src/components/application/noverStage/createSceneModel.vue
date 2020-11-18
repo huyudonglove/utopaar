@@ -112,6 +112,8 @@ export default {
         "materialCategoryId":this.statusType,
         "sortField":this.sortName,
         "sortType":this.sortType,
+        "isDel":0,
+        "isValid":0
       }
     }
   },

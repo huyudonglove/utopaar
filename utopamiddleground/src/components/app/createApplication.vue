@@ -465,9 +465,9 @@
                             msg.shareType==0?(()=>{
                               addPut(msg).then(res=>{
                                 res.code?(()=>{
-                                  this.$message.error(res.msg);
+                                  // this.$message.error(res.msg);
                                 })():(()=>{
-                                  this.$message.success(res.msg);
+                                  // this.$message.success(res.msg);
                                   this.goTo();
                                 })()
                               })
@@ -476,9 +476,9 @@
                               msg.shareImageUrl&&msg.shareTitle&&msg.shareDesc&&msg.shareUrl?(()=>{
                                 addPut(msg).then(res=>{
                                   res.code?(()=>{
-                                    this.$message.error(res.msg);
+                                    // this.$message.error(res.msg);
                                   })():(()=>{
-                                    this.$message.success(res.msg);
+                                    // this.$message.success(res.msg);
                                     this.goTo();
                                   })()
                                 })
@@ -488,9 +488,9 @@
                               msg.shareImageUrl?(()=>{
                                 addPut(msg).then(res=>{
                                   res.code?(()=>{
-                                    this.$message.error(res.msg);
+                                    // this.$message.error(res.msg);
                                   })():(()=>{
-                                    this.$message.success(res.msg);
+                                    // this.$message.success(res.msg);
                                     this.goTo();
                                   })()
                                 })
@@ -500,9 +500,9 @@
                               msg.shareTitle&&msg.shareUrl?(()=>{
                                 addPut(msg).then(res=>{
                                   res.code?(()=>{
-                                    this.$message.error(res.msg);
+                                    // this.$message.error(res.msg);
                                   })():(()=>{
-                                    this.$message.success(res.msg);
+                                    // this.$message.success(res.msg);
                                     this.goTo();
                                   })()
                                 })
@@ -527,9 +527,9 @@
                             msg.shareType==0?(()=>{
                               addPut(msg).then(res=>{
                                 res.code?(()=>{
-                                  this.$message.error(res.msg);
+                                  // this.$message.error(res.msg);
                                 })():(()=>{
-                                  this.$message.success(res.msg);
+                                  // this.$message.success(res.msg);
                                   this.goTo();
                                 })()
                               })
@@ -538,9 +538,9 @@
                               msg.shareImageUrl&&msg.shareTitle&&msg.shareDesc&&msg.shareUrl?(()=>{
                                 addPut(msg).then(res=>{
                                   res.code?(()=>{
-                                    this.$message.error(res.msg);
+                                    // this.$message.error(res.msg);
                                   })():(()=>{
-                                    this.$message.success(res.msg);
+                                    // this.$message.success(res.msg);
                                     this.goTo();
                                   })()
                                 })
@@ -550,9 +550,9 @@
                               msg.shareImageUrl?(()=>{
                                 addPut(msg).then(res=>{
                                   res.code?(()=>{
-                                    this.$message.error(res.msg);
+                                    // this.$message.error(res.msg);
                                   })():(()=>{
-                                    this.$message.success(res.msg);
+                                    // this.$message.success(res.msg);
                                     this.goTo();
                                   })()
                                 })
@@ -562,9 +562,9 @@
                               msg.shareTitle&&msg.shareUrl?(()=>{
                                 addPut(msg).then(res=>{
                                   res.code?(()=>{
-                                    this.$message.error(res.msg);
+                                    // this.$message.error(res.msg);
                                   })():(()=>{
-                                    this.$message.success(res.msg);
+                                    // this.$message.success(res.msg);
                                     this.goTo();
                                   })()
                                 })
@@ -596,6 +596,7 @@
 
       },
       toshow(val){
+        console.log(111,222,val)
         this.isClick=true
         this.assetUnitId=val.selectId;
         this.parentNameUrl=val.parentNameUrl
@@ -645,7 +646,7 @@
                 });
                 this.positionDataCopy=JSON.parse(JSON.stringify(this.positionData));
                 this.total=this.positionDataCopy.length;
-                resolve();
+                resolve(res);
               })():'';
               //console.log(this.positionData,789)
             })();
@@ -786,36 +787,39 @@
         });
         this.searchWord='';
       },
-    changePlatformType(){
-        if(this.appId&&this.recognizeType!==2)
-        {
-         this.getPosition().then(res=>{
-            this.positionData=[]
-            this.positions=[]
+     changePlatformType(){
+      if(this.appId&&this.recognizeType!==2){
+        this.getPosition().then(res=>{
+          this.positionData=res.data.items.map(v=>{v.checked=false;v.positionId=v.id;v.positionDesc=v.name;return v;});
+          this.positions=[]
+            
          })
+        this.assetUnitId='';
         }
-        else if(this.appId&&this.recognizeType==2&&this.assetUnitId){
-          this.getPosition().then(res=>{
-            this.positionData=[]
-            this.positions=[]
+      if(this.appId&&this.recognizeType==2&&this.assetUnitId){
+        this.getPosition().then(res=>{
+          this.positionData=res.data.items.map(v=>{v.checked=false;v.positionId=v.id;v.positionDesc=v.name;return v;});
+          this.positions=[]
+            
          })
-        };
-
+        this.assetUnitId='';
+        }
       },
       changeRecognizeType(){
-        if(this.appId&&this.recognizeType!==2)
-        { this.assetUnitId='';
+         if(this.appId&&this.recognizeType!==2){
+          this.assetUnitId='';
           this.getPosition().then(res=>{
-            this.positionData=[];
+            this.positionData=res.data.items.map(v=>{v.checked=false;v.positionId=v.id;v.positionDesc=v.name;return v;});
             this.positions=[]
-         })
-        }
-        else if(this.appId&&this.recognizeType==2 &&this.assetUnitId){
+          })
+      }
+      if(this.appId&&this.recognizeType==2&&this.assetUnitId){
+          this.assetUnitId='';
           this.getPosition().then(res=>{
-            this.positionData=[]
+             this.positionData=res.data.items.map(v=>{v.checked=false;v.positionId=v.id;v.positionDesc=v.name;return v;});
             this.positions=[]
-         })
-        };
+          })
+      }
       }
     },
     watch:{
@@ -890,12 +894,11 @@
 
       // },
       assetUnitId(){
-        if(this.appId&&this.assetUnitId&&this.isClick) {
-        this.getPosition().then(res=>{
-            this.positionData=[]
-            this.positions=[]
-         })
-        }else if(this.appId&&this.assetUnitId) {
+        if(this.appId&&this.isClick) {
+          this.positionData=[]
+          this.positions=[]
+        }
+        if(this.appId&&this.assetUnitId) {
         this.getPosition()
         };
       }

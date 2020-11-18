@@ -146,7 +146,8 @@ const getPlay=(id)=>{
 /*保存投放h*/
 const addPut=(msg)=>{
   //return loadRequest('/api/utopa/ar/admin/saveApplications',msg,'创建',http,'post')
-  return http.post('/api/utopa/ar/admin/saveApplications',msg)
+  return loadRequest('/api/utopa/ar/admin/saveApplications',msg,'保存',http,'post')
+  // return http.post('/api/utopa/ar/admin/saveApplications',msg)
 }
 /*获取应用详情h*/
 const getDetail=(id)=>{
@@ -385,7 +386,7 @@ export function getArMaterialList(params){
   let sortField = params.sortField;
   let sortType = params.sortType;
   return new Promise((resolve,reject)=>{
-    http.post('/api/utopa/ar/background/app/listModuleMaterial',{page,limit,module,name,appId,materialCategoryId,sortField,sortType}).then(res=>{
+    http.post('/api/utopa/ar/background/app/listModuleMaterial',{page,limit,module,name,appId,materialCategoryId,sortField,sortType,isDel:0,isValid:0}).then(res=>{
       if(res.code){
         Message.error(res.msg);
       }else{

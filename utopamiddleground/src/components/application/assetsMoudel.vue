@@ -279,7 +279,7 @@ export default {
    await playInfo({id:this.$route.params.playId}).then(res=>{
         res.data.equipmentType==1?this.equipmentEyeglass=false:res.data.equipmentType==2?this.equipmentEyeglass=true:this.equipmentEyeglass=''
     })
-    this.initListModule({...this.$route.query,module:this.tagKey,appId:this.appId}).then(res=>{
+    this.initListModule({...this.$route.query,module:this.tagKey,appId:this.appId,isDel:'0'}).then(res=>{
 
     if(res.data.items !=null){
       let app=res.data.items.map(v => {
@@ -483,7 +483,7 @@ export default {
         res.data.equipmentType==1?this.equipmentEyeglass=false:res.data.equipmentType==2?this.equipmentEyeglass=true:this.equipmentEyeglass=''
     })
     this.moduleTreeSelect=this.$route.query.moduleTreeSelect?JSON.parse(this.$route.query.moduleTreeSelect):[]
-		this.initListModule({...this.$route.query,module:this.tagKey,appId:this.appId}).then(res=>{
+		this.initListModule({...this.$route.query,module:this.tagKey,appId:this.appId,isDel:'0'}).then(res=>{
 
     if(res.data.items !=null){
       let app=res.data.items.map(v => {

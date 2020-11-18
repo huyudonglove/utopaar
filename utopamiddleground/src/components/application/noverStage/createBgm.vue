@@ -128,7 +128,9 @@ export default {
         "sortField":this.sortName,
         "sortType":this.sortType,
         "materialCategoryId":this.statusType,
-        "materialFormat":this.materialFormat
+        "materialFormat":this.materialFormat,
+        "isDel":0,
+        "isValid":0
       }
     }
   },

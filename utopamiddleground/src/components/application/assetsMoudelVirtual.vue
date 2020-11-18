@@ -83,7 +83,7 @@ export default {
   let limitRecord = query.limit;//记录上一次limit操作
   this.wd=query.wd?query.wd:'';
   this.appId=parseInt(this.$route.params.appId)
-  this.initListModule({...this.$route.query,appId:this.appId}).then(res=>{
+  this.initListModule({...this.$route.query,appId:this.appId,isDel:'0'}).then(res=>{
 
     if(res.data.items !=null){
        this.tableData=res.data.items
@@ -159,7 +159,7 @@ export default {
   $route(){//判断路由query变化执行请求
     if(this.$route.name=='assetsMoudelVirtual'){
     this.appId=parseInt(this.$route.params.appId)
-		this.initListModule({...this.$route.query,appId:this.appId}).then(res=>{
+		this.initListModule({...this.$route.query,appId:this.appId,isDel:'0'}).then(res=>{
     if(res.data.items !=null){
       this.tableData=res.data.items
     }

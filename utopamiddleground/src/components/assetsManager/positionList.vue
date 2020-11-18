@@ -62,7 +62,7 @@
             </el-table-column>
             <el-table-column label="资产位置" prop="provinceCityArea" align="center"></el-table-column>
             <el-table-column label="地图" prop="type" align="center">
-              <template slot-scope="scope">
+              <template>
                 <div style="margin:0 auto 10px;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
                 :style="{'background-color':easyarMapId&&easyarName?'#0074e4':easyarMapId||easyarName?'#ffdf25':'#ccc'}">EasyAR</div>
                 <div style="margin:0 auto;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
