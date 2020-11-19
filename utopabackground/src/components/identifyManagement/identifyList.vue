@@ -26,7 +26,7 @@
             识别平台：
             <el-select v-model="platformType" placeholder="请选择">
               <el-option label="全部" value></el-option>
-              <el-option label="vuforia" value="0"></el-option>
+              <el-option label="Vuforia" value="0"></el-option>
               <el-option label="EasyAR" value="1"></el-option>
               <el-option label="LocusAR" value="2"></el-option>
             </el-select>
@@ -96,15 +96,15 @@
                 <a href="javascript:void(0)" download="" style="text-decoration:none" class=""  v-if="scope.row.type==1"><img src="../../assets/downImg.png"/></a>
             </template>
           </el-table-column>
-          <el-table-column prop="pic" label="识别图上传" width align="center">
+          <el-table-column prop="pic" label="识别图上传" width align="center" :key="Math.random()">
             <template slot-scope="scope">
-                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!mapListPower[0].isCheck||scope.row.checkState==3" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="identifyList" v-if="!showMoudle&&showUpLoad" :showMoudle="showMoudle"></upload>
+                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!mapListPower[0].isCheck||scope.row.checkState==3" :row="scope.row" :hasAuthority="`${scope.row.platformType}`" ref="identifyList" v-if="!showMoudle&&showUpLoad" :showMoudle="showMoudle"></upload>
                  <!-- <el-button type="primary" size="small" :disabled="scope.row.type==1||!mapListPower[0].isCheck" @click="uploadAction(scope.row)">上传</el-button> -->
-                   <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!unablePower[0].isCheck||scope.row.checkState==3" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="state1" v-if="showMoudle=='3'&&showUpLoad" :showMoudle="showMoudle"></upload>
+                   <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!unablePower[0].isCheck||scope.row.checkState==3" :row="scope.row" :hasAuthority="`${scope.row.platformType}`" ref="state1" v-if="showMoudle=='3'&&showUpLoad" :showMoudle="showMoudle"></upload>
                   <!-- <el-button type="primary"  size="small" :disabled="scope.row.type==1||!unablePower[0].isCheck" @click="uploadAction(scope.row)">上传</el-button> -->
-                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!enablePower[0].isCheck||scope.row.checkState==3" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="state2" v-if="showMoudle=='2'&&showUpLoad" :showMoudle="showMoudle"></upload>
+                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!enablePower[0].isCheck||scope.row.checkState==3" :row="scope.row" :hasAuthority="`${scope.row.platformType}`" ref="state2" v-if="showMoudle=='2'&&showUpLoad" :showMoudle="showMoudle"></upload>
                   <!-- <el-button  type="primary" size="small" :disabled="scope.row.type==1||!enablePower[0].isCheck" @click="uploadAction(scope.row)">上传</el-button> -->
-                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!unapprovedPower[0].isCheck||scope.row.checkState==3" :hasResource="`${scope.row.androidResourcePackage?scope.row.androidResourcePackage:''},${scope.row.easyarFileId?scope.row.easyarFileId:''},${scope.row.locusFileId?scope.row.locusFileId:''}`" :hasAuthority="scope.row.platformType" ref="state3" v-if="showMoudle=='1'&&showUpLoad" :showMoudle="showMoudle"></upload>
+                  <upload @uploadAction="uploadAction" :id="scope.row.id" :disabled="scope.row.type==1||!unapprovedPower[0].isCheck||scope.row.checkState==3" :row="scope.row" :hasAuthority="`${scope.row.platformType}`" ref="state3" v-if="showMoudle=='1'&&showUpLoad" :showMoudle="showMoudle"></upload>
                    <!-- <el-button type="primary" size="small" :disabled="scope.row.type==1||!unapprovedPower[0].isCheck" @click="uploadAction(scope.row)">上传</el-button> -->
 
 
@@ -344,7 +344,7 @@ export default {
     showMoudle:'',
     uploadData:null,
     title:'',
-    showUpLoad:false
+    showUpLoad:true
 	  }
   },
   created(){
@@ -380,18 +380,14 @@ export default {
   // if(this.$route.path =='/identidfyManagement/identifyList'){
 
   // }
-
-  this.init({...query,source:'Background',saasCode:this.saasCode}).then(res=>{
-    this.showUpLoad=true
+    this.showUpLoad=false
+    this.init({...query,source:'Background',saasCode:this.saasCode}).then(res=>{
+   
     res.data.items.forEach(v=>v.webUrl=Base64.decode(v.pic))
     this.tableData=res.data.items
-    this.tableData.forEach(v=>{
-      if(!v.platformType){
-        v.platformType=null
-      }
-      return v
+    this.$nextTick(()=>{
+      this.showUpLoad=true
     })
-    console.log(this.tableData,'data')
 		this.$store.commit('pagination/setTotal',this.total);
   })
 
@@ -551,10 +547,11 @@ export default {
   },
   watch:{
 	page(){
+    // console.log(111,222,'page',this.page)
 		this.replace("page",this.page);
     },
     limit(){
-       this.replace('limit',this.limit);
+    this.replace('limit',this.limit);
     },
     wd(){
       this.$store.commit('pagination/setClickPage',1);
@@ -583,6 +580,8 @@ export default {
 	},
   $route(){//判断路由query变化执行请求
       //  console.log(11,'111')
+      let query=this.$route.query
+      // console.log(Object.keys(query).length,'Object.keys(query).length')
       if(this.$route.name=='identifyList'||this.$route.name=='checkState1'||this.$route.name=='checkState2'||this.$route.name=='checkState3'){
       switch (this.$route.name) {
        case 'checkState1':
@@ -604,11 +603,18 @@ export default {
         this.showMoudle=''
         this.title='图像识别'
         break;
-    }
-      this.init({...this.$route.query,source:'Background',saasCode:this.saasCode}).then(res=>{
-      this.showUpLoad=true
+    }  
+      this.showUpLoad=false
+      if(Object.keys(query).length !== 0||!this.showMoudle){ 
+      this.init({...query,source:'Background',saasCode:this.saasCode}).then(res=>{
+      
       res.data.items.forEach(v=>v.webUrl=Base64.decode(v.pic))
       this.tableData=res.data.items
+      this.$nextTick(()=>{
+      this.showUpLoad=true
+    })
+
+      
       this.$store.commit('pagination/setTotal',this.total);
 
     })
@@ -622,6 +628,7 @@ export default {
         this.$store.commit('pagination/setClickPage',1);
         this.$store.commit('pagination/setLimitPage',20);
      }
+      }
     },
 
   },
