@@ -1,6 +1,6 @@
 const state={
-  clickPage:'',
-  limitPage:'',
+  clickPage:1,
+  limitPage:20,
   total:''
 };
 const mutations={

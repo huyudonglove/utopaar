@@ -42,7 +42,7 @@
             平台类型：
             <el-select v-model="platformType" placeholder="请选择" style="width:150px;height:30px;">
               <el-option label="全部" value></el-option>
-              <el-option label="vuforia" value="0"></el-option>
+              <el-option label="Vuforia" value="0"></el-option>
               <el-option label="EasyAR" value="1"></el-option>
               <el-option label="LocusAR" value="2"></el-option>
             </el-select>
@@ -81,7 +81,7 @@
       </el-table-column>
       <el-table-column prop="position" label="平台类型" align="center" >
         <template slot-scope="scope">
-          <span v-if="scope.row.platformType ==0">vuforia</span>
+          <span v-if="scope.row.platformType ==0">Vuforia</span>
           <span v-if="scope.row.platformType ==1">EasyAR</span>
           <span v-if="scope.row.platformType ==2">LocusAR</span>
         </template>
