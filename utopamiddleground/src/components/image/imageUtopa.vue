@@ -616,9 +616,11 @@
              this.isValid=data.isValid
              this.positionId=data.id;
              this.positionData=data;
-             this.space=data.easyarMapId||data.easyarName||data.locusMapId||data.locusName;
              this.getImage();
            })():(()=>{
+             if (data.type==5){
+               this.space=data.easyarMapId||data.easyarName||data.locusMapId||data.locusName;
+             }
              // this.assetId=data.id
              // this.currentPage=1;
              // this.searchName='';
