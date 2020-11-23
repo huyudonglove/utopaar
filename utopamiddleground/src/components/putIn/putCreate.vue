@@ -854,9 +854,9 @@ changeTime(data){
           this.formSize.relationCarrierList=this.formSize.relationCarrierList.map(v=>{v.endTime='';v.startTime='';v.carrierId='';return v})
           this.tableData=this.tableData.map((v,index)=>{
             if(this.formSize.chooseTime=='1'){
-             v.smallTime=[]
+             v.smallTime !==undefined?v.smallTime=[]:null
             }else{
-             v.smallTime=null
+             v.smallTime !==undefined?v.smallTime=null:null
             }
             v.startTime=''
             v.endTime='';
