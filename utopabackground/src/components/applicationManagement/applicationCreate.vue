@@ -1407,37 +1407,38 @@ export default {
     this.replace('wd',this.wd);
   },
   keyWord(){
+    console.log(this.keyWord,'keyWord')
     switch (this.tagKey) {
           case 100:
-          this.keyWord?this.electionFlag=this.electionFlag.filter(item=>item.name.toLowerCase().indexOf(this.keyWord.toLowerCase()) != -1):this.electionFlag=this.multipleSelectionAll100
+          this.keyWord?this.electionFlag=this.multipleSelectionAll100.filter(item=>item.name.toLowerCase().indexOf(this.keyWord.toLowerCase()) != -1):this.electionFlag=this.multipleSelectionAll100
           // this.electionFlagCopy=this.electionFlag
            break;
            case 101:
-           this.keyWord?this.electionFlag=this.electionFlag.filter(item=>item.name.toLowerCase().indexOf(this.keyWord.toLowerCase()) != -1):this.electionFlag=this.multipleSelectionAll101
+           this.keyWord?this.electionFlag=this.multipleSelectionAll101.filter(item=>item.name.toLowerCase().indexOf(this.keyWord.toLowerCase()) != -1):this.electionFlag=this.multipleSelectionAll101
            break;
            case 102:
-           this.keyWord?this.electionFlag=this.electionFlag.filter(item=>item.name.toLowerCase().indexOf(this.keyWord.toLowerCase()) != -1):this.electionFlag=this.multipleSelectionAll102
+           this.keyWord?this.electionFlag=this.multipleSelectionAll102.filter(item=>item.name.toLowerCase().indexOf(this.keyWord.toLowerCase()) != -1):this.electionFlag=this.multipleSelectionAll102
            break;
            case 103:
-           this.keyWord?this.electionFlag=this.electionFlag.filter(item=>item.name.toLowerCase().indexOf(this.keyWord.toLowerCase()) != -1):this.electionFlag=this.multipleSelectionAll103
+           this.keyWord?this.electionFlag=this.multipleSelectionAll103.filter(item=>item.name.toLowerCase().indexOf(this.keyWord.toLowerCase()) != -1):this.electionFlag=this.multipleSelectionAll103
            break;
            case 104:
-           this.keyWord?this.electionFlag=this.electionFlag.filter(item=>item.name.toLowerCase().indexOf(this.keyWord.toLowerCase()) != -1):this.electionFlag=this.multipleSelectionAll104
+           this.keyWord?this.electionFlag=this.multipleSelectionAll104.filter(item=>item.name.toLowerCase().indexOf(this.keyWord.toLowerCase()) != -1):this.electionFlag=this.multipleSelectionAll104
            break;
            case 105:
-           this.keyWord?this.electionFlag=this.electionFlag.filter(item=>item.name.toLowerCase().indexOf(this.keyWord.toLowerCase()) != -1):this.electionFlag=this.multipleSelectionAll105
+           this.keyWord?this.electionFlag=this.multipleSelectionAll105.filter(item=>item.name.toLowerCase().indexOf(this.keyWord.toLowerCase()) != -1):this.electionFlag=this.multipleSelectionAll105
            break;
           case 106:
-           this.keyWord?this.electionFlag=this.electionFlag.filter(item=>item.name.toLowerCase().indexOf(this.keyWord.toLowerCase()) != -1):this.electionFlag=this.multipleSelectionAll106
+           this.keyWord?this.electionFlag=this.multipleSelectionAll106.filter(item=>item.name.toLowerCase().indexOf(this.keyWord.toLowerCase()) != -1):this.electionFlag=this.multipleSelectionAll106
            break;
            case 107:
-           this.keyWord?this.electionFlag=this.electionFlag.filter(item=>item.name.toLowerCase().indexOf(this.keyWord.toLowerCase()) != -1):this.electionFlag=this.multipleSelectionAll107
+           this.keyWord?this.electionFlag=this.multipleSelectionAll107.filter(item=>item.name.toLowerCase().indexOf(this.keyWord.toLowerCase()) != -1):this.electionFlag=this.multipleSelectionAll107
            break;
           default:
             break;
         }
        if(this.playId==7){
-       this.keyWord?this.electionFlag=this.electionFlag.filter(item=>item.identifyPhotoName.toLowerCase().indexOf(this.keyWord.toLowerCase()) != -1):this.electionFlag=this.multipleSelectionAll200
+       this.keyWord?this.electionFlag=this.multipleSelectionAll200.filter(item=>item.identifyPhotoName.toLowerCase().indexOf(this.keyWord.toLowerCase()) != -1):this.electionFlag=this.multipleSelectionAll200
     }
   },
   //过滤 已经选择分类
