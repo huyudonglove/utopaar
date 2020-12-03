@@ -37,16 +37,16 @@
         </el-row>
         <!-- 数据展示 -->
         <el-table :data="tableData" ref="multipleTable" tooltip-effect="dark" style="width: 100%" :max-height="tableHeight"  border @sort-change="changeUpadte">
-          <el-table-column prop="id" label="ID" width="" align="center">
+          <el-table-column prop="id" label="ID" width="100" align="center">
           </el-table-column>
           <el-table-column prop="androidVersionCode" label="排序" width="100" align="center" sortable="custom">
           </el-table-column>
-          <el-table-column prop="androidLatestVersion" label="版本号" width="" align="center">
+          <el-table-column prop="androidLatestVersion" label="版本号" width="130" align="center">
              <template slot-scope="scope">
                {{scope.row.appType==0?scope.row.androidLatestVersion:scope.row.iosLatestVersion}}
              </template>
           </el-table-column>
-          <el-table-column prop="publishTime" label="发布时间" width="" align="center" sortable="custom">
+          <el-table-column prop="publishTime" label="发布时间" width="180" align="center" sortable="custom">
           </el-table-column>
           <el-table-column prop="content" label="更新内容" width="" align="center">
           </el-table-column>
@@ -55,19 +55,19 @@
               {{scope.row.appType==0?scope.row.androidRemark:scope.row.iosRemark}}
             </template>>
           </el-table-column>
-          <el-table-column prop="updateType" label="强制更新" width="200" align="center">
+          <el-table-column prop="updateType" label="强制更新" width="120" align="center">
             <template slot-scope="scope">
               <span v-if="scope.row.updateType==1">是</span>
               <span v-if="scope.row.updateType==0" style="color:red">否</span>
             </template>
           </el-table-column>
-           <el-table-column prop="operatorName" label="是否生效" width="" align="center">
+           <el-table-column prop="operatorName" label="是否生效" width="120" align="center">
               <template slot-scope="scope">
               <span v-if="scope.row.isValid==1">是</span>
               <span v-if="scope.row.isValid==0" style="color:red">否</span>
             </template>>
           </el-table-column>
-          <el-table-column prop="status" label="操作" width="200" align="center">
+          <el-table-column prop="status" label="操作" width="180" align="center">
              <template slot-scope="scope">
               <el-button
                 type="primary"
@@ -116,7 +116,9 @@ export default {
     latestVersion:'',
     sortName:'',
     sortType:'',
-    mySetInterval:null
+    mySetInterval:null,
+    pageRecord:1,
+    limitRecord:1
 
 	  }
   },
@@ -124,17 +126,17 @@ export default {
   // var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
   // this.tableHeight=h-260+'px'
 	let query=this.$route.query
-  let pageRecord = query.page||1;//记录上一次页码操作
-  let limitRecord = query.limit||5;//记录上一次limit操作
+  this.pageRecord = query.page||1;//记录上一次页码操作
+  this.limitRecord = query.limit||5;//记录上一次limit操作
 	this.updateType=query.updateType?query.updateType:'';
   this.isValid=query.isValid?query.isValid:'';
   this.appType=query.appType?query.appType:'1';
   this.getLatestVersion({appType:this.appType})
   this.mySetInterval = setInterval(this.tableShow,5000);
-  await this.dataTable({...this.$route.query})
+  await this.dataTable({...this.$route.query,page:this.pageRecord,limit:this.limitRecord})
 	this.$nextTick(()=>{
-		this.$store.commit('pagination/setClickPage',pageRecord);
-		this.$store.commit('pagination/setLimitPage',limitRecord);
+		this.$store.commit('pagination/setClickPage',this.pageRecord);
+		this.$store.commit('pagination/setLimitPage',this.limitRecord);
 		this.showPagination = true;//加载分页组件
 })
   },
@@ -236,11 +238,9 @@ export default {
   },
   $route(){//判断路由query变化执行请求
       let query=this.$route.query
-      let pageRecord = query.page||1;//记录上一次页码操作
-      let limitRecord = query.limit||5;//记录上一次limit操作
       this.appType=query.appType?query.appType:'1';
       if(this.$route.name=='versionList'){
-      this.dataTable({...this.$route.query,appType:this.appType})
+      this.dataTable({...this.$route.query,appType:this.appType,page:this.pageRecord,limit:this.limitRecord})
       }  
     },
 
