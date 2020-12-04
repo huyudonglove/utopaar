@@ -18,6 +18,7 @@
             :picker-options="pickerOptions"
             style="width:100%"
             @change="handle"
+            :disabled="new Date(formSize.publishTime) * 1000 /1000<Date.now()"
             >
           </el-date-picker>
         </el-form-item>

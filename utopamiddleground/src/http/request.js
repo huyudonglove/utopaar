@@ -822,13 +822,14 @@ export function playInfo(params) {
 
 /** app版本管理-分页获取 w*/
 export function appVersionList(params){
-  let pageIndex = parseInt(params.page);
-  let pageSize = parseInt(params.limit);
+  let pageIndex = parseInt(params.page)||1;
+  let pageSize = parseInt(params.limit)||10;
   let appType = params.appType||'1';
   let isValid = params.isValid||'';
   let updateType = params.updateType||'';
-  let sortColumn = params.sortColumn||'';
-  let order = params.order||'';
+  let sortColumn = params.sortColumn||'publish_Time';
+  let order=false;
+  params.order=='true'?order = true:order =false
   return new Promise((resolve,reject)=>{
     http.post('/api/utopa/ar/web/app/version/pageListAppVersion',{pageIndex,pageSize,appType,isValid,updateType,sortColumn,order}).then(res=>{
       if(res.code){

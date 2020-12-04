@@ -39,8 +39,6 @@
         <el-table :data="tableData" ref="multipleTable" tooltip-effect="dark" style="width: 100%" :max-height="tableHeight"  border @sort-change="changeUpadte">
           <el-table-column prop="id" label="ID" width="100" align="center">
           </el-table-column>
-          <el-table-column prop="androidVersionCode" label="排序" width="100" align="center" sortable="custom">
-          </el-table-column>
           <el-table-column prop="androidLatestVersion" label="版本号" width="130" align="center">
              <template slot-scope="scope">
                {{scope.row.appType==0?scope.row.androidLatestVersion:scope.row.iosLatestVersion}}
@@ -118,22 +116,20 @@ export default {
     sortType:'',
     mySetInterval:null,
     pageRecord:1,
-    limitRecord:1
+    limitRecord:10
 
 	  }
   },
   async created(){
-  // var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-  // this.tableHeight=h-260+'px'
 	let query=this.$route.query
   this.pageRecord = query.page||1;//记录上一次页码操作
-  this.limitRecord = query.limit||5;//记录上一次limit操作
+  this.limitRecord = query.limit||10;//记录上一次limit操作
 	this.updateType=query.updateType?query.updateType:'';
   this.isValid=query.isValid?query.isValid:'';
   this.appType=query.appType?query.appType:'1';
   this.getLatestVersion({appType:this.appType})
-  this.mySetInterval = setInterval(this.tableShow,5000);
-  await this.dataTable({...this.$route.query,page:this.pageRecord,limit:this.limitRecord})
+  this.mySetInterval = setInterval(this.tableShow,10000);
+  await this.dataTable({...this.$route.query})
 	this.$nextTick(()=>{
 		this.$store.commit('pagination/setClickPage',this.pageRecord);
 		this.$store.commit('pagination/setLimitPage',this.limitRecord);
@@ -155,7 +151,7 @@ export default {
       this.sortColumn = col.prop.replace(/[A-Z]/g,(a,b)=>{
           return '_'+a.toLowerCase();
         });
-      this.order = col.order=='ascending'?'asc':'desc';
+      this.order = col.order=='ascending'?'true':'false';
       this.dataTable({...this.$route.query});
     },
 	  dataTable(params){
@@ -240,7 +236,7 @@ export default {
       let query=this.$route.query
       this.appType=query.appType?query.appType:'1';
       if(this.$route.name=='versionList'){
-      this.dataTable({...this.$route.query,appType:this.appType,page:this.pageRecord,limit:this.limitRecord})
+      this.dataTable({...this.$route.query,appType:this.appType})
       }  
     },
 

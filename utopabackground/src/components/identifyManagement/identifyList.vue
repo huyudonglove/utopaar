@@ -499,7 +499,7 @@ export default {
           this.$message.error('只能上传后缀为.zip格式资源');
         }
       if (!isLt45M) {
-          this.$message.error('上传大小不能超过50MB!');
+          this.$message.error('上传大小不能超过45MB!');
         }
         return isLt45M&&isDat;
       },
