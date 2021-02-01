@@ -88,7 +88,7 @@
     <el-container>
       <div class="asideTree">
         <div :style="{'overflow':'auto','height':'500px'}" v-if="isShowTree">
-          <el-tree :data="treedata" highlight-current @node-click="showTable" :default-expand-all="true" :props="defaulProps" >
+          <el-tree :data="treedata" highlight-current @node-click="showTable" :default-expand-all="isExpand" :props="defaulProps" >
             <span class="span-ellipsis" slot-scope="{ node }">
               <span :title="node.label">{{ node.label }}</span>
             </span>
