@@ -415,11 +415,11 @@ export default {
             return;
           }
           if(this.moduleList.length>0){
-            // var isTimeOk = this.moduleList.some(v=>v.effectFrom==false);
-            // if(isTimeOk){
-            //   this.$alert('请选择个性化投放时间段','提示');
-            //   return;
-            // }
+            var isTimeOk = this.moduleList.some(v=>v.effectFrom==false);
+            if(isTimeOk){
+              this.$message.error('请选择个性化投放时间段');
+              return;
+            }
             var isContentOk = this.moduleList.some(v=>v.relateContent==false);
             if(isContentOk){
               this.$message.error('请选择关联应用或者输入关联地址');

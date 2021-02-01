@@ -1,6 +1,6 @@
 <template>
   <div style="display:inline-block;">
-    <a class="q" href="javascript:void(0)" @click="up(0)" v-if="hasAuthority==0&&!arrayResource[0]"></a>
+    <!-- <a class="q" href="javascript:void(0)" @click="up(0)" v-if="hasAuthority==0&&!arrayResource[0]"></a>
     <a class="e" href="javascript:void(0)" @click="up(1)" v-if="hasAuthority==1&&!arrayResource[1]"></a>
     <a class="l" href="javascript:void(0)" @click="up(2)" v-if="hasAuthority==2&&!arrayResource[2]"></a>
     <a class="q_hasResource" href="javascript:void(0)" @click="up(0)" v-if="hasAuthority==0&&arrayResource[0]"></a>
@@ -8,7 +8,23 @@
     <a class="l_hasResource" href="javascript:void(0)" @click="up(2)" v-if="hasAuthority==2&&arrayResource[2]"></a>
     <a class="q_hasAuthority" href="javascript:void(0)" @click="up(0)" v-if="hasAuthority !==0&&!arrayResource[0]"></a>
     <a class="e_hasAuthority" href="javascript:void(0)" @click="up(1)" v-if="hasAuthority !==1&&!arrayResource[1] "></a>
-    <a class="l_hasAuthority" href="javascript:void(0)" @click="up(2)" v-if="hasAuthority !==2&&!arrayResource[2] "></a>
+    <a class="l_hasAuthority" href="javascript:void(0)" @click="up(2)" v-if="hasAuthority !==2&&!arrayResource[2] "></a> -->
+    <a class="q" href="javascript:void(0)" @click="up(0)" v-if="hasAuthority=='0'&&!arrayResource[0]"></a>
+    <a class="q_hasResource" href="javascript:void(0)" @click="up(0)" v-else-if="hasAuthority=='0'&&arrayResource[0]"></a>
+    <a class="q_hasAuthority" href="javascript:void(0)" @click="up(0)" v-else></a>
+
+
+    <a class="e" href="javascript:void(0)" @click="up(1)" v-if="hasAuthority=='1'&&!arrayResource[1]"></a>
+    <a class="e_hasResource" href="javascript:void(0)" @click="up(1)" v-else-if="hasAuthority=='1'&&arrayResource[1]"></a>
+    <a class="e_hasAuthority" href="javascript:void(0)" @click="up(1)" v-else></a>
+
+
+    <a class="l" href="javascript:void(0)" @click="up(2)" v-if="hasAuthority=='2'&&!arrayResource[2]"></a>
+    <a class="l_hasResource" href="javascript:void(0)" @click="up(2)" v-else-if="hasAuthority=='2'&&arrayResource[2]"></a>
+    <a class="l_hasAuthority" href="javascript:void(0)" @click="up(2)" v-else></a>
+
+
+
   </div>
 </template>
 <script>
@@ -16,23 +32,27 @@ import { Base64 } from 'js-base64';
 export default {
   name:'downLoad',
   inject:['replace','reload'],
-  props: ["id","disabled","hasResource","hasAuthority","showMoudle"],
+  props: ["id","disabled","row","hasAuthority","showMoudle"],
   data(){
     return{
-      arrayAuthority:[],
+      // arrayAuthority:[],
       arrayResource:[]
     }
   },
   created(){
     // this.arrayAuthority=this.hasAuthority?this.hasAuthority.split(','):[]
-    this.arrayResource=this.hasResource?this.hasResource.split(','):[]
+    let v=this.row.androidResourcePackage?this.row.androidResourcePackage:''
+    let e=this.row.easyarFileId?this.row.easyarFileId:''
+    let l=this.row.locusFileId?this.row.locusFileId:''
+    this.arrayResource=[v,e,l]
+    // console.log(this.arrayResource,'arrayResource',this.row.id,this.row)
   },
   mounted(){
   },
   methods:{
    up(platformType){
     //  console.log(platformType,'platformType',this.hasAuthority,platformType)
-     this.$emit('uploadAction',{"platformType":platformType,"id":this.id,"disabled":this.disabled,has:this.hasAuthority !==platformType});
+     this.$emit('uploadAction',{"platformType":platformType,"id":this.id,"disabled":this.disabled,has:parseInt(this.hasAuthority) !==platformType});
    }
   },
   watch:{

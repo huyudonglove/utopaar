@@ -393,7 +393,7 @@ export default {
         this.positionIdList=this.positionIdList.filter(v=>arr.map(v=>v.id).indexOf(v)==-1);
         this.positionIdList=this.positionIdList.concat(arr.map(v=>v.id))
       }else{
-        this.positionIdList=this.positionTable.filter(v=>arr.map(v=>v.id).indexOf(v)==-1);
+        this.positionIdList=this.positionIdList.filter(u=>this.positionTable.map(v=>v.id).indexOf(u)==-1);
       }
     },
     appList(isFirst){
@@ -552,6 +552,7 @@ export default {
     },
     showTable(data) {
       this.clickTreeId =data.id;//保存当前点击的树节点id
+      this.positionPage=1;
       this.getPositionList(data.id);
     },
     addOrEdit(){
