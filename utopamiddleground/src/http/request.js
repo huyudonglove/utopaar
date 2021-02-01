@@ -819,6 +819,57 @@ export function selectpositionList(params){
 export function playInfo(params) {
   return http.get('/api/utopa/ar/play/info', params)
 }
+<<<<<<< HEAD
+/*获取当前位置下空间识别包*/
+const  getBuyKeys=(parentId)=>{
+  return http.get('/api/utopa/ar/assets/location/selectAssetsLocationByPrimaryKey',{id:parentId})
+=======
+
+/** app版本管理-分页获取 w*/
+export function appVersionList(params){
+  let pageIndex = parseInt(params.page)||1;
+  let pageSize = parseInt(params.limit)||10;
+  let appType = params.appType||'1';
+  let isValid = params.isValid||'';
+  let updateType = params.updateType||'';
+  let sortColumn = params.sortColumn||'publish_Time';
+  let order=false;
+  params.order=='true'?order = true:order =false
+  return new Promise((resolve,reject)=>{
+    http.post('/api/utopa/ar/web/app/version/pageListAppVersion',{pageIndex,pageSize,appType,isValid,updateType,sortColumn,order}).then(res=>{
+      if(res.code){
+        Message.error(res.msg);
+      }else{
+        resolve(res);
+      }
+    }).catch(err=>{
+      reject(err);
+    })
+  })
+}
+
+/** app版本管理-添加版本记录 w*/
+export function addVersion(params){
+  return loadRequest('/api/utopa/ar/web/app/version/addVersion', params, '保存', http, 'post')
+}
+
+
+/** app版本管理-编辑更新版本记录 w*/
+export function updateVersion(params){
+  let des=params.isDel==1?'删除':'保存'
+  return loadRequest('/api/utopa/ar/web/app/version/updateVersion', params, des, http, 'post')
+}
+
+/** app版本管理-根据id获取版本 w*/
+export function getVersionInfo(params){
+  return http.get('/api/utopa/ar/web/app/version/getVersionById',params)
+}
+
+/** app版本管理-获取的是当前已生效的最新版本号 w*/
+export function getLatestVersion(params){
+  return http.post('/api/utopa/ar/web/app/version/getLatestVersion',params)
+>>>>>>> fab13336066d1f0d153ecc8faa0c0032dd3a5bb4
+}
 export {
   login,
   out,
@@ -835,5 +886,6 @@ export {
   getAppId,
   getPosition,
   deleteApp,
-  getLoad
+  getLoad,
+  getBuyKeys
 }

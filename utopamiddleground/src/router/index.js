@@ -83,6 +83,13 @@ export default new Router({
             }
           ]
         },
+        {
+          path:'/app/versionList',
+          name:'versionList',
+          component: ()=>import('@/components/versionManagement/versionList'),
+          children:[]
+        },
+
       {
       path:'/system',
       name:'system',

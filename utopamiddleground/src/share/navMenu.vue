@@ -71,6 +71,7 @@ export default {
         '/application/assetsList/assets/107':require('../assets/icon_MP4video_AD.png'),
         '/application/assetsList/assets/104':require('../assets/icon_Online-Video_AD.png'),
         '/app/feedBackList':require('../assets/icon_feedback.png'),
+        '/app/versionList':require('../assets/icon_feedback.png'),
       }
     };
   },
