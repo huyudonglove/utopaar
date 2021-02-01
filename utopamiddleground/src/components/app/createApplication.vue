@@ -85,19 +85,19 @@
                       <el-switch v-model="isMark" :active-value="1" :inactive-value="2"></el-switch>
                     </span>
               </div>
-              <div style="margin-bottom: 20px;">
+              <div style="margin-bottom: 20px">
                 <span class="labelSpan"><span style="color: #f56c6c;margin-right: 2px;">*</span>投放位置</span>
-                <div style="margin-left: 50px;min-height: 80px;margin-top: 10px;margin-bottom:10px;font-size: 14px;color: #606266;" >
+                <div style="margin-left: 150px;min-height: 80px;margin-top: 10px;margin-bottom:10px;font-size: 14px;color: #606266;width: 900px;" >
                   <div style="height: 30px;line-height: 30px"><span class="positionSpan">ID</span><span class="positionSpan">所属地区</span><span class="positionSpan">资产位置</span><span class="positionSpan">操作</span></div>
-                  <div>
-                    <div v-for="item in positionData" :key="item.id" v-if="item.checked" style="height: 30px;line-height: 30px;margin-left: 60px">
+                  <div >
+                    <div v-for="item in positionData" :key="item.id" v-if="item.checked" style="height: 30px;line-height: 30px;margin-left: 0px;" :class="item.isValid==0?'forbiden-pos':''">
                       <span class="positionSpan">{{item.positionId}}</span>
                       <span class="positionSpan">{{item.provinceCityArea}}</span>
                       <span class="positionSpan">{{item.positionDesc}}</span>
                       <span class="positionSpan"><el-button @click="item.checked=false;" type="text">删除</el-button></span>
                     </div>
                   </div>
-                  <el-button @click="showButton" style="width:850px;margin-left: 160px" :disabled='!appId&&recognizeType==2||!assetUnitId&&recognizeType==2'>+</el-button>
+                  <el-button @click="showButton" style="width:900px;margin-left: 0px" :disabled='!appId&&recognizeType==2||!assetUnitId&&recognizeType==2'>+</el-button>
                 </div>
               </div>
             </div>
@@ -406,7 +406,8 @@
         parentNameUrl:'',
         showTree:false,
         assetUnitIdCopy:'',
-        isClick:false
+        isClick:false,
+        showTable:true
       }
     },
     methods:{
@@ -644,7 +645,11 @@
                   ban.includes(r.id)?r.checked=true:r.checked=false;
                   return r;
                 });
-                this.positionDataCopy=JSON.parse(JSON.stringify(this.positionData));
+                this.positionDataCopy=JSON.parse(JSON.stringify(
+                  this.positionData.filter(v=>{
+                    return v.isValid==1;
+                  })
+                ))
                 this.total=this.positionDataCopy.length;
                 resolve(res);
               })():'';
@@ -761,7 +766,9 @@
         this.page=1;
         this.positionDataCopy=JSON.parse(JSON.stringify(
           this.positionData.filter(data=>{
-            return data.name.toLowerCase().includes(this.searchWord.toLowerCase());
+            if(data.isValid==1){
+              return data.name.toLowerCase().includes(this.searchWord.toLowerCase());
+            }
           })
         ))
         this.total=this.positionDataCopy.length;
@@ -778,7 +785,11 @@
         this.positionShow=false;
       },
       showButton(){
-        this.positionDataCopy=JSON.parse(JSON.stringify(this.positionData));
+        this.positionDataCopy=JSON.parse(JSON.stringify(this.positionData.filter(
+          v=>{
+            return v.isValid==1;
+          }
+        )));
         this.total=this.positionDataCopy.length;
         this.$nextTick(()=>{
           this.page=1;
@@ -792,7 +803,7 @@
         this.getPosition().then(res=>{
           this.positionData=res.data.items.map(v=>{v.checked=false;v.positionId=v.id;v.positionDesc=v.name;return v;});
           this.positions=[]
-            
+
          })
         this.assetUnitId='';
         }
@@ -800,7 +811,7 @@
         this.getPosition().then(res=>{
           this.positionData=res.data.items.map(v=>{v.checked=false;v.positionId=v.id;v.positionDesc=v.name;return v;});
           this.positions=[]
-            
+
          })
         this.assetUnitId='';
         }
@@ -823,18 +834,6 @@
       }
     },
     watch:{
-      // appId(){
-      //   // console.log(111111)
-      //   this.appId?(()=>{
-      //     //this.positionData=[];
-      //     //this.positionChecked=[];
-      //     this.getPosition();
-      //   })():(()=>{
-      //     //this.positionData=[];
-      //     //this.positionChecked=[];
-      //   })();
-      //   this.positionData=[];
-      // },
       appId(){
        if(this.appId&&this.recognizeType!==2)
         {
@@ -902,8 +901,6 @@
         this.getPosition()
         };
       }
-    },
-    computed:{
     },
     components:{
     tree
@@ -1019,9 +1016,11 @@
   }
   .positionSpan{
     display: inline-block;
-    width: 250px;
-    text-align: center;
+    width: 200px;
+    text-align: left;
     height: 40px;
   }
-
+ .forbiden-pos{
+   background: #8c939d;
+ }
 </style>

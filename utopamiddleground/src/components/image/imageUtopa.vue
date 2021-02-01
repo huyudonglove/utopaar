@@ -59,7 +59,7 @@
 
         <div>
           <div style="display: flex;justify-content: space-between">
-            <div class="ten" style="text-align: center;line-height: 300px;cursor: pointer;" @click="mapListPower[0].isCheck?dialogVisible=true:dialogVisible=false;" v-if="positionData.id&&activeName=='first'&&isValid==1&&recognizeType!=2">
+            <div class="ten" style="text-align: center;line-height: 300px;cursor: pointer;" @click="showAdd" v-if="mapListPower[0].isCheck&&positionData.id&&activeName=='first'&&isValid==1">
               <img src="@/assets/addI.png" alt="" width="200px" height="200px" style="margin-top: 40px">
             </div>
             <div class="ten" v-else style="text-align: center;line-height: 300px;cursor: not-allowed;">
@@ -80,8 +80,11 @@
               <div class="title">名称
                 {{items[0].name}}
               </div>
-              <div class="title" >宽度
+              <div class="title" v-if="items[0].recognizeType!=2">宽度
                 {{items[0].width}}m
+              </div>
+              <div class="title" v-if="items[0].recognizeType==2">地图包
+                {{items[0].locationMapArMapName}}
               </div>
               <div class="time">坐标：
                 X:{{items[0].positionX}}
@@ -128,8 +131,11 @@
               <div class="title">名称
                 {{items[1].name}}
               </div>
-              <div class="title" >宽度
+              <div class="title" v-if="items[1].recognizeType!=2">宽度
                 {{items[1].width}}m
+              </div>
+              <div class="title" v-if="items[1].recognizeType==2">地图包
+                {{items[0].locationMapArMapName}}
               </div>
               <div class="time">坐标：
                 X:{{items[1].positionX}}
@@ -178,8 +184,11 @@
               <div class="title">名称
                 {{items[2].name}}
               </div>
-              <div class="title" >宽度
+              <div class="title" v-if="items[2].recognizeType!=2">宽度
                 {{items[2].width}}m
+              </div>
+              <div class="title" v-if="items[2].recognizeType==2">地图包
+                {{items[0].locationMapArMapName}}
               </div>
               <div class="time">坐标：
                 X:{{items[2].positionX}}
@@ -226,8 +235,11 @@
               <div class="title">名称
                 {{items[3].name}}
               </div>
-              <div class="title" >宽度
+              <div class="title" v-if="items[3].recognizeType!=2">宽度
                 {{items[3].width}}m
+              </div>
+              <div class="title" v-if="items[3].recognizeType==2">地图包
+                {{items[0].locationMapArMapName}}
               </div>
               <div class="time">坐标：
                 X:{{items[3].positionX}}
@@ -274,8 +286,11 @@
               <div class="title">名称
                 {{items[4].name}}
               </div>
-              <div class="title" >宽度
+              <div class="title" v-if="items[4].recognizeType!=2">宽度
                 {{items[4].width}}m
+              </div>
+              <div class="title" v-if="items[4].recognizeType==2">地图包
+                {{items[0].locationMapArMapName}}
               </div>
               <div class="time">坐标：
                 X:{{items[4].positionX}}
@@ -325,17 +340,35 @@
 <!--              <el-checkbox-button v-for="item in engine" :label="item.val" :key="item.val">{{item.name}}</el-checkbox-button>-->
 <!--            </el-checkbox-group>-->
             <el-select v-model="platformType">
-              <el-option label="Vuforia" :value="0"></el-option>
+              <el-option label="Vuforia" :value="0" v-if="recognizeType!=2"></el-option>
               <el-option label="EasyAR" :value="1"></el-option>
               <el-option label="LocusAR" :value="2"></el-option>
             </el-select>
           </p>
         </div>
-        <div><span style="color: #f56c6c;margin-right: 2px;">*</span>识别图名称：
-        <el-input v-model="imageName" maxlength="50"></el-input>
+        <div v-if="recognizeType==2">
+          <p><span style="color: #f56c6c;margin-right: 2px;">*</span>地图包：</p>
+          <p >
+            <el-select v-model="locationMapId" v-if="!platformType">
+            </el-select>
+            <el-select v-model="locationMapId" v-if="platformType==1">
+              <el-option v-for="item in easyArList" :value="item.id" :label="item.mapName" :key="item.id" ></el-option>
+            </el-select>
+            <el-select v-model="locationMapId" v-if="platformType==2">
+              <el-option v-for="item in locusArList" :value="item.id" :label="item.mapName" :key="item.id" ></el-option>
+            </el-select>
+          </p>
         </div>
         <div>
-          <span style="color: #f56c6c;margin-right: 2px;">*</span>上传识别图：
+          <span style="color: #f56c6c;margin-right: 2px;">*</span>
+          <span v-if="recognizeType!=2">识别图名称：</span>
+          <span v-else>空间名称：</span>
+          <el-input v-model="imageName" maxlength="50"></el-input>
+        </div>
+        <div>
+          <span style="color: #f56c6c;margin-right: 2px;">*</span>
+          <span v-if="recognizeType!=2">上传识别图：</span>
+          <span v-else>上传空间图：</span>
           <el-upload
             class="avatar-uploader"
             :action="`/api/utopa/ar/material/upload/image`"
@@ -353,7 +386,7 @@
           <span v-if="recognizeType==0">图像本地识别</span>
           <span v-if="recognizeType==2">空间识别</span>
         </div>
-        <div>
+        <div v-if="recognizeType!=2">
           宽度：
           <el-input  v-model="imageWidth" onkeyup="this.value= this.value.match(/\d+(\.\d{0,2})?/) ? this.value.match(/\d+(\.\d{0,2})?/)[0] : ''" maxlength="50">
             <template slot="append">m</template>
@@ -409,7 +442,9 @@
             </el-select>
           </p>
         </div>
-        <div><span style="color: #f56c6c;margin-right: 2px;">*</span>识别图名称：
+        <div><span style="color: #f56c6c;margin-right: 2px;">*</span>
+          <span v-if="recognizeType!=2">识别图名称：</span>
+          <span v-else>空间名称：</span>
           <el-input v-model="imageName" maxlength="50"></el-input>
         </div>
         <div style="padding: 10px 0">
@@ -450,7 +485,7 @@
               <el-input style="width: 100px" v-model="relationZ"></el-input></span>
           </div>
         </div>
-        <div v-if="state==1">
+        <div v-if="state==1&&recognizeType!=2">
           宽度：
           <el-input  v-model="imageWidth" onkeyup="this.value= this.value.match(/\d+(\.\d{0,2})?/) ? this.value.match(/\d+(\.\d{0,2})?/)[0] : ''" maxlength="50">
             <template slot="append">m</template>
@@ -466,7 +501,7 @@
 </template>
 
 <script>
-  import {getImage,putInTree,createImage,editImgName,deleteImg} from "../../http/request";
+  import {getImage,putInTree,createImage,editImgName,deleteImg,getBuyKeys} from "../../http/request";
   import navMenu from "@/share/navMenu.vue";
   import headNav from "@/share/headNav.vue";
   import { Base64 } from 'js-base64';
@@ -523,7 +558,11 @@
             expandedKeys:[],
             assetId:'',
             platformType:null,
-            space:true
+            space:true,
+            parentId:'',
+            locusArList:[],
+            easyArList:[],
+            locationMapId:''
           }
         },
         components: {
@@ -616,6 +655,7 @@
              this.isValid=data.isValid
              this.positionId=data.id;
              this.positionData=data;
+             this.parentId=data.parentId;
              this.getImage();
            })():(()=>{
              if (data.type==5){
@@ -640,10 +680,6 @@
            return data.name.indexOf(value) !== -1;
          },
          createImage(){
-           // if(!this.mapEngine.length){
-           //   this.$message.error('识别引擎不能为空')
-           //   return
-           // }
            let msg={
              name:this.imageName,
              pic:this.imageId,
@@ -657,9 +693,9 @@
             relationX: this.relationX,
             relationY: this.relationY,
             relationZ: this.relationZ,
-            //mapEngine: this.mapEngine.join(',')
              recognizeType: this.recognizeType,
-            platformType: this.platformType
+            platformType: this.platformType,
+             locationMapId:this.locationMapId
            }
            if(msg.platformType==undefined){
              this.$message.error('平台类型不能为空')
@@ -670,6 +706,10 @@
                msg.middleGroundAssertId?(()=>{
                  msg.positionY&&msg.positionY&&msg.positionZ?(()=>{
                    msg.relationX&&msg.relationY&&msg.relationZ?(()=>{
+                     if(this.recognizeType==2&&!this.locationMapId){
+                        this.$message.error('地图包不能为空！')
+                         return;
+                     }
                      createImage(msg).then(res=>{res.code?this.$message.error(res.msg):(()=>{
                        this.$message.success(res.msg)
                        this.cancle();
@@ -680,7 +720,7 @@
                  })():this.$message.error('坐标不能为空')
                })():this.$message.error('地理位置不能为空');
              })():this.$message.error('识别图不能为空');
-           })():this.$message.error('识别图名称不能为空');
+           })():this.$message.error('名称不能为空');
          },
          cancle(){
            this.imageId='';
@@ -695,6 +735,8 @@
            this.relationY='';
            this.relationZ='';
            this.platformType=null;
+           this.locationMapId='';
+
          },
          editImgName(){
            let msg={
@@ -744,6 +786,17 @@
            this.relationY=item.relationY;
            this.relationZ=item.relationZ;
            this.platformType=item.platformType;
+         },
+         showAdd(){
+           this.dialogVisible=true;
+           console.log(this.recognizeType,7777);
+
+         },
+         getBuyKeys(){
+           getBuyKeys(this.parentId).then(v=>{
+              this.easyArList=v.data.easyArList;
+              this.locusArList=v.data.locusArList;
+           })
          }
        },
        watch:{
@@ -786,6 +839,11 @@
            this.showPagination=false;
            this.getImage();
            this.showPagination=true;
+           if(this.recognizeType==2){
+             if(this.parentId){
+               this.getBuyKeys()
+             }
+           }
          }
        },
       created() {

@@ -819,6 +819,10 @@ export function selectpositionList(params){
 export function playInfo(params) {
   return http.get('/api/utopa/ar/play/info', params)
 }
+/*获取当前位置下空间识别包*/
+const  getBuyKeys=(parentId)=>{
+  return http.get('/api/utopa/ar/assets/location/selectAssetsLocationByPrimaryKey',{id:parentId})
+}
 export {
   login,
   out,
@@ -835,5 +839,6 @@ export {
   getAppId,
   getPosition,
   deleteApp,
-  getLoad
+  getLoad,
+  getBuyKeys
 }
