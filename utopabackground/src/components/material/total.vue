@@ -8,13 +8,14 @@
         <span style="font-size:24px;font-weight:bold;color:#614a4d;" v-if="type==103">普通模型素材</span>
         <span style="font-size:24px;font-weight:bold;color:#614a4d;" v-if="type==104">在线视频素材</span>
         <span style="font-size:24px;font-weight:bold;color:#614a4d;" v-if="type==107">MP4视频素材</span>
+        <span style="font-size:24px;font-weight:bold;color:#614a4d;" v-if="type==110">MP4模型管理</span>
         <el-button style="float:right;" type="primary" @click="dialogVisible=true" v-if="type==100" :disabled="!musicPower[0].isCheck">新增</el-button>
         <el-button style="float:right;" type="primary" @click="dialogVisible=true" v-if="type==101"  :disabled="!scenePower[0].isCheck">新增</el-button>
         <el-button style="float:right;" type="primary" @click="dialogVisible=true" v-if="type==102"  :disabled="!carrierPower[0].isCheck">新增</el-button>
         <el-button style="float:right;" type="primary" @click="dialogVisible=true" v-if="type==103" :disabled="!modelPower[0].isCheck">新增</el-button>
         <el-button style="float:right;" type="primary" @click="dialogVisible=true" v-if="type==104" :disabled="!onlineVideoPower[0].isCheck">新增</el-button>
         <el-button style="float:right;" type="primary" @click="dialogVisible=true" v-if="type==107" :disabled="!videoPower[0].isCheck">新增</el-button>
-
+        <el-button style="float:right;" type="primary" @click="dialogVisible=true" v-if="type==110" :disabled="!mp4ModelPower[0].isCheck">新增</el-button>
       </div>
       <div style="margin-top: 10px;margin-bottom: 10px;">
         <el-input v-model="word" style="width: 200px;" maxlength="50" suffix-icon="el-icon-search" placeholder="输入关键字"></el-input>
@@ -171,7 +172,7 @@
           </el-table-column>
           <el-table-column prop="materialCategoryName" label="所属类别" align="center">
           </el-table-column>
-          <el-table-column  label="安卓包大小(M)" align="center" sortable="custom" prop="androidResourcePackageSize">
+          <el-table-column  label="Android包大小(M)" align="center" sortable="custom" prop="androidResourcePackageSize">
             <template slot-scope="scope">
               {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}
               <img v-if="scope.row.androidResourcePackageSize" src="@/assets/down.png" alt="" style="vertical-align: bottom;float: right;cursor: pointer;" @click="downAndroid(scope.row.androidMaterial,scope.row)">
@@ -183,10 +184,16 @@
               <img v-if="scope.row.iosResourcePackageSize" src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downIos(scope.row.iosMaterial,scope.row)">
             </template>
           </el-table-column>
-          <el-table-column  label="windows包大小(M)" align="center" sortable="custom" prop="windowsResourcePackageSize">
+          <el-table-column  label="windows(UWP)包大小(M)" align="center" sortable="custom" prop="windowsResourcePackageSize">
             <template slot-scope="scope">
               {{((scope.row.windowsResourcePackageSize/(1024*1024))+'').slice(0,4)}}
               <img v-if="scope.row.windowsResourcePackageSize" src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downWindows(scope.row.windowsMaterial,scope.row)">
+            </template>
+          </el-table-column>
+          <el-table-column  label="PC包大小(M)" align="center" sortable="custom" prop="uwpResourcePackageSize">
+            <template slot-scope="scope">
+              {{((scope.row.uwpResourcePackageSize/(1024*1024))+'').slice(0,4)}}
+              <img v-if="scope.row.uwpResourcePackageSize" src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downuwp(scope.row.uwpMaterial,scope.row)">
             </template>
           </el-table-column>
           <el-table-column prop="unityVersion" label="Unity版本" align="center" >
@@ -239,7 +246,7 @@
           </el-table-column>
           <el-table-column prop="materialCategoryName" label="所属类别" align="center">
           </el-table-column>
-          <el-table-column  label="安卓包大小(M)" align="center" sortable="custom" prop="androidResourcePackageSize">
+          <el-table-column  label="Android包大小(M)" align="center" sortable="custom" prop="androidResourcePackageSize">
             <template slot-scope="scope">
               {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}
               <img v-if="scope.row.androidResourcePackageSize" src="@/assets/down.png" alt="" style="vertical-align: bottom;float: right;cursor: pointer;" @click="downAndroid(scope.row.androidMaterial,scope.row)">
@@ -251,10 +258,16 @@
               <img v-if="scope.row.iosResourcePackageSize" src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downIos(scope.row.iosMaterial,scope.row)">
             </template>
           </el-table-column>
-          <el-table-column  label="windows包大小(M)" align="center" sortable="custom" prop="windowsResourcePackageSize">
+          <el-table-column  label="windows(UWP)包大小(M)" align="center" sortable="custom" prop="windowsResourcePackageSize">
             <template slot-scope="scope">
               {{((scope.row.windowsResourcePackageSize/(1024*1024))+'').slice(0,4)}}
-              <img  v-if="scope.row.windowsResourcePackageSize"src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downWindows(scope.row.windowsMaterial,scope.row)">
+              <img  v-if="scope.row.windowsResourcePackageSize" src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downWindows(scope.row.windowsMaterial,scope.row)">
+            </template>
+          </el-table-column>
+          <el-table-column  label="PC包大小(M)" align="center" sortable="custom" prop="uwpResourcePackageSize">
+            <template slot-scope="scope">
+              {{((scope.row.uwpResourcePackageSize/(1024*1024))+'').slice(0,4)}}
+              <img  v-if="scope.row.uwpResourcePackageSize" src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downuwp(scope.row.uwpMaterial,scope.row)">
             </template>
           </el-table-column>
           <el-table-column prop="unityVersion" label="Unity版本" align="center" >
@@ -312,7 +325,14 @@
               <span v-else>否</span>
             </template>
           </el-table-column>
-          <el-table-column  label="安卓包大小(M)" align="center" sortable="custom" prop="androidResourcePackageSize">
+          <el-table-column prop="configFileId" label="配置文件" align="center" >
+             <template slot-scope="scope">
+              <span v-if="scope.row.configFileId">有</span>
+              <span v-else>无</span>
+              <img src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" v-if="scope.row.configFileId"  @click="downConfig(scope.row.configFileName,scope.row)">
+            </template>
+          </el-table-column>
+          <el-table-column  label="Android包大小(M)" align="center" sortable="custom" prop="androidResourcePackageSize">
             <template slot-scope="scope">
               {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}
               <img v-if="scope.row.androidResourcePackageSize" src="@/assets/down.png" alt="" style="vertical-align: bottom;float: right;cursor: pointer;" @click="downAndroid(scope.row.androidMaterial,scope.row)">
@@ -324,10 +344,16 @@
               <img v-if="scope.row.iosResourcePackageSize" src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downIos(scope.row.iosMaterial,scope.row)">
             </template>
           </el-table-column>
-          <el-table-column  label="windows包大小(M)" align="center" sortable="custom" prop="windowsResourcePackageSize">
+          <el-table-column  label="windows(UWP)包大小(M)" align="center" sortable="custom" prop="windowsResourcePackageSize">
             <template slot-scope="scope">
               {{((scope.row.windowsResourcePackageSize/(1024*1024))+'').slice(0,4)}}
               <img v-if="scope.row.windowsResourcePackageSize" src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downWindows(scope.row.windowsMaterial,scope.row)">
+            </template>
+          </el-table-column>
+          <el-table-column  label="PC包大小(M)" align="center" sortable="custom" prop="uwpResourcePackageSize">
+            <template slot-scope="scope">
+              {{((scope.row.uwpResourcePackageSize/(1024*1024))+'').slice(0,4)}}
+              <img v-if="scope.row.uwpResourcePackageSize" src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downuwp(scope.row.uwpMaterial,scope.row)">
             </template>
           </el-table-column>
           <el-table-column prop="durationTimeStr" label="动画时长" align="center">
@@ -422,7 +448,7 @@
           </el-table-column>
           <el-table-column prop="materialCategoryName" label="所属类别">
           </el-table-column>
-          <el-table-column prop="androidResourcePackageSize" label="安卓包大小(M)">
+          <el-table-column prop="androidResourcePackageSize" label="Android包大小(M)">
           </el-table-column>
           <el-table-column prop="androidResourcePackageSize" label="总时长">
           </el-table-column>
@@ -496,6 +522,72 @@
           </el-table-column>
         </el-table>
       </div>
+      <div v-if="type==110" ><!--MP4模型-->
+        <el-table :data="tableData" style="width: 100%" @selection-change="selectAll" :key="10" border :max-height="tableHeight" ref="mp4modelRef" @sort-change="changeUpadte">
+          <el-table-column type="selection" width="55" align="center">
+          </el-table-column>
+          <el-table-column prop="id" label="ID" width="50" align="center">
+          </el-table-column>
+          <el-table-column prop="name" label="mp4模型名称"  align="center" sortable="custom">
+          </el-table-column>
+          <el-table-column  label="GIF展示" align="center">
+            <template slot-scope="scope">
+              <span style="cursor: pointer">
+                <img :src="`/api/file/get/${scope.row.pic}`" alt=""  style="width:100px;height:100px" v-focus>
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="materialCategoryName" label="所属类别" align="center">
+          </el-table-column>
+          <el-table-column prop="materialCategoryName" label="是否配置歌词" align="center">
+            <template slot-scope="scope">
+              <span v-if="scope.row.isLyric">是</span>
+              <img v-if="scope.row.isLyric" src="@/assets/down.png" alt="" style="vertical-align: bottom;float: right;cursor: pointer;" @click="downLyric(scope.row.lyricUrl,scope.row)">
+              <span v-else>否</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="androidResourcePackageSize" label="素材包大小" align="center" sortable="custom">
+             <template slot-scope="scope">
+              {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}
+              <img src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downMusic(scope.row.androidMaterial,scope.row)">
+            </template>
+          </el-table-column>
+          <el-table-column prop="configFileId" label="配置文件" align="center" >
+             <template slot-scope="scope">
+              <span v-if="scope.row.configFileId">有</span>
+              <span v-else>无</span>
+              <img src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" v-if="scope.row.configFileId"  @click="downConfig(scope.row.configFileName,scope.row)">
+            </template>
+          </el-table-column>
+          <el-table-column prop="durationTimeStr" label="总时长" align="center" sortable="custom">
+          </el-table-column>
+          <el-table-column prop="createTime" label="创建时间" align="center" sortable="custom">
+          </el-table-column>
+          <el-table-column prop="updateTime" label="修改时间" align="center" sortable="custom">
+          </el-table-column>
+          <el-table-column prop="updateUser" label="最后修改人" align="center">
+          </el-table-column>
+<!--          <el-table-column  label="上下架" align="center">-->
+<!--            <template slot-scope="scope">-->
+<!--              <el-switch-->
+<!--                v-model="scope.row.state"-->
+<!--                active-value="1"-->
+<!--                inactive-value="2"-->
+<!--                @change="upState(scope.row.state,scope.row.id)"-->
+<!--                :disabled="!onlineVideoPower[1].isCheck"-->
+<!--              >-->
+<!--              </el-switch>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+          <el-table-column prop="address" label="操作" fixed="right" align="center">
+            <template slot-scope="scope">
+              <el-button @click.native.prevent="reviseRow(scope.row, tableData)" type="primary" size="small" :disabled="!mp4ModelPower[1].isCheck">
+                编辑
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
       <div>
         <pagination v-if="showPagenation"></pagination>
       </div>
@@ -532,9 +624,10 @@
               </div>
               <div style="margin-top: 10px">
                <h3>上传资源包 </h3>
-                安卓包资源<uploadFile buttonName="文件" moduleCode="utopar" type="android" @getSdkId="getSdkId" :parentName="androidFileName"></uploadFile>
+                Android包资源<uploadFile buttonName="文件" moduleCode="utopar" type="android" @getSdkId="getSdkId" :parentName="androidFileName"></uploadFile>
                 IOS包资源<uploadFile buttonName="文件" moduleCode="utopar" type="ios" @getSdkId="getSdkId" :parentName="iosFileName"></uploadFile>
-                windows包资源<uploadFile buttonName="文件" moduleCode="utopar" type="windows" @getSdkId="getSdkId" :parentName="windowsFileName"></uploadFile>
+                windows(UWP)包资源<uploadFile buttonName="文件" moduleCode="utopar" type="windows" @getSdkId="getSdkId" :parentName="windowsFileName"></uploadFile>
+                PC包资源<uploadFile buttonName="文件" moduleCode="utopar" type="uwp" @getSdkId="getSdkId" :parentName="uwpFileName"></uploadFile>
               </div>
               <div>
                 <div style="margin-top: 10px">
@@ -581,9 +674,10 @@
             </div>
             <div style="margin-top: 10px;">
               <h3>上传资源包 </h3>
-              安卓包资源<uploadFile buttonName="文件" moduleCode="utopar" type="android" @getSdkId="getSdkId" :parentName="androidFileName"></uploadFile>
+              Android包资源<uploadFile buttonName="文件" moduleCode="utopar" type="android" @getSdkId="getSdkId" :parentName="androidFileName"></uploadFile>
               IOS包资源<uploadFile buttonName="文件" moduleCode="utopar" type="ios" @getSdkId="getSdkId" :parentName="iosFileName"></uploadFile>
-              windows包资源<uploadFile buttonName="文件" moduleCode="utopar" type="windows" @getSdkId="getSdkId" :parentName="windowsFileName"></uploadFile>
+              windows(UWP)包资源<uploadFile buttonName="文件" moduleCode="utopar" type="windows" @getSdkId="getSdkId" :parentName="windowsFileName"></uploadFile>
+               PC包资源<uploadFile buttonName="文件" moduleCode="utopar" type="uwp" @getSdkId="getSdkId" :parentName="uwpFileName"></uploadFile>
             </div>
             <div>
               <div style="margin-top: 10px">
@@ -626,9 +720,10 @@
             </div>
             <div style="margin-top: 10px;">
               <h3>上传资源包</h3>
-              安卓包资源<uploadFile buttonName="文件" moduleCode="utopar" type="android" @getSdkId="getSdkId" :parentName="androidFileName"></uploadFile>
+              Android包资源<uploadFile buttonName="文件" moduleCode="utopar" type="android" @getSdkId="getSdkId" :parentName="androidFileName"></uploadFile>
               IOS包资源<uploadFile buttonName="文件" moduleCode="utopar" type="ios" @getSdkId="getSdkId" :parentName="iosFileName"></uploadFile>
-              windows包资源<uploadFile buttonName="文件" moduleCode="utopar" type="windows" @getSdkId="getSdkId" :parentName="windowsFileName"></uploadFile>
+              windows(UWP)包资源<uploadFile buttonName="文件" moduleCode="utopar" type="windows" @getSdkId="getSdkId" :parentName="windowsFileName"></uploadFile>
+               pc包资源<uploadFile buttonName="文件" moduleCode="utopar" type="uwp" @getSdkId="getSdkId" :parentName="uwpFileName"></uploadFile>
             </div>
             <div>
               <div style="margin-top: 10px">
@@ -668,6 +763,12 @@
                 <uploadFile buttonName="歌词" moduleCode="utopar" type="lyric" @getSdkId="getSdkId" :parentName="lyricFileName"></uploadFile>
               </span>
             </div>
+            <div style="margin-top: 10px;">
+                配置文件
+                <span>
+                  <uploadFile buttonName="文件" moduleCode="utopar" type="config" @getSdkId="getSdkId" :parentName="configFileName"></uploadFile>
+                </span>
+              </div>
           </div>
           <div v-if="type==104"><!--在线视频-->
             <div style="margin-top: 10px;">
@@ -703,6 +804,35 @@
               <uploadFile buttonName="文件" moduleCode="utopar" type="video" @getSdkId="getSdkId" :parentName="androidFileName"></uploadFile>
             </div>
           </div>
+          <div v-if="type==110"><!--载体模型-->
+              <div>
+                <span style="color: #f56c6c;margin-right: 2px;">*</span>MP4模型名称 <el-input style="width: 200px;margin-top: 10px;" v-model="inputName" maxlength="50"></el-input>
+              </div>
+              <div style="margin-top: 10px;">
+               <span style="color: #f56c6c;margin-right: 2px;">*</span>MP4模型时长 <el-input style="width: 200px" v-model="durationTimeStr" maxlength="50" placeholder="00:02:00" onkeyup="value=value.replace(/[^0-9:]/g,'')"></el-input>
+              </div>
+               <div style="margin-top: 10px;">
+                 <span style="color: #f56c6c;margin-right: 2px;">*</span>GIF览图上传 <br>
+                 <uploadImg size="5" type="gif" @getImg="getImg" :id="gifId"></uploadImg>
+               </div>
+              <div style="margin-top: 10px">
+               <h3><span style="color: #f56c6c;margin-right: 2px;">*</span>上传资源包 </h3>
+                <uploadFile buttonName="文件" moduleCode="utopar" type="android" @getSdkId="getSdkId" :parentName="androidFileName"></uploadFile>
+              </div>
+              <div style="margin-top: 10px;">
+                是否配置歌词
+                <el-switch v-model="(isLyric)" ></el-switch>
+                <span v-if="isLyric">
+                  <uploadFile buttonName="歌词" moduleCode="utopar" type="lyric" @getSdkId="getSdkId" :parentName="lyricFileName"></uploadFile>
+                </span>
+              </div>
+              <div style="margin-top: 10px;">
+                配置文件
+                <span>
+                  <uploadFile buttonName="文件" moduleCode="utopar" type="config" @getSdkId="getSdkId" :parentName="configFileName"></uploadFile>
+                </span>
+              </div>
+          </div>
           <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false;">取 消</el-button>
             <el-button type="primary" @click="addTotal">确 定</el-button>
@@ -730,7 +860,7 @@
         inject:['replace','reload'],
         computed:{
           ...mapState('pagination',['limitPage','clickPage']),
-          ...mapState('currentUserPower',['musicPower','carrierPower','scenePower','videoPower','onlineVideoPower','modelPower']),
+          ...mapState('currentUserPower',['musicPower','carrierPower','scenePower','videoPower','onlineVideoPower','modelPower','mp4ModelPower']),
         },
         data(){
           return{
@@ -763,6 +893,8 @@
             androidMaterial:'',
             androidFileName:'',
             androidResourcePackageSize:'',
+            configFileName:'',
+            configFileId:'',
             iosMaterial:'',
             iosFileName:'',
             iosResourcePackageSize:'',
@@ -783,7 +915,7 @@
             gifId:'',
             gifSize:'',
             pageShow:false,
-            tableHeight:0,
+            tableHeight:110,
             props: {
               label: "name",
               children: 'children',
@@ -810,6 +942,9 @@
             windowsFileName:'',
             windowsMaterial:'',
             windowsResourcePackageSize:'',
+            uwpFileName:'',
+            uwpMaterial:'',
+            uwpResourcePackageSize:'',
             musicData:[],
             musicType:'',
             materialFormat:''
@@ -950,6 +1085,15 @@
                 this.windowsFileName=fileName;
                 this.windowsResourcePackageSize=size;
             })():'';
+            type=='uwp'?(()=>{
+                this.uwpMaterial=sdkId;
+                this.uwpFileName=fileName;
+                this.uwpResourcePackageSize=size;
+            })():'';
+             type=='config'?(()=>{
+                this.configFileId=sdkId;
+                this.configFileName=fileName;
+            })():'';
           },
           addTotal(){
             let msg={
@@ -977,6 +1121,9 @@
               msg.windowsMaterial=this.sdkId;
               msg.windowsResourcePackageSize=this.size;
               msg.windowsFileName=this.fileName;
+              msg.uwpMaterial=this.sdkId;
+              msg.uwpResourcePackageSize=this.size;
+              msg.uwpFileName=this.fileName;
               msg.materialFormat=this.materialFormat;
               msg.name?(()=>{
                 msg.materialCategoryId?(()=>{
@@ -1025,6 +1172,9 @@
               msg.windowsMaterial=this.windowsMaterial;
               msg.windowsFileName=this.windowsFileName;
               msg.windowsResourcePackageSize=this.windowsResourcePackageSize;
+              msg.uwpMaterial=this.uwpMaterial;
+              msg.uwpFileName=this.uwpFileName;
+              msg.uwpResourcePackageSize=this.uwpResourcePackageSize;
               msg.name?(()=>{
                 msg.materialCategoryId?(()=>{
                       msg.placeholderNum?(()=>{
@@ -1076,6 +1226,9 @@
               msg.windowsMaterial=this.windowsMaterial;
               msg.windowsFileName=this.windowsFileName;
               msg.windowsResourcePackageSize=this.windowsResourcePackageSize;
+              msg.uwpMaterial=this.uwpMaterial;
+              msg.uwpFileName=this.uwpFileName;
+              msg.uwpResourcePackageSize=this.uwpResourcePackageSize;
               //msg.viewType=this.viewTypeAdd;
               msg.name?(()=>{
                 msg.materialCategoryId?(()=>{
@@ -1113,6 +1266,9 @@
               msg.androidMaterial=this.androidMaterial;
               msg.androidFileName=this.androidFileName;
               msg.androidResourcePackageSize=this.androidResourcePackageSize;
+              //配置
+              msg.configFileId=this.configFileId;
+              msg.configFileName=this.configFileName;
               msg.iosMaterial=this.iosMaterial;
               msg.iosFileName=this.iosFileName;
               msg.iosResourcePackageSize=this.iosResourcePackageSize;
@@ -1136,6 +1292,9 @@
               msg.windowsMaterial=this.windowsMaterial;
               msg.windowsFileName=this.windowsFileName;
               msg.windowsResourcePackageSize=this.windowsResourcePackageSize;
+              msg.uwpMaterial=this.uwpMaterial;
+              msg.uwpFileName=this.uwpFileName;
+              msg.uwpResourcePackageSize=this.uwpResourcePackageSize;
               msg.name?(()=>{
                 msg.materialCategoryId?(()=>{
                       msg.pic?(()=>{
@@ -1216,6 +1375,9 @@
               msg.windowsMaterial=this.androidMaterial;
               msg.windowsFileName=this.androidFileName;
               msg.windowsResourcePackageSize=this.androidResourcePackageSize;
+              msg.uwpMaterial=this.androidMaterial;
+              msg.uwpFileName=this.androidFileName;
+              msg.uwpResourcePackageSize=this.androidResourcePackageSize;
               msg.name?(()=>{
                 msg.materialCategoryId?(()=>{
                   msg.androidMaterial?(()=>{
@@ -1242,6 +1404,67 @@
                   })():this.$message.error('资源包不能为空')
                 })():this.$message.error('分类不能为空')
               })():this.$message.error('视频名称不能为空')
+            })():'';
+            this.type=='110'?(()=>{  //mp4模型管理
+              msg.name=this.inputName;
+              msg.materialCategory=this.checkedModule;
+              msg.materialCategoryId=this.checkedId;
+              msg.androidMaterial=this.androidMaterial;
+              msg.androidFileName=this.androidFileName;
+              msg.androidResourcePackageSize=this.androidResourcePackageSize;
+              //配置
+              msg.configFileId=this.configFileId;
+              msg.configFileName=this.configFileName;
+              msg.durationTimeStr=this.durationTimeStr;
+              msg.pic=this.gifId;
+              msg.isLyric=this.isLyric||true;
+              this.isLyric?(()=>{
+                msg.lyricUrl=this.lyricId;
+                msg.lyricFileName=this.lyricFileName;
+                msg.lyricSize=this.lyricSize;
+                msg.isLyric=1;
+              })():(()=>{
+                msg.lyricUrl='';
+                msg.lyricFileName='';
+                msg.lyricSize='';
+                msg.isLyric=0;
+              })();
+              //增加字段
+              msg.iosMaterial=this.androidMaterial;
+              msg.iosFileName=this.androidFileName;
+              msg.iosResourcePackageSize=this.androidResourcePackageSize;
+              msg.windowsMaterial=this.androidMaterial;
+              msg.windowsFileName=this.androidFileName;
+              msg.windowsResourcePackageSize=this.androidResourcePackageSize;
+              msg.uwpMaterial=this.androidMaterial;
+              msg.uwpFileName=this.androidFileName;
+              msg.uwpResourcePackageSize=this.androidResourcePackageSize;
+              msg.name?(()=>{
+                msg.materialCategoryId?(()=>{
+                  msg.androidMaterial?(()=>{
+                      msg.pic?(()=>{
+                        this.id?(()=>{
+                          editTotal(msg).then(res=>{
+                            res.code?this.$message.error(res.msg):(()=>{
+                              this.$message.success(res.msg);
+                              this.getTotal();
+                              this.dialogVisible=false;
+                              this.cancle();
+                            })();
+                          })
+                        })():(()=>{
+                          msg.state=1;
+                          addTotal(msg).then(res=>{
+                            res.code?this.$message.error(res.msg):(()=>{
+                              this.$message.success(res.msg);
+                              this.reload();
+                            })();
+                          })
+                        })();
+                      })():this.$message.error('gif图不能为空')
+                  })():this.$message.error('资源包不能为空')
+                })():this.$message.error('分类不能为空')
+              })():this.$message.error('模型名称不能为空')
             })():'';
             console.log(msg,9999);
 
@@ -1283,6 +1506,9 @@
               this.windowsMaterial=row.androidMaterial;
               this.windowsFileName=row.androidFileName;
               this.windowsResourcePackageSize=row.androidResourcePackageSize;
+              this.uwpMaterial=row.androidMaterial;
+              this.uwpFileName=row.androidFileName;
+              this.uwpResourcePackageSize=row.androidResourcePackageSize;
               this.materialFormat=row.materialFormat;
             })():'';
             this.type=='102'?(()=>{
@@ -1306,6 +1532,9 @@
               this.windowsMaterial=row.windowsMaterial;
               this.windowsFileName=row.windowsFileName;
               this.windowsResourcePackageSize=row.windowsResourcePackageSize;
+              this.uwpMaterial=row.uwpMaterial;
+              this.uwpFileName=row.uwpFileName;
+              this.uwpResourcePackageSize=row.uwpResourcePackageSize;
             })():'';
             this.type=='103'?(()=>{
               this.id=row.id;
@@ -1327,6 +1556,9 @@
               this.windowsMaterial=row.windowsMaterial;
               this.windowsFileName=row.windowsFileName;
               this.windowsResourcePackageSize=row.windowsResourcePackageSize;
+              this.uwpMaterial=row.uwpMaterial;
+              this.uwpFileName=row.uwpFileName;
+              this.uwpResourcePackageSize=row.uwpResourcePackageSize;
             })():'';
             this.type=='101'?(()=>{ //动画
               this.id=row.id;
@@ -1337,6 +1569,9 @@
               this.androidFileName=row.androidFileName;
               this.androidMaterial=row.androidMaterial;
               this.androidResourcePackageSize=row.androidResourcePackageSize;
+              //配置
+              this.configFileId=row.configFileId;
+              this.configFileName=row.configFileName;
               this.iosFileName=row.iosFileName;
               this.iosMaterial=row.iosMaterial;
               this.iosResourcePackageSize=row.iosResourcePackageSize;
@@ -1352,6 +1587,9 @@
               this.windowsMaterial=row.windowsMaterial;
               this.windowsFileName=row.windowsFileName;
               this.windowsResourcePackageSize=row.windowsResourcePackageSize;
+              this.uwpMaterial=row.uwpMaterial;
+              this.uwpFileName=row.uwpFileName;
+              this.uwpResourcePackageSize=row.uwpResourcePackageSize;
             })():'';
             this.type=='104'?(()=>{
               this.id=row.id;
@@ -1379,6 +1617,37 @@
               this.windowsFileName=row.androidFileName;
               this.windowsMaterial=row.androidMaterial;
               this.windowsResourcePackageSize=row.androidResourcePackageSize;
+              this.uwpFileName=row.androidFileName;
+              this.uwpMaterial=row.androidMaterial;
+              this.uwpResourcePackageSize=row.androidResourcePackageSize;
+            })():'';
+            this.type=='110'?(()=>{ //mp4模型
+              this.id=row.id;
+              this.checkedName=row.materialCategoryName;
+              this.inputName=row.name;
+              this.checkedModule=row.materialCategory;
+              this.checkedId=row.materialCategoryId;
+              this.androidFileName=row.androidFileName;
+              this.androidMaterial=row.androidMaterial;
+              this.androidResourcePackageSize=row.androidResourcePackageSize;
+              //配置
+              this.configFileId=row.configFileId;
+              this.configFileName=row.configFileName;
+              this.gifId=row.pic;
+              this.durationTimeStr=row.durationTimeStr;
+              row.isLyric==0?this.isLyric=false:this.isLyric=true;
+              this.lyricFileName=row.lyricFileName;
+              this.lyricId=row.lyricUrl;
+              //增加
+              this.windowsMaterial=row.windowsMaterial;
+              this.windowsFileName=row.windowsFileName;
+              this.windowsResourcePackageSize=row.windowsResourcePackageSize;
+              this.uwpMaterial=row.uwpMaterial;
+              this.uwpFileName=row.uwpFileName;
+              this.uwpResourcePackageSize=row.uwpResourcePackageSize;
+              this.iosFileName=row.iosFileName;
+              this.iosMaterial=row.iosMaterial;
+              this.iosResourcePackageSize=row.iosResourcePackageSize;
             })():'';
             this.state=row.state;
           },
@@ -1428,6 +1697,12 @@
             this.windowsMaterial='';
             this.windowsFileName='';
             this.windowsResourcePackageSize='';
+            this.uwpMaterial='';
+            this.uwpFileName='';
+            this.uwpResourcePackageSize='';
+            //配置
+            this.configFileId='';
+            this.configFileName='';
             this.materialFormat='';
             this.getTree();
           },
@@ -1503,6 +1778,20 @@
             let url=`/static/${Base64.decode(id)}`;
             let aTag = document.createElement('a')
             aTag.download = row.windowsFileName;
+            aTag.href = url;
+            aTag.click()
+          },
+          downuwp(id,row){
+            let url=`/static/${Base64.decode(id)}`;
+            let aTag = document.createElement('a')
+            aTag.download = row.uwpFileName;
+            aTag.href = url;
+            aTag.click()
+          },
+          downConfig(id,row){
+            let url=`/static/${Base64.decode(id)}`;
+            let aTag = document.createElement('a')
+            aTag.download = row.configFileName;
             aTag.href = url;
             aTag.click()
           },
@@ -1599,6 +1888,9 @@
               case 'mp4':
                 this.type=107;
                 break;
+              case 'mp4model':
+                this.type=110;
+                break;
               default:
                 break;
             }
@@ -1643,6 +1935,8 @@
             case 'mp4':
               this.type=107;
               break;
+            case 'mp4model':
+              this.type=110;  
             default:
               break;
           }
@@ -1665,7 +1959,7 @@
         },
       updated(){
         //console.log(this.$route,888)
-        (this.$route.name=='music'&&this.type==100)||this.$route.name=='animation'||this.$route.name=='container'||this.$route.name=='nomarl'||this.$route.name=='online'||this.$route.name=='mp4'?(()=>{
+        (this.$route.name=='music'&&this.type==100)||this.$route.name=='animation'||this.$route.name=='container'||this.$route.name=='nomarl'||this.$route.name=='online'||this.$route.name=='mp4'||this.$route.name=='mp4model'?(()=>{
           this.$nextTick(()=>{
             try {
               switch (this.$route.name) {
@@ -1686,6 +1980,9 @@
                   break;
                 case 'mp4':
                   this.tableHeight = window.innerHeight - this.$refs.mp4Ref.$el.offsetTop - 120;
+                  break;
+                case 'mp4model':
+                  this.tableHeight = window.innerHeight - this.$refs.mp4modelRef.$el.offsetTop - 120;
                   break;
                 default:
                   break;

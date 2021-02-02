@@ -181,6 +181,11 @@ export default new Router({
               path:'/material/mp4',
               name:'mp4',
               component:total   //mp4
+            },
+            {
+              path:'/material/mp4model',
+              name:'mp4model',
+              component:total   //mp4
             }
           ]
         },

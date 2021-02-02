@@ -177,6 +177,15 @@
           :key="9"
           >
           </el-table-column>
+          <el-table-column
+          type="selection"
+          width="55"
+          align="center"
+          :selectable="(row)=>multipleSelectionAll110.map(v=>v.id).indexOf(row.id)==-1&&row.state==1"
+          v-if="tagKey==110"
+          :key="8"
+          >
+          </el-table-column>
           <el-table-column prop="name" :label="`${tagValue}名称`" width="" align="center" :key="10" sortable="custom">
           </el-table-column>
           <el-table-column prop="materialFormat" :label="`格式`" width="" align="center" :key="65" v-if="tagKey==100">
@@ -201,7 +210,13 @@
                 </span>
               </template>
           </el-table-column>
-          
+          <el-table-column  :label="`${tagValue}展示`" width="150" align="center" v-if="tagKey==110" :key="19">
+              <template slot-scope="scope">
+                <span style="cursor: pointer;" >
+                  <img :src="`/api/file/get/${scope.row.pic}`" alt=""  style="width:100px;height:100px" v-focus>
+                </span>
+              </template>
+          </el-table-column>
           <el-table-column  :label="`${tagValue}预览`" width="150" align="center" v-if="tagKey==105||tagKey==107" :key="14">
             <template slot-scope="scope">
                 <span style="cursor: pointer;" >
@@ -221,14 +236,14 @@
                 </span>
               </template>
           </el-table-column>
-          <el-table-column prop="isLyric" label="是否包含歌词" width="80" align="center" v-if="tagKey==101" :key="17">
+          <el-table-column prop="isLyric" label="是否包含歌词" width="80" align="center" v-if="tagKey==101||tagKey==110" :key="17">
             <template slot-scope="scope">
               <span v-if="scope.row.isLyric==1">是</span>
               <span v-if="!scope.row.isLyric" style="color:#FF644E">否</span>
         
             </template>
             </el-table-column>
-            <el-table-column  label="资源包大小" width="150" align="center" v-if="tagKey ==100||tagKey ==107" :key="18" sortable="custom" prop="androidResourcePackageSize">
+            <el-table-column  label="资源包大小" width="150" align="center" v-if="tagKey ==100||tagKey ==107||tagKey ==110" :key="18" sortable="custom" prop="androidResourcePackageSize">
               <template slot-scope="scope">
                 {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
                 
@@ -255,7 +270,7 @@
             </el-table-column>
             <el-table-column prop="viewType" :label="'动画类型'" width="120" align="center" v-if="tagKey==101||tagKey==102" :key="Math.random()+14" >
             </el-table-column>
-            <el-table-column prop="durationTimeStr" label="总时长" width align="center" v-if="tagKey==100||tagKey==101||tagKey ==105||tagKey ==106||tagKey ==107" :key="21" sortable="custom"></el-table-column>
+            <el-table-column prop="durationTimeStr" label="总时长" width align="center" v-if="tagKey==100||tagKey==101||tagKey ==105||tagKey ==106||tagKey ==107||tagKey ==110" :key="21" sortable="custom"></el-table-column>
             <el-table-column prop="createTime" label="创建时间" width="110" align="center"  :key="15" sortable="custom" ></el-table-column>
             <el-table-column prop="updateTime" label="修改时间" width="110" align="center" :key="46" sortable="custom" ></el-table-column>
             <el-table-column prop="state" label="状态"  align="center" width="80" >
@@ -378,6 +393,7 @@
               <span v-if="item.module==105">({{multipleSelectionAll105.length}})</span>
               <span v-if="item.module==106">({{multipleSelectionAll106.length}})</span>
               <span v-if="item.module==107">({{multipleSelectionAll107.length}})</span>
+              <span v-if="item.module==110">({{multipleSelectionAll110.length}})</span>
               </el-tag>
           </div>
         <!-- 数据展示  已选素材列表 start-->
@@ -412,7 +428,13 @@
               </span>
             </template>
         </el-table-column>
-         
+          <el-table-column  :label="`${tagValue}展示`" width="150" align="center" v-if="tagKey==110" :key="19">
+              <template slot-scope="scope">
+                <span style="cursor: pointer;" >
+                  <img :src="`/api/file/get/${scope.row.pic}`" alt=""  style="width:100px;height:100px" v-focus>
+                </span>
+              </template>
+          </el-table-column>
         <el-table-column  :label="`${tagValue}预览`" width="150" align="center" v-if="tagKey==105||tagKey==107" :key="35">
            <template slot-scope="scope">
               <span style="cursor: pointer;" >
@@ -432,14 +454,14 @@
               </span>
             </template>
         </el-table-column>
-        <el-table-column prop="isLyric" label="是否包含歌词" width="80" align="center" v-if="tagKey==101" :key="38">
+        <el-table-column prop="isLyric" label="是否包含歌词" width="80" align="center" v-if="tagKey==101||tagKey==110" :key="38">
           <template slot-scope="scope">
             <span v-if="scope.row.isLyric==1">是</span>
             <span v-if="!scope.row.isLyric" style="color:#FF644E">否</span>
       
           </template>
           </el-table-column>
-          <el-table-column  label="资源包大小" width="150" align="center" v-if="tagKey ==100||tagKey ==107" :key="39" prop="androidResourcePackageSize"  sortable>
+          <el-table-column  label="资源包大小" width="150" align="center" v-if="tagKey ==100||tagKey ==107||tagKey ==110" :key="39" prop="androidResourcePackageSize"  sortable>
              <template slot-scope="scope">
                {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
             </template>
@@ -465,7 +487,7 @@
           </el-table-column>
           <el-table-column prop="viewType" :label="'动画类型'" width="120" align="center" v-if="tagKey==101||tagKey==102" :key="Math.random()+56" >
           </el-table-column>
-          <el-table-column prop="durationTimeStr" label="总时长" width align="center" v-if="tagKey==100||tagKey==101||tagKey ==105||tagKey ==106||tagKey ==107" :key="42">
+          <el-table-column prop="durationTimeStr" label="总时长" width align="center" v-if="tagKey==100||tagKey==101||tagKey ==105||tagKey ==106||tagKey ==107||tagKey ==110" :key="42">
           </el-table-column>
            <el-table-column prop="createTime" label="创建时间" width="110" align="center"  :key="15" sortable ></el-table-column>
           <el-table-column prop="updateTime" label="修改时间" width="110" align="center" :key="51" sortable ></el-table-column>
@@ -577,6 +599,7 @@ export default {
       multipleSelection105:[],
       multipleSelection106:[],
       multipleSelection107:[],
+      multipleSelection110:[],
       multipleSelection200:[],
       multipleSelectionAll:[],//已选全部素材
       multipleSelectionAll100:[],
@@ -587,6 +610,7 @@ export default {
       multipleSelectionAll105:[],
       multipleSelectionAll106:[],
       multipleSelectionAll107:[],
+      multipleSelectionAll110:[],
       multipleSelectionAll200:[],
       multipleSelectionList:[],
       materialIdsAarray:[],
@@ -727,6 +751,7 @@ export default {
       this.multipleSelection105=[],
       this.multipleSelection106=[],
       this.multipleSelection107=[],
+      this.multipleSelection110=[]
       this.multipleSelectionAll100=[]
       this.multipleSelectionAll101=[]
       this.multipleSelectionAll102=[]
@@ -735,6 +760,7 @@ export default {
       this.multipleSelectionAll105=[]
       this.multipleSelectionAll106=[]
       this.multipleSelectionAll107=[]
+      this.multipleSelectionAll110=[]
       this.formSize.moduleList=[]
       this.formSize.identifyPhotosList=[]
       if(!this.isCreate&&this.formSize.unityVersion==this.unityVersionEdit&&this.formSize.loadingLine==this.loadingLineEdit&&this.playIdEdit==this.formSize.playId){
@@ -808,6 +834,9 @@ export default {
             case 107:
             this.multipleSelectionAll107=res.data.items||[]
             break;
+            case 110:
+            this.multipleSelectionAll110=res.data.items||[]
+            break;
             default:
               break;
           }
@@ -828,6 +857,7 @@ export default {
       this.multipleSelectionAll105=[]
       this.multipleSelectionAll106=[]
       this.multipleSelectionAll107=[]
+      this.multipleSelectionAll110=[]
       this. multipleSelection100=[]
       this.multipleSelection101=[]
       this.multipleSelection102=[]
@@ -836,6 +866,7 @@ export default {
       this.multipleSelection105=[]
       this.multipleSelection106=[]
       this.multipleSelection107=[]
+      this.multipleSelection110=[]
       this.formSize.moduleList=[]
       this.formSize.identifyPhotosList=[]
       if(!this.isCreate&&this.formSize.unityVersion==this.unityVersionEdit&&this.formSize.loadingLine==this.loadingLineEdit&&this.playIdEdit==this.formSize.playId){
@@ -871,6 +902,9 @@ export default {
         break;
         case 107:
         this.multipleSelection107=this.multipleSelectionAll107.concat(val)
+        break;
+        case 110:
+        this.multipleSelection110=this.multipleSelectionAll110.concat(val)
         break;
       default:
         break;
@@ -969,6 +1003,14 @@ export default {
           this.selectAllCom()
           }
         break;
+        case 110:
+         if(this.multipleSelection110.length>0){
+          this.multipleSelectionAll110=this.multipleSelection110
+          this.multipleSelectionAll110=this.uniqueChoose(this.multipleSelectionAll110)
+          }else{
+          this.selectAllCom()
+          }
+        break;
       default:
         
         break;
@@ -1033,6 +1075,11 @@ export default {
         case 107:
         var i=this.multipleSelectionAll107.map(v=>v.id).indexOf(row.id)
         this.multipleSelectionAll107.splice(i, 1)
+        this.delCom(row)
+        break;
+        case 110:
+        var i=this.multipleSelectionAll110.map(v=>v.id).indexOf(row.id)
+        this.multipleSelectionAll110.splice(i, 1)
         this.delCom(row)
         break;
           default:
@@ -1161,6 +1208,14 @@ export default {
           this.delAllCom()
           this.multipleSelectionAll107=this.multipleSelectionAll107.filter(v=>v.id)
           break;
+          case 110:
+           for(let i = 0 ;i<this.multipleSelectionAll110.length;i++){
+          let idx= this.multipleSelectionAll110.map(v=>v.id).indexOf(idxArray[i]);
+          this.multipleSelectionAll110.splice(idx,1,{})
+          }
+          this.delAllCom()
+          this.multipleSelectionAll110=this.multipleSelectionAll110.filter(v=>v.id)
+          break;
         default:
           break;
     }
@@ -1246,6 +1301,7 @@ export default {
             this.multipleSelectionAll105=[]
             this.multipleSelectionAll106=[]
             this.multipleSelectionAll107=[]
+            this.multipleSelectionAll110=[]
             this.formSize.identifyPhotosList=[]
             if(!this.isCreate&&this.formSize.unityVersion==this.unityVersionEdit&&this.formSize.loadingLine==this.loadingLineEdit&&this.playIdEdit==this.formSize.playId){
             // console.log(11111115555555555,this.formSize.unityVersion,this.unityVersionEdit)
@@ -1434,6 +1490,9 @@ export default {
            case 107:
            this.keyWord?this.electionFlag=this.multipleSelectionAll107.filter(item=>item.name.toLowerCase().indexOf(this.keyWord.toLowerCase()) != -1):this.electionFlag=this.multipleSelectionAll107
            break;
+           case 110:
+           this.keyWord?this.electionFlag=this.multipleSelectionAll110.filter(item=>item.name.toLowerCase().indexOf(this.keyWord.toLowerCase()) != -1):this.electionFlag=this.multipleSelectionAll110
+           break;
           default:
             break;
         }
@@ -1511,6 +1570,9 @@ export default {
       case 107:
         this.electionFlag=this.multipleSelectionAll107;this.unique()
         break;
+      case 110:
+        this.electionFlag=this.multipleSelectionAll110;this.unique()
+        break;
       default:
         break;
     }
@@ -1560,6 +1622,11 @@ export default {
     this.materialIdsAarray=this.multipleSelectionAll107.length>0?this.multipleSelectionAll107.map(v=>v.id):[]
     this.watchSelectAll()
     if(this.tagKey==107){this.electionFlag=this.multipleSelectionAll107;this.unique()}
+  },
+  multipleSelectionAll110(){
+    this.materialIdsAarray=this.multipleSelectionAll110.length>0?this.multipleSelectionAll110.map(v=>v.id):[]
+    this.watchSelectAll()
+    if(this.tagKey==110){this.electionFlag=this.multipleSelectionAll110;this.unique()}
   },
   multipleSelectionAll200(){
     // console.log('this.watchSelectAll2',this.multipleSelectionAll200)

@@ -72,7 +72,13 @@
           <el-table-column prop="name" :label="'识别图名称'" width="" align="center">
             <template slot-scope="scope">{{ scope.row.name}}</template>
           </el-table-column>
-          <el-table-column prop="targetId" :label="'识别图ID'" width align="center"></el-table-column>
+          <el-table-column prop="targetId" :label="'识别图ID'" width align="center">
+            <template  slot-scope="scope">
+              <span>{{scope.row.targetId}}</span>
+              <el-button type="text" class="ml20" @click="copyUrl2(scope.row.targetId)">复制识别图ID</el-button>
+            </template>
+          </el-table-column>
+
           <el-table-column prop="state" label="识别方式" width="120" align="center">
             <template slot-scope="scope">
               <span v-if="scope.row.recognizeType==1">图像云识别</span>
@@ -462,7 +468,6 @@ export default {
       // console.log(file);
     },
     handleExceed(files, fileList) {
-      {{files.length}}
       this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
     },
     beforeRemove(file, fileList) {
@@ -543,7 +548,21 @@ export default {
     },
     delAll(){
       this.multipleSelection.length?this.del(this.multipleSelectionId).then(res=>{this.reload()}):this.$message.error('最少选择一项删除项')
-    }
+    },
+    copyUrl2(data){
+      let url = data;
+      let oInput = document.createElement('input');
+      oInput.value = url;
+      document.body.appendChild(oInput);
+      oInput.select(); // 选择对象;
+      document.execCommand("Copy"); // 执行浏览器复制命令
+      this.$message({
+        message: '已成功复制到剪切板',
+        type: 'success'
+      });
+      oInput.remove()
+    },
+
   },
   watch:{
 	page(){
