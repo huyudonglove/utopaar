@@ -819,12 +819,10 @@ export function selectpositionList(params){
 export function playInfo(params) {
   return http.get('/api/utopa/ar/play/info', params)
 }
-<<<<<<< HEAD
 /*获取当前位置下空间识别包*/
 const  getBuyKeys=(parentId)=>{
   return http.get('/api/utopa/ar/assets/location/selectAssetsLocationByPrimaryKey',{id:parentId})
-=======
-
+}
 /** app版本管理-分页获取 w*/
 export function appVersionList(params){
   let pageIndex = parseInt(params.page)||1;
@@ -868,7 +866,6 @@ export function getVersionInfo(params){
 /** app版本管理-获取的是当前已生效的最新版本号 w*/
 export function getLatestVersion(params){
   return http.post('/api/utopa/ar/web/app/version/getLatestVersion',params)
->>>>>>> fab13336066d1f0d153ecc8faa0c0032dd3a5bb4
 }
 export {
   login,

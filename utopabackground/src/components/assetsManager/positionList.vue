@@ -64,9 +64,10 @@
             <el-table-column label="地图" v-if="positionTable[0]&&positionTable[0].type==5" prop="type" align="center">
               <template slot-scope="scope">
                 <div style="margin:0 auto 10px;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
-                :style="{'background-color':scope.row.easyarMapId&&scope.row.easyarName?'#0074e4':scope.row.easyarMapId||scope.row.easyarName?'#ffdf25':'#ccc'}">EasyAR</div>
+                :style="{'background-color':scope.row.easyArList&&scope.row.easyArList.length?'#0074e4':false?'#ffdf25':'#ccc'}">EasyAR</div>
                 <div style="margin:0 auto;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
-                :style="{'background-color':scope.row.locusMapId&&scope.row.locusName?'#0074e4':scope.row.locusMapId||scope.row.locusName?'#ffdf25':'#ccc'}">LocusAR</div>
+                :style="{'background-color':scope.row.locusArList&&scope.row.locusArList.length?'#0074e4':false?'#ffdf25':'#ccc'}">LocusAR</div>
+                <div><el-button type="text" @click="showMap(scope.row)">查看</el-button></div>
               </template>
             </el-table-column>
             <el-table-column label="创建时间" prop="createTime" align="center"></el-table-column>
@@ -83,7 +84,7 @@
         <div>
           <pagination></pagination>
         </div>
-        <el-dialog title="资产添加" :visible.sync="showAssetsDialog" @close="closeDialog" width="35%" center>
+        <el-dialog title="资产添加" :visible.sync="showAssetsDialog" @close="closeDialog" width="670px" center>
           <el-form ref="form" :model="form" label-width="100px" :rules="rules">
             <el-form-item label="资产种类" prop="assetsType">
               <!-- <el-select v-if="!isEdit" v-model="form.assetsType" placeholder="请选择">
@@ -101,20 +102,59 @@
               <el-input v-model="form.assetsName" style="width:200px;" maxlength="50"></el-input>
             </el-form-item>
             <el-form-item v-if="form.assetsType==5" label="地图">
-              <el-table ref="mapTable" :data="mapList" tooltip-effect="dark" border>
-                <el-table-column label="id" prop="id" width="50" align="center"></el-table-column>
-                <el-table-column label="平台类型" prop="type" align="center"></el-table-column>
-                <el-table-column label="地图名称" align="center">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.mapName"></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column label="地图ID" align="center">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.mapId"></el-input>
-                  </template>
-                </el-table-column>
-              </el-table>
+              <el-radio-group v-model="mapType" style="padding-bottom: 10px" @change="mapInput=''">
+                <el-radio-button :label="1">EasyAR</el-radio-button>
+                <el-radio-button :label="2">LocusAR</el-radio-button>
+              </el-radio-group>
+              <div style="margin-bottom: 10px;position:relative;overflow:hidden;">
+                <el-button style="float:right;" type="primary" @click="addMap">新增</el-button>
+                <el-input style="width:150px;float:right;margin-right:10px;" v-model="mapInput" suffix-icon="el-icon-search" maxlength="50" placeholder="关键字搜索"></el-input>
+              </div>
+              <el-dialog
+                width="380px"
+                title="新增地图"
+                :visible.sync="isMapAdd"
+                center
+                append-to-body>
+                <el-form ref="mapForm" :model="mapForm" label-width="100px" :rules="mapRules" destroy-on-close>
+                  <el-form-item label="地图名称" prop="mapName">
+                    <el-input v-model="mapForm.mapName" style="width:200px;" maxlength="50"></el-input>
+                  </el-form-item>
+                  <el-form-item label="地图ID" prop="mapId">
+                    <el-input v-model="mapForm.mapId" style="width:200px;" maxlength="50"></el-input>
+                  </el-form-item>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                  <el-button type="primary" @click="createMap()">确定</el-button>
+                  <el-button @click="closeCreateMap">取消</el-button>
+                </span>
+              </el-dialog>
+              <div v-if="mapType==1">
+                <el-table ref="mapTable" :data="easyMapList.filter(v=>v.mapName.toLowerCase().indexOf(mapInput.toLowerCase())!=-1)" tooltip-effect="dark" border>
+                  <el-table-column label="id" prop="id" width="50" align="center"></el-table-column>
+                  <el-table-column label="地图名称" prop="mapName" align="center"> </el-table-column>
+                  <el-table-column label="地图ID" prop="mapId" align="center"></el-table-column>
+                  <el-table-column label="操作" align="center">
+                    <template slot-scope="scope">
+                      <el-button type="primary" size="mini" @click="editMap(scope)">编辑</el-button>
+                      <el-button type="danger" size="mini" @click="delMap(scope.$index)">删除</el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
+              <div v-if="mapType==2">
+                <el-table ref="mapTable" :data="locusMapList.filter(v=>v.mapName.toLowerCase().indexOf(mapInput.toLowerCase())!=-1)" tooltip-effect="dark" border>
+                  <el-table-column label="id" prop="id" width="50" align="center"></el-table-column>
+                  <el-table-column label="地图名称" prop="mapName" align="center"> </el-table-column>
+                  <el-table-column label="地图ID" prop="mapId" align="center"></el-table-column>
+                  <el-table-column label="操作" align="center">
+                    <template slot-scope="scope">
+                      <el-button type="primary" size="mini" @click="editMap(scope)">编辑</el-button>
+                      <el-button type="danger" size="mini" @click="delMap(scope.$index)">删除</el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
             </el-form-item>
             <el-form-item label="位置所属" v-if="form.assetsType==1" prop="areaC">
               <span class="myWords">省
@@ -155,6 +195,29 @@
             <el-button @click="selectDialog=false;">取消</el-button>
           </span>
         </el-dialog> -->
+        <el-dialog title="地图详情" :visible.sync="mapVisibleSee" @close="mapInputSee='';mapTypeSee=1" width="500px">
+          <el-radio-group v-model="mapTypeSee" style="padding-bottom: 10px" @change="mapInputSee=''">
+            <el-radio-button :label="1">EasyAR</el-radio-button>
+            <el-radio-button :label="2">LocusAR</el-radio-button>
+          </el-radio-group>
+          <div style="margin-bottom: 10px;position:relative;overflow:hidden;">
+            <el-input style="width:150px;float:right;margin-right:10px;" v-model="mapInputSee" suffix-icon="el-icon-search" maxlength="50" placeholder="关键字搜索"></el-input>
+          </div>
+          <div v-if="mapTypeSee==1">
+            <el-table ref="mapTable" :data="easyMapListSee.filter(v=>v.mapName.toLowerCase().indexOf(mapInputSee.toLowerCase())!=-1)" tooltip-effect="dark" max-height="300px" border>
+              <el-table-column label="id" prop="id" width="50" align="center"></el-table-column>
+              <el-table-column label="地图名称" prop="mapName" align="center"></el-table-column>
+              <el-table-column label="地图ID" prop="mapId" align="center"></el-table-column>
+            </el-table>
+          </div>
+          <div v-if="mapTypeSee==2">
+            <el-table ref="mapTable" :data="locusMapListSee.filter(v=>v.mapName.toLowerCase().indexOf(mapInputSee.toLowerCase())!=-1)" tooltip-effect="dark" max-height="300px" border>
+              <el-table-column label="id" prop="id" width="50" align="center"></el-table-column>
+              <el-table-column label="地图名称" prop="mapName" align="center"></el-table-column>
+              <el-table-column label="地图ID" prop="mapId" align="center"></el-table-column>
+            </el-table>
+          </div>
+        </el-dialog>
       </el-main>
     </el-container>
   </div>
@@ -226,10 +289,26 @@ export default {
       tableHeight:0,//表格的高度
       treeHeight:0,//树的高度
       tableAreaId:'',//保存区id，用来查询项目,
-      mapList:[
-        {id:1,type:'EasyAR',mapName:'',mapId:''},
-        {id:2,type:'LocusAR',mapName:'',mapId:''}
-      ]
+      easyMapList:[],
+      locusMapList:[],
+      mapType:1,
+      isMapAdd:false,
+      mapForm:{
+        mapName:'',
+        mapId:''
+      },
+      mapRules:{
+        mapName:[{required: true, message: '请输入地图名称', trigger: ['blur','change']}],
+        mapId:[{required: true, message: '请输入地图id', trigger:  ['blur','change']}],
+      },
+      isEditMap:false,
+      mapIndex:'',
+      mapInput:'',
+      mapVisibleSee:false,
+      easyMapListSee:[],
+      locusMapListSee:[],
+      mapTypeSee:1,
+      mapInputSee:''
     }
   },
   watch:{
@@ -311,10 +390,12 @@ export default {
         "state":this.form.status,
         "type":this.form.assetsType,
         "provinceCityArea":this.form.positionBelong,
-        "locusName":this.mapList[1].mapName,
-        "locusMapId":this.mapList[1].mapId,
-        "easyarName":this.mapList[0].mapName,
-        "easyarMapId":this.mapList[0].mapId,
+        // "locusName":this.mapList[1].mapName,
+        // "locusMapId":this.mapList[1].mapId,
+        // "easyarName":this.mapList[0].mapName,
+        // "easyarMapId":this.mapList[0].mapId,
+        "easyArList":this.easyMapList,
+        "locusArList":this.locusMapList,
       }
     },
     searchParams(){
@@ -594,10 +675,12 @@ export default {
           this.form.areaC =res.data.areaId;
           this.form.positionBelong=res.data.provinceCityArea;
           this.form.status=res.data.state;
-          this.mapList[0].mapId=res.data.easyarMapId;
-          this.mapList[0].mapName=res.data.easyarName;
-          this.mapList[1].mapId=res.data.locusMapId;
-          this.mapList[1].mapName=res.data.locusName;
+          // this.mapList[0].mapId=res.data.easyarMapId;
+          // this.mapList[0].mapName=res.data.easyarName;
+          // this.mapList[1].mapId=res.data.locusMapId;
+          // this.mapList[1].mapName=res.data.locusName;
+          this.easyMapList=res.data.easyArList||[];
+          this.locusMapList=res.data.locusArList||[];
         }
       })
     },
@@ -628,10 +711,8 @@ export default {
       this.isEdit=false;
       this.showAssetsDialog=false;
       this.resetForm('form');
-      this.mapList=[
-        {id:1,type:'EasyAR',mapName:'',mapId:''},
-        {id:2,type:'LocusAR',mapName:'',mapId:''}
-      ];
+      this.easyMapList=[];
+      this.locusMapList=[];
       // this.selectParent='',
       // this.selectParentId='',
       // this.positionBelong='',
@@ -639,6 +720,8 @@ export default {
       // this.selectBelongIdList.cityId="",
       // this.selectBelongIdList.areaId="";
       // this.typeId='';
+      this.mapType=1;
+      this.mapInput='';
     },
     // confirmParent(){//确认选择的上级机构
     //   if(this.selectParent===''){
@@ -675,6 +758,47 @@ export default {
       closeAssets({"ids":this.selectId,"source":"Background"}).then(res=>{
         this.getTable(this.clickId,this.clickTypeId);
       })
+    },
+    addMap(){
+      this.isMapAdd=true;
+      this.isEditMap=false;
+    },
+    editMap(scope){
+      this.isMapAdd=true;
+      this.isEditMap=true;
+      this.mapForm.mapName=scope.row.mapName;
+      this.mapForm.mapId=scope.row.mapId;
+      this.mapIndex = scope.$index;
+    },
+    delMap(index){
+      if(this.mapType==1){
+        this.easyMapList.splice(index,1);
+      }else{
+        this.locusMapList.splice(index,1);;
+      }
+    },
+    createMap(type){
+      this.$refs.mapForm.validate((valid) => {
+        if (valid) {
+          this.isMapAdd=false;
+          if(this.mapType==1){
+            this.isEditMap?this.easyMapList.splice(this.mapIndex,1,{...this.mapForm}):this.easyMapList.push({...this.mapForm});
+          }else{
+            this.isEditMap?this.locusMapList.splice(this.mapIndex,1,{...this.mapForm}):this.locusMapList.push({...this.mapForm});
+          }
+          // this.mapForm={'mapName':'','mapId':''} 
+          this.$refs.mapForm.resetFields();
+        }
+      })
+    },
+    closeCreateMap(){
+      this.isMapAdd=false;
+      this.$refs.mapForm.resetFields();
+    },
+    showMap(row){
+      this.mapVisibleSee=true;
+      this.easyMapListSee=row.easyArList||[];
+      this.locusMapListSee = row.locusArList||[];
     }
   },
   created(){

@@ -62,11 +62,12 @@
             </el-table-column>
             <el-table-column label="资产位置" prop="provinceCityArea" align="center"></el-table-column>
             <el-table-column label="地图" prop="type" align="center">
-              <template>
+              <template slot-scope="scope">
                 <div style="margin:0 auto 10px;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
-                :style="{'background-color':easyarMapId&&easyarName?'#0074e4':easyarMapId||easyarName?'#ffdf25':'#ccc'}">EasyAR</div>
+                :style="{'background-color':easyMapList&&easyMapList.length?'#0074e4':false?'#ffdf25':'#ccc'}">EasyAR</div>
                 <div style="margin:0 auto;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
-                :style="{'background-color':locusMapId&&locusName?'#0074e4':locusMapId||locusName?'#ffdf25':'#ccc'}">LocusAR</div>
+                :style="{'background-color':locusMapList&&locusMapList.length?'#0074e4':false?'#ffdf25':'#ccc'}">LocusAR</div>
+                <div><el-button type="text" @click="mapVisibleSee=true;">查看</el-button></div>
               </template>
             </el-table-column>
             <el-table-column label="创建时间" prop="createTime" align="center"></el-table-column>
@@ -101,10 +102,27 @@
               <el-input v-model="form.assetsName" style="width:200px;" maxlength="50"></el-input>
             </el-form-item>
             <el-form-item label="地图" required>
-              <div style="display:inline-block;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
-              :style="{'background-color':easyarMapId&&easyarName?'#0074e4':easyarMapId||easyarName?'#ffdf25':'#ccc'}">EasyAR</div>
-              <div style="display:inline-block;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
-              :style="{'background-color':locusMapId&&locusName?'#0074e4':locusMapId||locusName?'#ffdf25':'#ccc'}">LocusAR</div>
+              <el-radio-group v-model="mapType" style="padding-bottom: 10px" @change="mapInput=''">
+                <el-radio-button :label="1">EasyAR</el-radio-button>
+                <el-radio-button :label="2">LocusAR</el-radio-button>
+              </el-radio-group>
+              <div style="margin-bottom: 10px;position:relative;overflow:hidden;">
+                <el-input style="width:150px;float:right;margin-right:10px;" v-model="mapInput" suffix-icon="el-icon-search" maxlength="50" placeholder="关键字搜索"></el-input>
+              </div>
+              <div v-if="mapType==1">
+                <el-table ref="mapTable" :data="easyMapList.filter(v=>v.mapName.toLowerCase().indexOf(mapInput.toLowerCase())!=-1)" tooltip-effect="dark" max-height="300px" border>
+                  <el-table-column label="id" prop="id" width="50" align="center"></el-table-column>
+                  <el-table-column label="地图名称" prop="mapName" align="center"></el-table-column>
+                  <el-table-column label="地图ID" prop="mapId" align="center"></el-table-column>
+                </el-table>
+              </div>
+              <div v-if="mapType==2">
+                <el-table ref="mapTable" :data="locusMapList.filter(v=>v.mapName.toLowerCase().indexOf(mapInput.toLowerCase())!=-1)" tooltip-effect="dark" max-height="300px" border>
+                  <el-table-column label="id" prop="id" width="50" align="center"></el-table-column>
+                  <el-table-column label="地图名称" prop="mapName" align="center"></el-table-column>
+                  <el-table-column label="地图ID" prop="mapId" align="center"></el-table-column>
+                </el-table>
+              </div>
             </el-form-item>
             <!-- <el-form-item label="位置所属" v-if="form.assetsType==1" prop="areaC">
               <span>省
@@ -145,6 +163,29 @@
             <el-button @click="selectDialog=false;">取消</el-button>
           </span>
         </el-dialog> -->
+        <el-dialog title="地图详情" :visible.sync="mapVisibleSee" @close="mapInputSee='';mapTypeSee=1" width="500px">
+          <el-radio-group v-model="mapTypeSee" style="padding-bottom: 10px" @change="mapInputSee=''">
+            <el-radio-button :label="1">EasyAR</el-radio-button>
+            <el-radio-button :label="2">LocusAR</el-radio-button>
+          </el-radio-group>
+          <div style="margin-bottom: 10px;position:relative;overflow:hidden;">
+            <el-input style="width:150px;float:right;margin-right:10px;" v-model="mapInputSee" suffix-icon="el-icon-search" maxlength="50" placeholder="关键字搜索"></el-input>
+          </div>
+          <div v-if="mapTypeSee==1">
+            <el-table ref="mapTable" :data="easyMapList.filter(v=>v.mapName.toLowerCase().indexOf(mapInputSee.toLowerCase())!=-1)" tooltip-effect="dark" max-height="300px" border>
+              <el-table-column label="id" prop="id" width="50" align="center"></el-table-column>
+              <el-table-column label="地图名称" prop="mapName" align="center"></el-table-column>
+              <el-table-column label="地图ID" prop="mapId" align="center"></el-table-column>
+            </el-table>
+          </div>
+          <div v-if="mapTypeSee==2">
+            <el-table ref="mapTable" :data="locusMapList.filter(v=>v.mapName.toLowerCase().indexOf(mapInputSee.toLowerCase())!=-1)" tooltip-effect="dark" max-height="300px" border>
+              <el-table-column label="id" prop="id" width="50" align="center"></el-table-column>
+              <el-table-column label="地图名称" prop="mapName" align="center"></el-table-column>
+              <el-table-column label="地图ID" prop="mapId" align="center"></el-table-column>
+            </el-table>
+          </div>
+        </el-dialog>
       </el-main>
     </el-container>
   </div>
@@ -214,10 +255,14 @@ export default {
       tableHeight:0,
       treeHeight:0,
       isValid:false,
-      easyarMapId:'',
-      easyarName:'',
-      locusMapId:'',
-      locusName:'',
+      mapVisible:false,
+      easyMapList:[],
+      locusMapList:[],
+      mapType:1,
+      mapInput:'',
+      mapVisibleSee:false,
+      mapTypeSee:1,
+      mapInputSee:''
     }
   },
   watch:{
@@ -254,10 +299,6 @@ export default {
         "source":'Middleground',
         "state":this.form.status,
         "type":this.form.assetsType,
-        // "locusName":this.locusName,
-        // "locusMapId":this.locusMapId,
-        // "easyarName":this.easyarName,
-        // "easyarMapId":this.easyarMapId,
       }
     },
     searchParams(){
@@ -284,10 +325,8 @@ export default {
         this.selectParentId=arr.id;//保存选择的上级id
         this.selectParent = arr.name;//选择的上级名
         this.clickId = arr.id;//保存当前点击的id
-        this.easyarMapId=arr.easyarMapId;
-        this.easyarName=arr.easyarName;
-        this.locusMapId=arr.locusMapId;
-        this.locusName=arr.locusName;
+        this.easyMapList=arr.easyArList||[];
+        this.locusMapList=arr.locusArList||[];
       }else{
         this.typeId='';
         this.isCreate=false;
@@ -463,7 +502,7 @@ export default {
       closeAssets({"ids":this.selectId,"source":"Middleground"}).then(res=>{
         this.getTable(this.clickId);
       })
-    }
+    },
   },
   created(){
     this.getProvince();

@@ -136,9 +136,9 @@
             <el-table-column label="地图" align="center">
               <template slot-scope="scope">
                 <div style="display:inline-block;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
-                :style="{'background-color':scope.row.easyarMapId&&scope.row.easyarName?'#0074e4':scope.row.easyarMapId||scope.row.easyarName?'#ffdf25':'grey'}">EasyAR</div>
+                :style="{'background-color':scope.row.easyArList&&scope.row.easyArList.length?'#0074e4':false?'#ffdf25':'grey'}">EasyAR</div>
                 <div style="display:inline-block;color:#fff;text-align:center;border-radius:4px;width:80px;height:35px;line-height:35px;"
-                :style="{'background-color':scope.row.locusMapId&&scope.row.locusName?'#0074e4':scope.row.locusMapId||scope.row.locusName?'#ffdf25':'grey'}">LocusAR</div>
+                :style="{'background-color':scope.row.locusArList&&scope.row.locusArList.length?'#0074e4':false?'#ffdf25':'grey'}">LocusAR</div>
                 <div><el-button type="text" @click="showMap(scope.row)">查看</el-button></div>
               </template>
             </el-table-column>
@@ -168,13 +168,28 @@
       <el-button type="primary" @click="addOrEdit">确定</el-button>
       <el-button @click="$router.push({path:'/middleusersetting/middleuserlist',query:JSON.parse($route.query.oldQuery)});">取消</el-button>
     </div>
-    <el-dialog title="地图" :visible.sync="mapVisible" width="500px">
-      <el-table ref="mapTable" :data="mapList" tooltip-effect="dark" border>
-        <el-table-column label="id" prop="id" width="50" align="center"></el-table-column>
-        <el-table-column label="平台类型" prop="type" align="center"></el-table-column>
-        <el-table-column label="地图名称" prop="mapName" align="center"></el-table-column>
-        <el-table-column label="地图ID" prop="mapId" align="center"></el-table-column>
-      </el-table>
+    <el-dialog title="地图详情" :visible.sync="mapVisible" @close="mapInput='';mapType=1" width="500px">
+      <el-radio-group v-model="mapType" style="padding-bottom: 10px" @change="mapInput=''">
+        <el-radio-button :label="1">EasyAR</el-radio-button>
+        <el-radio-button :label="2">LocusAR</el-radio-button>
+      </el-radio-group>
+      <div style="margin-bottom: 10px;position:relative;overflow:hidden;">
+        <el-input style="width:150px;float:right;margin-right:10px;" v-model="mapInput" suffix-icon="el-icon-search" maxlength="50" placeholder="关键字搜索"></el-input>
+      </div>
+      <div v-if="mapType==1">
+        <el-table ref="mapTable" :data="easyMapList.filter(v=>v.mapName.toLowerCase().indexOf(mapInput.toLowerCase())!=-1)" tooltip-effect="dark" max-height="300px" border>
+          <el-table-column label="id" prop="id" width="50" align="center"></el-table-column>
+          <el-table-column label="地图名称" prop="mapName" align="center"></el-table-column>
+          <el-table-column label="地图ID" prop="mapId" align="center"></el-table-column>
+        </el-table>
+      </div>
+      <div v-if="mapType==2">
+        <el-table ref="mapTable" :data="locusMapList.filter(v=>v.mapName.toLowerCase().indexOf(mapInput.toLowerCase())!=-1)" tooltip-effect="dark" max-height="300px" border>
+          <el-table-column label="id" prop="id" width="50" align="center"></el-table-column>
+          <el-table-column label="地图名称" prop="mapName" align="center"></el-table-column>
+          <el-table-column label="地图ID" prop="mapId" align="center"></el-table-column>
+        </el-table>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -227,10 +242,10 @@ export default {
       isShowTree:true,
       isExpand:false,
       mapVisible:false,
-      mapList:[
-        {id:1,type:'EasyAR',mapName:'',mapId:''},
-        {id:2,type:'LocusAR',mapName:'',mapId:''}
-      ]
+      easyMapList:[],
+      locusMapList:[],
+      mapType:1,
+      mapInput:''
     }
   },
   computed:{
@@ -345,10 +360,8 @@ export default {
   methods:{
     showMap(row){
       this.mapVisible=true;
-      this.mapList[0].mapId=row.easyarMapId;
-      this.mapList[0].mapName=row.easyarName;
-      this.mapList[1].mapId=row.locusMapId;
-      this.mapList[1].mapName=row.locusName;
+      this.easyMapList=row.easyArList||[];
+      this.locusMapList = row.locusArList||[];
     },
     appCellStyle({row, column, rowIndex, columnIndex}){//将选择的应用行高亮
       if(this.appIdList.indexOf(row.id)!=-1){
