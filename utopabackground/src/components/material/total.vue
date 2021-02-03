@@ -1894,6 +1894,8 @@
               default:
                 break;
             }
+            let page=this.$route.query.clickPage||1;
+            this.$store.commit('pagination/setClickPage',page);
             this.getTotal();
             this.getTree();
             this.pageShow=false;
