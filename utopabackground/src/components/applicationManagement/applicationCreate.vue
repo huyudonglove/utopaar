@@ -249,7 +249,7 @@
                 
               </template>
             </el-table-column>
-            <el-table-column  label="安卓资源包大小" width="150" align="center" v-if="tagKey ==101||tagKey ==102||tagKey ==103" :key="19" sortable="custom" prop="androidResourcePackageSize">
+            <el-table-column  label="Android资源包大小" width="150" align="center" v-if="tagKey ==101||tagKey ==102||tagKey ==103" :key="19" sortable="custom" prop="androidResourcePackageSize">
               <template slot-scope="scope">
                 {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
               </template>
@@ -466,7 +466,7 @@
                {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
             </template>
           </el-table-column>
-          <el-table-column  label="安卓资源包大小" width="150" align="center" v-if="tagKey ==101||tagKey ==102||tagKey ==103" prop="androidResourcePackageSize" :key="40" sortable >
+          <el-table-column  label="Android资源包大小" width="150" align="center" v-if="tagKey ==101||tagKey ==102||tagKey ==103" prop="androidResourcePackageSize" :key="40" sortable >
              <template slot-scope="scope">
                {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
             </template>
