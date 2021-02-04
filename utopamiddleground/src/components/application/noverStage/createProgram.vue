@@ -42,7 +42,12 @@
           placeholder="结束时间">
         </el-time-picker>
       </el-form-item>
-      <el-form-item label="选择动画">
+      <el-form-item label="选择节目">
+        <span v-for="(item,idx) in tabList" :key="idx">
+          <el-button size="mini" type="primary" :plain="!item.isCheck" round @click="tabType(idx)">{{item.name}}</el-button>
+        </span>
+      </el-form-item>
+      <el-form-item label="选择素材" :required="true">
         <div>
           <el-row class="tac" style="padding-bottom:15px">
             <el-input v-model="animationName" style="width: 20%" suffix-icon="el-icon-search" maxlength="50" placeholder="请输入关键字"></el-input>
@@ -65,7 +70,7 @@
           <el-table ref="programTable" :data="ainimationList" border style="width: 100%" class="mt15 mb15"  @selection-change="handleSelectionChange" @sort-change="changeTableSort" row-key="id">
             <el-table-column type="selection" width="50" :selectable="(row)=>row.state==1" :reserve-selection="true"></el-table-column>
             <el-table-column prop="id" label="ID" width="50" align="center"></el-table-column>
-            <el-table-column prop="name" label="动画名称" align="center" sortable></el-table-column>
+            <el-table-column prop="name" :label="`${moduleName}名称`" align="center" sortable></el-table-column>
             <el-table-column prop="materialCategoryName" label="所属类别" align="center"></el-table-column>
             <el-table-column prop="isLyric" label="是否配置歌词" width="110" align="center">
               <template slot-scope="scope">
@@ -73,17 +78,22 @@
                 <span v-if="scope.row.isLyric==0">否</span>
               </template>
             </el-table-column>
-            <el-table-column prop="androidResourcePackageSize" label="安卓资源包大小(M)" align="center" sortable>
+            <el-table-column prop="androidResourcePackageSize" v-if="materialCategory==110" label="资源包大小(M)" align="center" sortable>
               <template slot-scope="scope">
                 {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
               </template>
             </el-table-column>
-            <el-table-column prop="iosResourcePackageSize" label="IOS资源包大小(M)" align="center" sortable>
+            <el-table-column prop="androidResourcePackageSize" v-if="materialCategory!=110" label="Android资源包大小(M)" align="center" sortable>
+              <template slot-scope="scope">
+                {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
+              </template>
+            </el-table-column>
+            <el-table-column prop="iosResourcePackageSize" v-if="materialCategory!=110" label="IOS资源包大小(M)" align="center" sortable>
               <template slot-scope="scope">
                 {{scope.row.iosResourcePackageSize?((scope.row.iosResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
               </template>
             </el-table-column>
-            <el-table-column prop="windowsResourcePackageSize" label="Windows资源包大小(M)" align="center" sortable>
+            <el-table-column prop="windowsResourcePackageSize" v-if="materialCategory!=110" label="Windows资源包大小(M)" align="center" sortable>
               <template slot-scope="scope">
                 {{scope.row.windowsResourcePackageSize?((scope.row.windowsResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
               </template>
@@ -102,18 +112,6 @@
               </template>
             </el-table-column>
           </el-table>
-          <!-- <div>
-            <el-pagination
-              background
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="page"
-              :page-sizes="[ 20, 40, 60,80]"
-              :page-size="limit"
-              layout="total,sizes, prev, pager, next,jumper"
-              :total="total?total:0">
-            </el-pagination>
-          </div> -->
         </div>
       </el-form-item>
     </el-form>
@@ -157,6 +155,21 @@ export default {
         checkStrictly: true,
         expandTrigger:'click'
       },
+      tabList:[
+        {
+          id:101,
+          name:'动画',
+          isCheck:true
+        },
+        {
+          id:110,
+          name:'MP4模型',
+          isCheck:false
+        }
+      ],
+      currentIndex:0,
+      materialCategory:101,
+      moduleName:'动画'
     }
   },
   computed:{
@@ -166,7 +179,7 @@ export default {
         // "page":this.page,
         // "limit":this.limit,
         "appId":this.$route.params.appId,
-        "module":'101',
+        "module":this.materialCategory,
         "sortField":this.sortName,
         "sortType":this.sortType,
         "materialCategoryId":this.statusType,
@@ -176,61 +189,35 @@ export default {
     }
   },
   watch:{
-    // async page(){
-    //   await this.listData();
-    //   if(this.currentProgram){
-    //     let row = this.ainimationList.find(v=>v.id==this.currentProgram.materialId);
-    //     if(row){
-    //       this.$nextTick(()=>{
-    //         this.$refs.programTable.toggleRowSelection(row,true);
-    //       })
-    //     }
-    //   }
-    // },
-    // async limit(){
-    //   if(this.page!=1){
-    //     this.page=1;
-    //   }
-    //   await this.listData();
-    //   if(this.currentProgram){
-    //     let row = this.ainimationList.find(v=>v.id==this.currentProgram.materialId);
-    //     if(row){
-    //       this.$nextTick(()=>{
-    //         this.$refs.programTable.toggleRowSelection(row,true);
-    //       })
-    //     }
-    //   }
-    // },
     async animationName(){
       if(this.page!=1){
         this.page=1;
       }
       await this.listData();
-      // if(this.currentProgram&&this.ainimationList.length){
-      //   let row = this.ainimationList.find(v=>v.id==this.currentProgram.materialId);
-      //   if(row){
-      //     this.$nextTick(()=>{
-      //       this.$refs.programTable.toggleRowSelection(row,true);
-      //     })
-      //   }
-      // }
     },
     async statusType(){
       if(this.page!=1){
         this.page=1;
       }
       await this.listData();
-      // if(this.currentProgram&&this.ainimationList.length){
-      //   let row = this.ainimationList.find(v=>v.id==this.currentProgram.materialId);
-      //   if(row){
-      //     this.$nextTick(()=>{
-      //       this.$refs.programTable.toggleRowSelection(row,true);
-      //     })
-      //   }
-      // }
     }
   },
   methods:{
+    tabType(idx){
+      if(this.currentIndex===idx){
+        return;
+      }
+      this.materialCategory=this.tabList[idx].id
+      this.sortName='';
+      this.sortType='';
+      this.currentIndex = idx;                 
+      this.tabList.forEach(v=>{v.isCheck=false});
+      this.tabList[idx].isCheck=true;
+      this.moduleName = this.tabList[idx].name;
+      this.dropDown();
+      this.listData();
+      this.$refs.programTable.clearSelection();
+    },
     handleSizeChange(val){
       this.limit = val;
     },
@@ -268,7 +255,7 @@ export default {
       })
     },
     dropDown(){
-      getMaterialDropDown({"moduleId":101}).then(res=>{
+      getMaterialDropDown({"moduleId":this.materialCategory}).then(res=>{
         if(res.code){
           this.$message.error(res.msg);
         }else{
@@ -302,7 +289,7 @@ export default {
         return;
       }
       if(!this.selectProgram){
-        this.$message.error('请勾选动画');
+        this.$message.error('请勾选素材');
         this.startTime='';
         this.endTime='';
         return;
@@ -380,6 +367,7 @@ export default {
       this.selectProgram.duration = this.selectProgram.durationTimeStr;
       this.selectProgram.materialName = this.selectProgram.name;
       this.selectProgram.materialId = this.selectProgram.id;
+      this.selectProgram.materialCategory = this.materialCategory;
       this.selectProgram.musicId = (new Date()).valueOf();
       if(this.isEdit){
         this.selectProgramList.splice(this.currentProgram.currentIndex,1,this.selectProgram);
@@ -392,17 +380,24 @@ export default {
     }
   },
   async created(){
-    this.dropDown();
     this.sceneTime = JSON.parse(this.$route.query.sceneTime);
     if(this.$route.query.selectProgramList){
       this.selectProgramList= JSON.parse(this.$route.query.selectProgramList);
     }
-    await this.listData();
     if(this.$route.query.currentProgram){
       this.currentProgram = JSON.parse(this.$route.query.currentProgram);
       this.programName = this.currentProgram.programName;
       this.startTime = this.currentProgram.startTime;
       this.endTime = this.currentProgram.endTime;
+      this.materialCategory = this.currentProgram.materialCategory;
+      if(this.currentProgram.materialCategory==110){
+        this.currentIndex=1;
+        this.tabList.forEach(v=>{v.isCheck=false});
+        this.tabList[1].isCheck=true;
+        this.moduleName = 'MP4模型'
+      }
+      this.dropDown();
+      await this.listData();
       let row = this.ainimationList.length?this.ainimationList.find(v=>v.id==this.currentProgram.materialId):false;
       if(row){
         this.$nextTick(()=>{
@@ -415,6 +410,8 @@ export default {
       }
       this.isEdit=true;
     }else{
+      this.dropDown();
+      this.listData();
       this.isCreate=true;
     }
   }

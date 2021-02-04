@@ -105,7 +105,7 @@
             </template>
         </el-table-column>
 
-        <el-table-column  :label="`${tagValue}预览`" width="200" align="center" v-if="tagKey==105||tagKey==107" :key="6">
+        <el-table-column  :label="`${tagValue}预览`" width="200" align="center" v-if="tagKey==105||tagKey==107||tagKey==110" :key="6">
            <template slot-scope="scope">
               <span style="cursor: pointer;" >
 
@@ -133,13 +133,13 @@
 
           </template>
           </el-table-column>
-          <el-table-column  label="资源包大小" width="150" align="center" v-if="tagKey ==100||tagKey ==107" :key="10" sortable="custom" prop="androidResourcePackageSize">
+          <el-table-column  label="资源包大小" width="150" align="center" v-if="tagKey ==100||tagKey ==107||tagKey ==110" :key="10" sortable="custom" prop="androidResourcePackageSize">
              <template slot-scope="scope">
               {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
 
             </template>
           </el-table-column>
-          <el-table-column  label="安卓资源包大小" width="150" align="center" v-if="tagKey ==101||tagKey ==102||tagKey ==103" :key="11" sortable="custom" prop="androidResourcePackageSize">
+          <el-table-column  label="Android资源包大小" width="150" align="center" v-if="tagKey ==101||tagKey ==102||tagKey ==103" :key="11" sortable="custom" prop="androidResourcePackageSize">
              <template slot-scope="scope">
               {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
             </template>
@@ -160,7 +160,7 @@
         </el-table-column>
          <el-table-column prop="viewType" :label="'动画类型'" width="120" align="center" v-if="tagKey==101||tagKey==102" :key="Math.random()+14" >
         </el-table-column> -->
-          <el-table-column prop="durationTimeStr" label="总时长" width="100" align="center" v-if="tagKey==100||tagKey==101||tagKey ==105||tagKey ==106||tagKey ==107" :key="13" sortable="custom"></el-table-column>
+          <el-table-column prop="durationTimeStr" label="总时长" width="100" align="center" v-if="tagKey==100||tagKey==101||tagKey ==105||tagKey ==106||tagKey ==107||tagKey ==110" :key="13" sortable="custom"></el-table-column>
           <el-table-column prop="state" label="状态" width="120" align="center">
               <template slot-scope="scope">
                 <span v-if="scope.row.state==1">上架</span>
@@ -475,6 +475,9 @@ export default {
       break;
     case 107:
       this.tagValue='MP4'
+      break;
+    case 110:
+      this.tagValue='MP4模型'
       break;
     default:
       break;
