@@ -344,6 +344,18 @@ export default new Router({
               component:createArContent,
             }
           ]
+        },
+        {
+          path: '/application/assetsList/content/12/:appId',//AR宠物_同步
+          name: 'arContentList',
+          component: arContentList,
+          children:[
+            {
+              path:'/application/assetsList/content/12/:appId/createarcontent',
+              name:'createArContent',
+              component:createArContent,
+            }
+          ]
         }
       ],
     },

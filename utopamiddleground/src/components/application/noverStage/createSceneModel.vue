@@ -31,7 +31,7 @@
           <img :src="`/static/${scope.row.webUrl}`" alt="" width="150px">
         </template>
       </el-table-column>
-      <el-table-column prop="androidResourcePackageSize" label="安卓资源包大小(M)" align="center" sortable>
+      <el-table-column prop="androidResourcePackageSize" label="Android资源包大小(M)" align="center" sortable>
         <template slot-scope="scope">
           {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
         </template>

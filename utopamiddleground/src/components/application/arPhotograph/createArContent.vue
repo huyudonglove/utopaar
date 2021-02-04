@@ -65,17 +65,17 @@
                 <span v-if="scope.row.isLyric==0">否</span>
               </template>
             </el-table-column>
-            <el-table-column v-if="tableTitle.package" :label="(tableTitle.module!='107'&&tableTitle.module!='100'?'安卓':'')+tableTitle.package+'(M)'" prop="androidResourcePackageSize" width="170" align="center" sortable>
+            <el-table-column v-if="tableTitle.package" :label="(tableTitle.module!='107'&&tableTitle.module!='100'&&tableTitle.module!='110'?'Android':'')+tableTitle.package+'(M)'" prop="androidResourcePackageSize" width="170" align="center" sortable>
               <template slot-scope="scope">
                 {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
               </template>
             </el-table-column>
-            <el-table-column v-if="tableTitle.package&&tableTitle.module!='107'&&tableTitle.module!='100'" :label="'IOS'+tableTitle.package+'(M)'" prop="iosResourcePackageSize" width="165" align="center" sortable>
+            <el-table-column v-if="tableTitle.package&&tableTitle.module!='107'&&tableTitle.module!='100'&&tableTitle.module!='110'" :label="'IOS'+tableTitle.package+'(M)'" prop="iosResourcePackageSize" width="165" align="center" sortable>
               <template slot-scope="scope">
                 {{scope.row.iosResourcePackageSize?((scope.row.iosResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
               </template>
             </el-table-column>
-            <el-table-column v-if="tableTitle.package&&tableTitle.module!='107'&&tableTitle.module!='100'" :label="'Windows'+tableTitle.package+'(M)'" prop="windowsResourcePackageSize" width="210" align="center" sortable>
+            <el-table-column v-if="tableTitle.package&&tableTitle.module!='107'&&tableTitle.module!='100'&&tableTitle.module!='110'" :label="'Windows'+tableTitle.package+'(M)'" prop="windowsResourcePackageSize" width="210" align="center" sortable>
               <template slot-scope="scope">
                 {{scope.row.windowsResourcePackageSize?((scope.row.windowsResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
               </template>
@@ -150,6 +150,7 @@ export default {
         {name:'视频',display:'视频预览',lyric:'是否包含歌词',time:'总时长',module:'105'},//抠像视频
         {name:'游戏',display:'预览图片',time:'总时长',module:'106'},
         {name:'视频',display:'视频预览',time:'总时长',package:'资源包大小',module:'107'},//mp4视频
+        {name:'模型',display:'模型展示',time:'总时长',package:'资源包大小',module:'110'},//mp4模型
       ],
       selectId:'',
       moduleType:'',
