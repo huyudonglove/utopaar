@@ -145,7 +145,6 @@
             <template slot-scope="scope">
               <span v-if="scope.row.isLyric==1">是</span>
               <span v-if="!scope.row.isLyric" style="color:#FF644E">否</span>
-        
             </template>
             </el-table-column>
             <el-table-column  label="资源包大小" width="150" align="center" v-if="tagKey ==100||tagKey ==107" :key="18" sortable="custom" prop="androidResourcePackageSize">

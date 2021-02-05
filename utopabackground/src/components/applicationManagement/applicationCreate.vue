@@ -240,9 +240,14 @@
             <template slot-scope="scope">
               <span v-if="scope.row.isLyric==1">是</span>
               <span v-if="!scope.row.isLyric" style="color:#FF644E">否</span>
-        
             </template>
             </el-table-column>
+            <el-table-column prop="configFileId" label="配置文件" align="center"  :key="60" v-if="tagKey==101||tagKey==110" >
+             <template slot-scope="scope">
+              <span v-if="scope.row.configFileId">有</span>
+              <span v-else>无</span>
+            </template>
+          </el-table-column>
             <el-table-column  label="资源包大小" width="150" align="center" v-if="tagKey ==100||tagKey ==107||tagKey ==110" :key="18" sortable="custom" prop="androidResourcePackageSize">
               <template slot-scope="scope">
                 {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
@@ -259,7 +264,7 @@
                 {{((scope.row.iosResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
               </template>
             </el-table-column>
-            <el-table-column prop="windowsResourcePackageSize" label="Windows资源包" width="140" align="center" v-if="tagKey==101&&equipmentEyeglass||tagKey==102&&equipmentEyeglass||tagKey==103&&equipmentEyeglass" :key="40" sortable="custom">
+            <el-table-column prop="windowsResourcePackageSize" label="Windows(UWP)资源包" width="140" align="center" v-if="tagKey==101&&equipmentEyeglass||tagKey==102&&equipmentEyeglass||tagKey==103&&equipmentEyeglass" :key="40" sortable="custom">
               <template slot-scope="scope">
                 {{((scope.row.windowsResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
               </template>
@@ -458,8 +463,13 @@
           <template slot-scope="scope">
             <span v-if="scope.row.isLyric==1">是</span>
             <span v-if="!scope.row.isLyric" style="color:#FF644E">否</span>
-      
           </template>
+          </el-table-column>
+          <el-table-column prop="configFileId" label="配置文件" align="center"  :key="60">
+             <template slot-scope="scope">
+              <span v-if="scope.row.configFileId">有</span>
+              <span v-else>无</span>
+            </template>
           </el-table-column>
           <el-table-column  label="资源包大小" width="150" align="center" v-if="tagKey ==100||tagKey ==107||tagKey ==110" :key="39" prop="androidResourcePackageSize"  sortable>
              <template slot-scope="scope">
@@ -476,7 +486,7 @@
                 {{((scope.row.iosResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
               </template>
             </el-table-column>
-            <el-table-column prop="windowsResourcePackageSize" label="Windows资源包" width="140" align="center" v-if="tagKey==101&&equipmentEyeglass||tagKey==102&&equipmentEyeglass||tagKey==103&&equipmentEyeglass" :key="96" sortable="custom">
+            <el-table-column prop="windowsResourcePackageSize" label="Windows(UWP)资源包" width="140" align="center" v-if="tagKey==101&&equipmentEyeglass||tagKey==102&&equipmentEyeglass||tagKey==103&&equipmentEyeglass" :key="96" sortable="custom">
               <template slot-scope="scope">
                 {{((scope.row.windowsResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
               </template>
