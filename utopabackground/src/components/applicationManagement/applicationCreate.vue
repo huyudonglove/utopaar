@@ -173,10 +173,6 @@
           :key="8"
           >
           </el-table-column>
-          <el-table-column prop="id" :label="'id'" width="80" align="center"
-          :key="9"
-          >
-          </el-table-column>
           <el-table-column
           type="selection"
           width="55"
@@ -184,6 +180,10 @@
           :selectable="(row)=>multipleSelectionAll110.map(v=>v.id).indexOf(row.id)==-1&&row.state==1"
           v-if="tagKey==110"
           :key="8"
+          >
+          </el-table-column>
+          <el-table-column prop="id" :label="'id'" width="80" align="center"
+          :key="9"
           >
           </el-table-column>
           <el-table-column prop="name" :label="`${tagValue}名称`" width="" align="center" :key="10" sortable="custom">
