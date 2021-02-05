@@ -804,7 +804,7 @@
               <uploadFile buttonName="文件" moduleCode="utopar" type="video" @getSdkId="getSdkId" :parentName="androidFileName"></uploadFile>
             </div>
           </div>
-          <div v-if="type==110"><!--载体模型-->
+          <div v-if="type==110"><!--MP4模型-->
               <div>
                 <span style="color: #f56c6c;margin-right: 2px;">*</span>MP4模型名称 <el-input style="width: 200px;margin-top: 10px;" v-model="inputName" maxlength="50"></el-input>
               </div>
@@ -817,7 +817,7 @@
                </div>
               <div style="margin-top: 10px">
                <h3><span style="color: #f56c6c;margin-right: 2px;">*</span>上传资源包 </h3>
-                <uploadFile buttonName="文件" moduleCode="utopar" type="android" @getSdkId="getSdkId" :parentName="androidFileName"></uploadFile>
+                <uploadFile buttonName="文件" moduleCode="utopar" type="video" @getSdkId="getSdkId" :parentName="androidFileName"></uploadFile>
               </div>
               <div style="margin-top: 10px;">
                 是否配置歌词

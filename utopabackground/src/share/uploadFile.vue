@@ -286,6 +286,8 @@ export default {
           this.$emit('getSdkId',null,null,null,null,'windows');
       }else if(this.type=='uwp'){
           this.$emit('getSdkId',null,null,null,null,'uwp');
+      }else{
+        this.$emit('getSdkId',null,null,null,null,'config');
       }
     }
   }
