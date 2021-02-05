@@ -55,15 +55,25 @@
               >
             </el-date-picker>
             </el-form-item>
-            <el-form-item label="投放位置：">
+            <el-form-item :label="`投放位置${playId==12?'(手机端)':''}：`">
               x：{{formSize.positionX}},
               y：{{formSize.positionY}},
               z：{{formSize.positionZ}}
             </el-form-item>
-            <el-form-item label="投放方向：">
+            <el-form-item :label="`投放方向${playId==12?'(手机端)':''}：`">
               x：{{formSize.relationX}},
               y：{{formSize.relationY}},
               z：{{formSize.relationZ}}
+            </el-form-item>
+            <el-form-item label="投放位置(眼镜端)：" v-if="playId==12">
+              x：{{formSize.positionGlassX}},
+              y：{{formSize.positionGlassY}},
+              z：{{formSize.positionGlassZ}}
+            </el-form-item>
+            <el-form-item label="投放方向(眼镜端)：" v-if="playId==12">
+              x：{{formSize.relationGlassX}},
+              y：{{formSize.relationGlassY}},
+              z：{{formSize.relationGlassZ}}
             </el-form-item>
             <el-form-item label="使用状态：">
                <el-radio v-model="formSize.state" label="1" :disabled="formSize.state==2">启用</el-radio>
@@ -185,6 +195,12 @@ export default {
       relationX:'',
       relationY:'',
       relationZ:'',
+      positionGlassX:'',
+      positionGlassY:'',
+      positionGlassZ:'',
+      relationGlassX:'',
+      relationGlassY:'',
+      relationGlassZ:'',
       relationCarrierList:[
       ],
       assetId:'21'
@@ -194,7 +210,8 @@ export default {
     limit:20,
     page:1,
     total:0,
-    timeScope:[]
+    timeScope:[],
+    playId:1
     };
   },
  async created(){

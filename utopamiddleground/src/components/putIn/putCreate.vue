@@ -42,7 +42,7 @@
             <el-button style="float: left; padding: 2px 0;margin-top:5px;" type="text" class="downIcon"></el-button>
           </div>
           <div  class="text item">
-           <el-form ref="formSize" :model="formSize" label-width="120px" :rules="rules">
+           <el-form ref="formSize" :model="formSize" label-width="150px" :rules="rules">
             <el-form-item label="选择应用：" prop="backgroundAppId">
               <el-select v-model="formSize.backgroundAppId" placeholder="请选择" filterable @change="changePlayId">
                 <el-option
@@ -58,7 +58,7 @@
             <el-form-item label="投放时间：" required prop="startTime">
               <timeSwitch></timeSwitch>
             </el-form-item>
-            <el-form-item label="投放位置：" required>
+            <el-form-item :label="`投放位置${playId==12?'(手机端)':''}：`" required>
               <el-col :span="3">
                 <el-form-item prop="positionX">
                   x：<el-input v-model="formSize.positionX" style="width:75%" ></el-input>
@@ -75,7 +75,7 @@
                 </el-form-item>
               </el-col>
             </el-form-item>
-            <el-form-item label="投放方向：" required>
+            <el-form-item :label="`投放方向${playId==12?'(手机端)':''}：`" required>
               <el-col :span="3">
                 <el-form-item prop="relationX">
                   x：<el-input v-model="formSize.relationX" style="width:75%" ></el-input>
@@ -89,6 +89,40 @@
               <el-col :span="3">
                 <el-form-item prop="relationZ">
                   z：<el-input v-model="formSize.relationZ" style="width:75%" ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-form-item>
+            <el-form-item label="投放位置(眼镜端)：" v-if="playId==12" required>
+              <el-col :span="3">
+                <el-form-item prop="positionGlassX">
+                  x：<el-input v-model="formSize.positionGlassX" style="width:75%" ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="3">
+                <el-form-item prop="positionGlassY">
+                  y：<el-input v-model="formSize.positionGlassY" style="width:75%"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="3">
+                <el-form-item prop="positionGlassZ">
+                  z：<el-input v-model="formSize.positionGlassZ" style="width:75%"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-form-item>
+            <el-form-item label="投放方向(眼镜端)：" v-if="playId==12" required>
+              <el-col :span="3">
+                <el-form-item prop="relationGlassX">
+                  x：<el-input v-model="formSize.relationGlassX" style="width:75%" ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="3">
+                <el-form-item prop="relationGlassY">
+                  y：<el-input v-model="formSize.relationGlassY" style="width:75%"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="3">
+                <el-form-item prop="relationGlassZ">
+                  z：<el-input v-model="formSize.relationGlassZ" style="width:75%" ></el-input>
                 </el-form-item>
               </el-col>
             </el-form-item>
@@ -142,20 +176,23 @@
                   </el-table-column>
                   <el-table-column prop="scope.row.state" label="状态" width="120" align="center"> 
                     <template slot-scope="scope">
-                      <el-button type="text" v-if="scope.row.state==1" @click="activeAble(2,scope.$index,scope.row,2)">启用</el-button>
-                      <el-button type="text" v-if="scope.row.state==2" style="color:red" @click="activeAble(1,scope.$index,scope.row,2)">禁用</el-button>
+                      <el-button type="text" v-if="scope.row.state==1" @click="activeAble(2,scope.$index,2)">启用</el-button>
+                      <el-button type="text" v-if="scope.row.state==2" style="color:red" @click="activeAble(1,scope.$index,2)">禁用</el-button>
                     </template>
                   </el-table-column>
-                   <el-table-column  label="操作" width="150" align="center">
+                   <el-table-column  label="操作" width="250" align="center">
                     <template slot-scope="scope">
-                       <el-button type="danger"  @click="del(scope.$index,2)">删除</el-button>
+                       <el-button type="primary"  @click="edit(scope.$index,scope.row)">编辑</el-button>
+                       <el-button type="danger"  @click="del(scope.$index)">删除</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
                 <el-table  :data="tableData" ref="multipleTable2" tooltip-effect="dark" style="width: 100%;position:relative;padding-bottom:56px;"  v-if="formSize.chooseTime=='1'" :key="2">
                   <el-table-column prop="id" label="内容ID" width="120" align="center">
                   </el-table-column>
-                  <el-table-column prop="name" label="内容名称"  align="center" :key="96">
+                   <el-table-column prop="name" label="内容名称"  align="center" v-if="!isBs" :key="74">
+                  </el-table-column>
+                  <el-table-column prop="identifyPhotoName" label="内容名称"  align="center" v-if="isBs" :key="76">
                   </el-table-column>
                    <el-table-column  label="展示时间" width="" align="center" >
                     <template slot-scope="scope">
@@ -180,14 +217,15 @@
                       <el-button type="text" v-if="scope.row.state==2" style="color:red" @click="activeAble(1,scope.$index,scope.row,1)">禁用</el-button>
                     </template>
                   </el-table-column>
-                   <el-table-column  label="操作" width="150" align="center">
+                   <el-table-column  label="操作" width="250" align="center">
                     <template slot-scope="scope">
-                       <el-button type="danger"  @click="del(scope.$index,1)">删除</el-button>
+                       <el-button type="primary"  @click="edit(scope.$index,scope.row)">编辑</el-button>
+                       <el-button type="danger"  @click="del(scope.$index)">删除</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
                 <div align="center" style="position:absolute;bottom:10px;background:#fff;left:50%;transform:translateX(-50%);width:100%">
-                <el-button :disabled="!formSize.backgroundAppId" @click="listData();dialogTableVisible = true;" style="width:100%" >+添加</el-button>
+                <el-button :disabled="!formSize.backgroundAppId" @click="listData();dialogTableVisible = true;isEdit=false" style="width:100%" >+添加</el-button>
               </div>
               </div>
             </el-form-item>
@@ -201,13 +239,15 @@
             <el-button @click="goTo()">取消</el-button>
           </div>
         </div>
-        <el-dialog  :visible.sync="dialogTableVisible" width="50%" tooltip-effect="dark" @selection-change="handleSelectionChange">
+        <el-dialog  :visible.sync="dialogTableVisible" width="50%" tooltip-effect="dark">
            <el-row class="tac" style="border-bottom:1px solid #eeeeee; padding:15px 0" >
             <span><el-input v-model="wd" placeholder="请输入关键词" style="width: 30%"></el-input></span>
-            <router-link tag="a" target="_blank" :to="`/application/assetsList/content/${playId}/${formSize.backgroundAppId}`" :underline="false" class="a-button a-primary">添加新内容</router-link>
+            <router-link tag="a" target="_blank" :to="playId==8?`/application/assetsList/equipPut/${playId}/${formSize.backgroundAppId}`:`/application/assetsList/content/${playId}/${formSize.backgroundAppId}`" :underline="false" class="a-button a-primary">添加新内容</router-link>
             <el-button type="info" icon="el-icon-refresh" @click="listData();"></el-button>
           </el-row>
-          <el-table :data="gridData"  @selection-change="handleSelectionChange" border>
+          <el-table :data="gridData"  @selection-change="handleSelectionChange" border 
+          ref="gridData"
+          >
             <el-table-column
               type="selection"
               width="55"
@@ -336,6 +376,10 @@ export default {
     }
     // 
     return {
+    replaceObj:{},
+    replaceObjCopy:{},
+    isEdit:false,
+    isEditIndex:0,
     treeData:[],
     props: {
         label: "name",
@@ -362,6 +406,12 @@ export default {
       relationX:'',
       relationY:'',
       relationZ:'',
+      positionGlassX:'',
+      positionGlassY:'',
+      positionGlassZ:'',
+      relationGlassX:'',
+      relationGlassY:'',
+      relationGlassZ:'',
       relationCarrierList:[
       ],
       assetId:'21',
@@ -406,6 +456,24 @@ export default {
           relationZ: [
             { required: true,validator: checkRelationZ,trigger: 'blur' }
           ],
+          positionGlassX: [
+            { required: true,validator: checkPositonX,trigger: 'blur'},
+          ],
+          positionGlassY: [
+            { required: true,validator: checkPositonY,trigger: 'blur' }
+          ],
+          positionGlassZ: [
+            { required: true,validator: checkPositonZ,trigger: 'blur' }
+          ],
+          relationGlassX: [
+            { required: true,validator: checkRelationX,trigger: 'blur' }
+          ],
+          relationGlassY: [
+            { required: true,validator: checkRelationY,trigger: 'blur' }
+          ],
+          relationGlassZ: [
+            { required: true,validator: checkRelationZ,trigger: 'blur' }
+          ],
           startTime: [
             { required: true, message: '请投放选择时间', trigger: 'change' }
           ],
@@ -431,7 +499,7 @@ export default {
       this.formSize = Object.assign(this.formSize, currentRow);
       this.formSize.state=JSON.stringify(this.formSize.state)
       this.tableData=this.formSize.relationCarrierList;
-      
+      this.playId = this.options.find(v=>v.id==this.formSize.backgroundAppId)?this.options.find(v=>v.id==this.formSize.backgroundAppId).playId:1
       if(this.options.length){
          this.isBs=this.options.filter(v=>v.id==this.formSize.backgroundAppId)[0].playId==7?true:false
 
@@ -500,7 +568,17 @@ export default {
   methods: {
     ...mapActions('currentUserPower',['getUserPower']),
     handleSelectionChange(val) {
-        this.multipleSelection = val;
+        if(!this.isEdit){
+          this.multipleSelection = val;
+        }else{
+          if(val.length>1){
+              this.$refs.gridData.toggleRowSelection(val[0],false);
+              this.replaceObjCopy=val.splice(0,1)[0]
+            }else{
+              this.replaceObjCopy=val[0]
+            }
+        }
+       
       },
     //请求列表数据
     listData(){
@@ -527,8 +605,33 @@ export default {
     },
     saveGrid(){
       this.dialogTableVisible=false;
+      if(this.isEdit){
+       if(this.isBs){
+        this.replaceObj.identifyPhotoName=this.replaceObjCopy.identifyPhotoName;
+        this.replaceObj.id=this.replaceObjCopy.id;
+        this.replaceObj.carrierId=this.replaceObjCopy.id;
+        this.replaceObj.startTime=this.replaceObj.effectFrom
+        this.replaceObj.endTime=this.replaceObj.effectTo
+        this.replaceObj.timeType=parseInt(this.formSize.chooseTime)
+        this.tableData.splice(this.isEditIndex,1,this.replaceObj)
+        this.formSize.relationCarrierList.splice(this.isEditIndex,1,this.replaceObj)
+        console.log(this.tableData)
+       }else{
+       console.log(this.replaceObjCopy)
+        this.replaceObj.name=this.replaceObjCopy.name;
+        this.replaceObj.id=this.replaceObjCopy.id;
+        this.replaceObj.carrierId=this.replaceObjCopy.id;
+        this.replaceObj.startTime=this.replaceObj.effectFrom
+        this.replaceObj.endTime=this.replaceObj.effectTo
+        this.replaceObj.timeType=parseInt(this.formSize.chooseTime)
+        this.tableData.splice(this.isEditIndex,1,this.replaceObj)
+        this.formSize.relationCarrierList.splice(this.isEditIndex,1,this.replaceObj)
+        console.log(this.tableData)
+       }
+      }else{
       this.tableData=this.tableData.concat(this.multipleSelection)
       this.multipleSelection.forEach(v=>{v.effectFrom ='';v.effectTo='';this.formSize.relationCarrierList.push({carrierId:'',startTime:'',endTime:'',state:1,timeType:parseInt(this.formSize.chooseTime)})})
+      }
       
     },
     smallTimeChange(index,row,type){
@@ -540,13 +643,8 @@ export default {
       let indx=this.allStartTime.indexOf(this.startTimeArr[this.rowIndex])
       this.allStartTime.splice(indx,1)
       this.allEndTime.splice(idx,1)
-     // startTimeArr:[],//开始时间数组
-     // endTimeArr:[],//结束时间数组
-     // allStartTime:[],//排序后的开始时间数组
-     // allEndTime:[],//排序后的结束时间数组
       this.startTimeArr.splice(this.startTimeArr.length-1,1)
       this.endTimeArr.splice(this.endTimeArr.length-1,1)
-      // console.log(this.allStartTime,this.allEndTime,333)
       this.tableData[index].effectFrom ="";
       this.tableData[index].effectTo ="";
       this.tableData[index].smallTime=null;
@@ -566,8 +664,14 @@ export default {
       this.formSize.positionZ='';
       this.formSize.relationX='';
       this.formSize.relationY='';
-      this.formSize.relationCarrierList=[];
       this.formSize.relationZ='';
+      this.formSize.positionGlassX='';
+      this.formSize.positionGlassY='';
+      this.formSize.positionGlassZ='';
+      this.formSize.relationGlassX='';
+      this.formSize.relationGlassY='';
+      this.formSize.relationGlassZ='';
+      this.formSize.relationCarrierList=[];
       this.formSize.chooseTime='2';
       this.tableData=[];
       this.$store.commit('timeSwitch/setValue',[])
@@ -583,44 +687,22 @@ export default {
       this.allStartTime=[];//排序后的开始时间数组
       this.allEndTime=[];//排序后的结束时间数组
     },
-    del(index,type){
+    del(index){
       let idxS=0;
       let idxE=0;
       let indexS=0;
       let indexE=0;
       // if(!this.tableData[index].effectFrom){idxS=this.startTimeArr.indexOf(new Date(this.tableData[index].et).getTime())};
       // if(!this.tableData[index].effectTo){idxE=this.endTimeArr.indexOf(new Date(this.tableData[index].st).getTime())};
-      if(this.tableData[index].effectFrom&&type==1){
+      if(this.tableData[index].effectFrom){
         idxS=this.startTimeArr.indexOf(new Date(this.tableData[index].effectFrom).getTime()); 
         indexS=this.allStartTime.indexOf(new Date(this.tableData[index].effectFrom).getTime())
         this.startTimeArr.splice(idxS,1)
         this.allStartTime.splice(indexS,1)
       };
-      if(this.tableData[index].effectTo&&type==1){
+      if(this.tableData[index].effectTo){
         idxE=this.endTimeArr.indexOf(new Date(this.tableData[index].effectTo).getTime())
         indexE=this.allEndTime.indexOf(new Date(this.tableData[index].effectTo).getTime())
-        this.endTimeArr.splice(idxE,1)
-        this.allEndTime.splice(indexE,1)
-        };
-      if(this.tableData[index].effectFrom&&type==2){
-        let time1=/\d{2}:\d{2}:\d{2}/g.exec(this.tableData[index].effectFrom)[0]
-        let hour1 = time1.split(':')[0]
-        let min1= time1.split(':')[1]
-        let sec1 = time1.split(':')[2]
-        let s1= Number(hour1 * 3600) + Number(min1 * 60) + Number(sec1)
-        idxS=this.startTimeArr.indexOf(s1); 
-        indexS=this.allStartTime.indexOf(s1)
-        this.startTimeArr.splice(idxS,1)
-        this.allStartTime.splice(indexS,1)
-      };
-      if(this.tableData[index].effectTo&&type==2){
-        let time2=/\d{2}:\d{2}:\d{2}/g.exec(this.tableData[index].effectTo)[0]
-        let hour2 = time2.split(':')[0]
-        let min2 = time2.split(':')[1]
-        let sec2 = time2.split(':')[2]
-        let s2 = Number(hour2 * 3600) + Number(min2 * 60) + Number(sec2)
-        idxE=this.endTimeArr.indexOf(s2)
-        indexE=this.allEndTime.indexOf(s2)
         this.endTimeArr.splice(idxE,1)
         this.allEndTime.splice(indexE,1)
         };
@@ -677,15 +759,12 @@ export default {
     //   return time.getTime() < this.allStartTime[0]||time.getTime()> this.allEndTime[0]
     // },
       activeAble(num,index,row,type){
-        // console.log(num,index,row,type,'num,index,row,type')
+        // console.log(this.tableData[index])
         if(!this.tableData[index].effectFrom){
             this.$message.error('请先选择时间,再操作');
            }
         else if(num==1){
-          this.tableData[index].state =1;
-          // console.log('启用')
           if(!this.checkTime(index,type)){
-            // console.log('false')
             let indx=this.allStartTime.indexOf(this.startTimeArr[this.rowIndex])
             this.allStartTime.splice(indx,1)
             // this.allStartTime.splice(this.idxs,1)
@@ -693,40 +772,19 @@ export default {
             this.allEndTime.splice(idx,1)
             this.startTimeArr.splice(this.startTimeArr.length-1,1)
             this.endTimeArr.splice(this.endTimeArr.length-1,1)
-            this.tableData[index].state =2;
             return false;
           }
-         
+         this.tableData[index].state =1;
          this.formSize.relationCarrierList[index].state=1
         }else if(num==2){
-          // console.log('禁用')
-          let idxS=null;
-          let idxE=null;
-          let indexS=null;
-          let indexE=null;
-         if(type==1){
+          let idxS=0;
+          let idxE=0;
+          let indexS=0;
+          let indexE=0;
           if(this.tableData[index].effectFrom){idxS=this.startTimeArr.indexOf(new Date(this.tableData[index].effectFrom).getTime())};
           if(this.tableData[index].effectTo){idxE=this.endTimeArr.indexOf(new Date(this.tableData[index].effectTo).getTime())};
           if(this.tableData[index].effectFrom){indexS=this.allStartTime.indexOf(new Date(this.tableData[index].effectFrom).getTime())};
           if(this.tableData[index].effectTo){indexE=this.allEndTime.indexOf(new Date(this.tableData[index].effectTo).getTime())};
-         }
-         if(type==2){
-          //  console.log(this.allEndTime,this.allStartTime,'this.allStartTime')
-           let time1=/\d{2}:\d{2}:\d{2}/g.exec(this.tableData[index].effectFrom)[0]
-           let hour1 = time1.split(':')[0]
-           let min1= time1.split(':')[1]
-           let sec1 = time1.split(':')[2]
-           let s1= Number(hour1 * 3600) + Number(min1 * 60) + Number(sec1)
-           let time2=/\d{2}:\d{2}:\d{2}/g.exec(this.tableData[index].effectTo)[0]
-           let hour2 = time2.split(':')[0]
-           let min2 = time2.split(':')[1]
-           let sec2 = time2.split(':')[2]
-           let s2 = Number(hour2 * 3600) + Number(min2 * 60) + Number(sec2)
-           idxS=this.startTimeArr.indexOf(s1)
-           idxE=this.endTimeArr.indexOf(s2)
-           indexS=this.allStartTime.indexOf(s1)
-           indexE=this.allEndTime.indexOf(s2)
-         }
         // console.log(idxS,'idxS',idxE,'idxE',indexS,'indexS',indexE,'indexE')
           this.startTimeArr.splice(idxS,1)
           this.endTimeArr.splice(idxE,1)
@@ -734,12 +792,10 @@ export default {
           this.allEndTime.splice(indexE,1)
           this.tableData[index].state =2;
           this.formSize.relationCarrierList[index].state=2
-          // console.log(this.allStartTime,this.allEndTime,this.startTimeArr,this.endTimeArr)
         }
       },
 
       checkTime(index,type){
-        // console.log(index,type,'index,type')
         index?this.rowIndex=index:this.rowIndex=0
         var activeStart=[];
         var activeEnd=[];
@@ -751,29 +807,31 @@ export default {
         if(this.tableData[index].effectFrom){activeStart.push(new Date(this.tableData[index].effectFrom).getTime())};
         if(this.tableData[index].effectTo){activeEnd.push(new Date(this.tableData[index].effectTo).getTime())};
         }else if(type ==2 ){
-        // console.log(this.tableData[index].effectFrom,'this.tableData[index].effectFrom')
-        if(this.tableData[index].effectFrom){
-        let time=/\d{2}:\d{2}:\d{2}/g.exec(this.tableData[index].effectFrom)[0]
+        if(!item.effectFrom){item.effectFrom=item.st;};
+        if(!item.effectTo){item.effectTo=item.et;}
+        // console.log(data,'data')
+        if(item.effectFrom){
+        let time=/\d{2}:\d{2}:\d{2}/g.exec(item.effectFrom)[0]
         let hour = time.split(':')[0]
         let min = time.split(':')[1]
         let sec = time.split(':')[2]
         var s = Number(hour * 3600) + Number(min * 60) + Number(sec)
         }
-        if(this.tableData[index].effectTo){
+        if(item.effectTo){
         // console.log(item.effectTo,'item.effectTo')
-        let time2=/\d{2}:\d{2}:\d{2}/g.exec(this.tableData[index].effectTo)[0]
+        let time2=/\d{2}:\d{2}:\d{2}/g.exec(item.effectTo)[0]
         let hour2 = time2.split(':')[0]
         let min2 = time2.split(':')[1]
         let sec2 = time2.split(':')[2]
         var s2 = Number(hour2 * 3600) + Number(min2 * 60) + Number(sec2)
         }
-        if(this.tableData[index].effectFrom&&this.tableData[index].state==1){this.startTimeArr.push(s);};
-        if(this.tableData[index].effectTo&&this.tableData[index].state==1){this.endTimeArr.push(s2)};
+        if(item.effectFrom&&item.state==1){startTimeArr.push(s)};
+        if(item.effectTo&&item.state==1){endTimeArr.push(s2)};
           }
-          // console.log(this.allStartTime,this.allEndTime,'this.allEndTime')
+        
           this.allStartTime = JSON.parse(JSON.stringify(this.startTimeArr)).sort();
           this.allEndTime = JSON.parse(JSON.stringify(this.endTimeArr)).sort();
-        // console.log( this.allStartTime, 'this.allStartTime',this.allEndTime,'this.allEndTime')
+          // console.log(this.allStartTime)
             for(let i=1;i<this.allStartTime.length;i++){
               if (this.allStartTime[i] <= this.allEndTime[i-1]){
                   this.$message.error('时间有重叠,请重新选择时间,再启动');
@@ -828,8 +886,8 @@ export default {
     }
     
     if(type==2){
-      this.allStartTime =  JSON.parse(JSON.stringify(this.startTimeArr)).sort(function(a, b){return a - b});
-      this.allEndTime = JSON.parse(JSON.stringify(this.endTimeArr)).sort(function(a, b){return a - b});
+      this.allStartTime = this.startTimeArr.sort(function(a, b){return a - b});
+      this.allEndTime =this.endTimeArr.sort(function(a, b){return a - b});
     }
     // console.log(this.allStartTime,this.allEndTime,'this.allEndTime')
     for(let i=1;i<this.allStartTime.length;i++){
@@ -844,7 +902,6 @@ export default {
 },
 
 changeTime(data){
-  
   if(data == this.formSize.chooseTime&&this.tableData.filter(v=>v.smallTime&&v.smallTime.length).length){
       this.$confirm('切换展示规则将清空所有时间设置, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -854,9 +911,9 @@ changeTime(data){
           this.formSize.relationCarrierList=this.formSize.relationCarrierList.map(v=>{v.endTime='';v.startTime='';v.carrierId='';return v})
           this.tableData=this.tableData.map((v,index)=>{
             if(this.formSize.chooseTime=='1'){
-             v.smallTime !==undefined?v.smallTime=[]:null
+             v.smallTime=[]
             }else{
-             v.smallTime !==undefined?v.smallTime=null:null
+             v.smallTime=null
             }
             v.startTime=''
             v.endTime='';
@@ -870,6 +927,7 @@ changeTime(data){
             this.allEndTime=[];//排序后的结束时间数组
             return v;
           })
+   
         }).catch(() => {
             if(this.formSize.chooseTime=='1'){
               this.formSize.chooseTime='2'
@@ -919,6 +977,20 @@ treeDataTable(){
         })
       })
     },
+  edit(index,row){
+    console.log(row,'row')
+    this.isEdit=true;
+    if(this.isEdit){
+    this.listData();
+    this.dialogTableVisible = true;
+    this.isEditIndex=index
+    this.replaceObj=row
+    console.log(this.replaceObj,'edit this.replaceObj')
+    }else{
+
+    }
+    
+  }
   },
    watch: {
     page(){
