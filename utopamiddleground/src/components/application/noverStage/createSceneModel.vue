@@ -41,7 +41,7 @@
           {{scope.row.iosResourcePackageSize?((scope.row.iosResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
         </template>
       </el-table-column>
-      <el-table-column prop="windowsResourcePackageSize" label="Windows资源包大小(M)" align="center" sortable>
+      <el-table-column prop="windowsResourcePackageSize" label="Windows(UWP)资源包大小(M)" align="center" sortable>
         <template slot-scope="scope">
           {{scope.row.windowsResourcePackageSize?((scope.row.windowsResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
         </template>

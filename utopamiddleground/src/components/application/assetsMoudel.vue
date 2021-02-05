@@ -126,7 +126,7 @@
               </span>
             </template>
         </el-table-column>
-        <el-table-column prop="isLyric" label="是否包含歌词" width="120" align="center" v-if="tagKey==101" :key="9">
+        <el-table-column prop="isLyric" label="是否包含歌词" width="120" align="center" v-if="tagKey==101||tagKey==110" :key="9">
           <template slot-scope="scope">
             <span v-if="scope.row.isLyric==1">是</span>
             <span v-if="!scope.row.isLyric" style="color:#FF644E">否</span>
@@ -149,11 +149,22 @@
                 {{((scope.row.iosResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
               </template>
             </el-table-column>
-          <el-table-column prop="windowsResourcePackageSize" label="Windows资源包" width="140" align="center" v-if="tagKey==101&&equipmentEyeglass||tagKey==102&&equipmentEyeglass||tagKey==103&&equipmentEyeglass" :key="40" sortable="custom">
+          <el-table-column prop="windowsResourcePackageSize" label="Windows(UWP)资源包大小" width="140" align="center" v-if="tagKey==101&&equipmentEyeglass||tagKey==102&&equipmentEyeglass||tagKey==103&&equipmentEyeglass" :key="40" sortable="custom">
               <template slot-scope="scope">
                 {{((scope.row.windowsResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
               </template>
-            </el-table-column>
+          </el-table-column>
+            <!-- <el-table-column prop="uwpResourcePackageSize" label="PC资源包大小" width="140" align="center" v-if="tagKey==101||tagKey==102||tagKey==103" :key="60" sortable="custom">
+              <template slot-scope="scope">
+                {{((scope.row.uwpResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
+              </template>
+            </el-table-column> -->
+          <el-table-column prop="configFileId" label="配置文件" align="center" v-if="tagKey==101||tagKey==110">
+             <template slot-scope="scope">
+              <span v-if="scope.row.configFileId">有</span>
+              <span v-else>无</span>
+            </template>
+          </el-table-column>
         <!-- <el-table-column prop="unityVersion" :label="'unity版本'" width="120" align="center" v-if="tagKey==101||tagKey==102||tagKey==103" :key="Math.random()+13">
         </el-table-column>
          <el-table-column prop="loadingLine" :label="'渲染管线'" width="120" align="center" v-if="tagKey==101||tagKey==102||tagKey==103" :key="Math.random()+14" >
