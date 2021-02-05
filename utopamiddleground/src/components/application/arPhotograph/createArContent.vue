@@ -75,9 +75,20 @@
                 {{scope.row.iosResourcePackageSize?((scope.row.iosResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
               </template>
             </el-table-column>
-            <el-table-column v-if="tableTitle.package&&tableTitle.module!='107'&&tableTitle.module!='100'&&tableTitle.module!='110'" :label="'Windows'+tableTitle.package+'(M)'" prop="windowsResourcePackageSize" width="210" align="center" sortable>
+            <el-table-column v-if="tableTitle.package&&tableTitle.module!='107'&&tableTitle.module!='100'&&tableTitle.module!='110'" :label="'Windows(UWP)'+tableTitle.package+'(M)'" prop="windowsResourcePackageSize" width="210" align="center" sortable>
               <template slot-scope="scope">
                 {{scope.row.windowsResourcePackageSize?((scope.row.windowsResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
+              </template>
+            </el-table-column>
+            <!-- <el-table-column v-if="tableTitle.package&&tableTitle.module!='101'&&tableTitle.module!='102'&&tableTitle.module!='103'" :label="'PC'+tableTitle.package+'(M)'" prop="uwpResourcePackageSize" width="210" align="center" sortable>
+              <template slot-scope="scope">
+                {{scope.row.uwpResourcePackageSize?((scope.row.uwpResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
+              </template>
+            </el-table-column> -->
+            <el-table-column v-if="tableTitle.setFile" :label="tableTitle.setFile" prop="configFileId" align="center" sortable>
+              <template slot-scope="scope">
+                <span v-if="scope.row.configFileId">有</span>
+                <span v-else>无</span>
               </template>
             </el-table-column>
             <el-table-column v-if="tableTitle.time" :label="tableTitle.time" prop="durationTime" width="90" align="center" sortable>
@@ -143,14 +154,14 @@ export default {
       tableTitle:{},
       tableTitleList:[
         {name:'歌曲',display:'音乐预览',lyric:'是否包含歌词',time:'总时长',package:'资源包大小',module:'100'},
-        {name:'动画',display:'动画展示',lyric:'是否包含歌词',time:'总时长',package:'资源包大小',module:'101'},
+        {name:'动画',display:'动画展示',lyric:'是否包含歌词',time:'总时长',package:'资源包大小',setFile:'配置文件',module:'101'},
         {name:'模型',display:'模型展示',package:'资源包大小',module:'102'},//载体模型
         {name:'模型',display:'模型展示',package:'资源包大小',module:'103'},//普通模型
         {name:'视频',display:'视频预览',module:'104'},//在线视频
         {name:'视频',display:'视频预览',lyric:'是否包含歌词',time:'总时长',module:'105'},//抠像视频
         {name:'游戏',display:'预览图片',time:'总时长',module:'106'},
         {name:'视频',display:'视频预览',time:'总时长',package:'资源包大小',module:'107'},//mp4视频
-        {name:'模型',display:'模型展示',time:'总时长',package:'资源包大小',module:'110'},//mp4模型
+        {name:'模型',display:'模型展示',lyric:'是否包含歌词',time:'总时长',package:'资源包大小',setFile:'配置文件',module:'110'},//mp4模型
       ],
       selectId:'',
       moduleType:'',

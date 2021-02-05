@@ -93,9 +93,15 @@
                 {{scope.row.iosResourcePackageSize?((scope.row.iosResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
               </template>
             </el-table-column>
-            <el-table-column prop="windowsResourcePackageSize" v-if="materialCategory!=110" label="Windows资源包大小(M)" align="center" sortable>
+            <el-table-column prop="windowsResourcePackageSize" v-if="materialCategory!=110" label="Windows(UWP)资源包大小(M)" align="center" sortable>
               <template slot-scope="scope">
                 {{scope.row.windowsResourcePackageSize?((scope.row.windowsResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
+              </template>
+            </el-table-column>
+            <el-table-column prop="configFileId" label="配置文件" align="center">
+              <template slot-scope="scope">
+                <span v-if="scope.row.configFileId">有</span>
+                <span v-else>无</span>
               </template>
             </el-table-column>
             <el-table-column prop="durationTime" label="总时长" width="100" align="center" sortable>
