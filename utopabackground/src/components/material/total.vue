@@ -546,9 +546,9 @@
               <span v-else>否</span>
             </template>
           </el-table-column>
-          <el-table-column prop="androidResourcePackageSize" label="素材包大小" align="center" sortable="custom">
+          <el-table-column prop="androidResourcePackageSize" label="素材包大小(m)" align="center" sortable="custom">
              <template slot-scope="scope">
-              {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}
+              {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,5)}}
               <img src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downMusic(scope.row.androidMaterial,scope.row)">
             </template>
           </el-table-column>
@@ -817,7 +817,7 @@
                </div>
               <div style="margin-top: 10px">
                <h3><span style="color: #f56c6c;margin-right: 2px;">*</span>上传资源包 </h3>
-                <uploadFile buttonName="文件" moduleCode="utopar" type="video" @getSdkId="getSdkId" :parentName="androidFileName"></uploadFile>
+                <uploadFile buttonName="文件" moduleCode="utopar" type="videoCopy" @getSdkId="getSdkId" :parentName="androidFileName"></uploadFile>
               </div>
               <div style="margin-top: 10px;">
                 是否配置歌词
@@ -1074,6 +1074,13 @@
                 //console.log(this.lyricSize,789)
             })():'';
             type=='video'?(()=>{
+              console.log(sdkId,fileName,size)
+              this.androidMaterial=sdkId;
+              this.androidFileName=fileName;
+              this.androidResourcePackageSize=size;
+              this.time=time;
+            })():'';
+            type=='videoCopy'?(()=>{
               console.log(sdkId,fileName,size)
               this.androidMaterial=sdkId;
               this.androidFileName=fileName;
@@ -1439,6 +1446,10 @@
               msg.uwpMaterial=this.androidMaterial;
               msg.uwpFileName=this.androidFileName;
               msg.uwpResourcePackageSize=this.androidResourcePackageSize;
+              if(!this.durationTimeStr){
+                this.$message.error('MP4模型时长不能为空')
+                return
+              }
               msg.name?(()=>{
                 msg.materialCategoryId?(()=>{
                   msg.androidMaterial?(()=>{

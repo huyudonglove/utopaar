@@ -633,9 +633,11 @@
         return new Promise((resolve,reject)=>{
           getPosition(msg).then(res=>{
             //console.log(res,9999)
+           
             res.code?this.$message.error(res.msg):(()=>{
               let apple=res.data.items;
               this.positionData=apple.map(v=>{v.checked=false;v.positionId=v.id;v.positionDesc=v.name;return v;});
+              console.log(this.positionData,9999999)
               this.id?(()=>{
                 let ban=[];
                 this.positionChecked.map(v=>ban.push(v.positionId))

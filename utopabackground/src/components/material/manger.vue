@@ -40,6 +40,9 @@
               <span v-if="scope.row.module==104">在线视频</span>
               <span v-if="scope.row.module==105">抠像视频</span>
               <span v-if="scope.row.module==107">MP4视频</span>
+              <span v-if="scope.row.module==108">钢琴</span>
+              <span v-if="scope.row.module==109">动画音乐</span>
+              <span v-if="scope.row.module==110">MP4模型</span>
             </template>
           </el-table-column>
           <el-table-column prop="createTime" label="创建时间" align="center" sortable="custom">
