@@ -9,7 +9,8 @@ const state={
   arAppPower:[],
   mapListPower:[],
   pageSettingPower:[],
-  arGlassesAppPower:[]
+  arGlassesAppPower:[],
+  versionListPower:[]
 };
 const mutations={
 
@@ -26,6 +27,7 @@ const actions={
       state.mapListPower = res.data.filter(v=>v.code=='utopa:putin:map')[0].permissionList;//空间识别图
       state.pageSettingPower = res.data.filter(v=>v.code=='utopa:ar:app:page').length?res.data.filter(v=>v.code=='utopa:ar:app:page')[0].permissionList:[];//页面配置
       state.arGlassesAppPower = res.data.filter(v=>v.code=='utopa:equip:app').length?res.data.filter(v=>v.code=='utopa:equip:app')[0].permissionList:[];//AR眼镜App
+      state.versionListPower = res.data.filter(v=>v.code=='utopa:ar:app:version').length?res.data.filter(v=>v.code=='utopa:ar:app:version')[0].permissionList:[];//版本管理
     })
   }
 };
