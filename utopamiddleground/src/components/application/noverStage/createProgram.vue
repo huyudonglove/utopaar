@@ -80,22 +80,22 @@
             </el-table-column>
             <el-table-column prop="androidResourcePackageSize" v-if="materialCategory==110" label="资源包大小(M)" align="center" sortable>
               <template slot-scope="scope">
-                {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
+                {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
             <el-table-column prop="androidResourcePackageSize" v-if="materialCategory!=110" label="Android资源包大小(M)" align="center" sortable>
               <template slot-scope="scope">
-                {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
+                {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
             <el-table-column prop="iosResourcePackageSize" v-if="materialCategory!=110" label="IOS资源包大小(M)" align="center" sortable>
               <template slot-scope="scope">
-                {{scope.row.iosResourcePackageSize?((scope.row.iosResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
+                {{scope.row.iosResourcePackageSize?((scope.row.iosResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
             <el-table-column prop="windowsResourcePackageSize" v-if="materialCategory!=110" label="Windows(UWP)资源包大小(M)" align="center" sortable>
               <template slot-scope="scope">
-                {{scope.row.windowsResourcePackageSize?((scope.row.windowsResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
+                {{scope.row.windowsResourcePackageSize?((scope.row.windowsResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
             <el-table-column prop="configFileId" label="配置文件" align="center">
@@ -296,6 +296,12 @@ export default {
       }
       if(!this.selectProgram){
         this.$message.error('请勾选素材');
+        this.startTime='';
+        this.endTime='';
+        return;
+      }
+      if(!this.selectProgram.durationTimeStr){
+        this.$message.error('所选素材节目时长为空，请重新选择');
         this.startTime='';
         this.endTime='';
         return;
