@@ -108,7 +108,7 @@
           </el-table-column>
           <el-table-column  label="资源包大小(m)" align="center" sortable="custom" prop="androidResourcePackageSize">
             <template slot-scope="scope" >
-                {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}
+                {{((scope.row.androidResourcePackageSize/(1024*1024))+'').toFixed(2)}}
               <img src="@/assets/down.png" alt="" style="vertical-align: bottom;float: right;cursor: pointer;" @click="downMusic(scope.row.androidMaterial,scope.row)">
             </template>
           </el-table-column>
@@ -174,25 +174,25 @@
           </el-table-column>
           <el-table-column  label="Android包大小(M)" align="center" sortable="custom" prop="androidResourcePackageSize">
             <template slot-scope="scope">
-              {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}
+              {{((scope.row.androidResourcePackageSize/(1024*1024))+'').toFixed(2)}}
               <img v-if="scope.row.androidResourcePackageSize" src="@/assets/down.png" alt="" style="vertical-align: bottom;float: right;cursor: pointer;" @click="downAndroid(scope.row.androidMaterial,scope.row)">
             </template>
           </el-table-column>
           <el-table-column  label="IOS包大小(M)" align="center" sortable="custom" prop="iosResourcePackageSize">
             <template slot-scope="scope">
-              {{((scope.row.iosResourcePackageSize/(1024*1024))+'').slice(0,4)}}
+              {{((scope.row.iosResourcePackageSize/(1024*1024))+'').toFixed(2)}}
               <img v-if="scope.row.iosResourcePackageSize" src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downIos(scope.row.iosMaterial,scope.row)">
             </template>
           </el-table-column>
           <el-table-column  label="windows(UWP)包大小(M)" align="center" sortable="custom" prop="windowsResourcePackageSize">
             <template slot-scope="scope">
-              {{((scope.row.windowsResourcePackageSize/(1024*1024))+'').slice(0,4)}}
+              {{((scope.row.windowsResourcePackageSize/(1024*1024))+'').toFixed(2)}}
               <img v-if="scope.row.windowsResourcePackageSize" src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downWindows(scope.row.windowsMaterial,scope.row)">
             </template>
           </el-table-column>
           <el-table-column  label="PC包大小(M)" align="center" sortable="custom" prop="uwpResourcePackageSize">
             <template slot-scope="scope">
-              {{((scope.row.uwpResourcePackageSize/(1024*1024))+'').slice(0,4)}}
+              {{((scope.row.uwpResourcePackageSize/(1024*1024))+'').toFixed(2)}}
               <img v-if="scope.row.uwpResourcePackageSize" src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downuwp(scope.row.uwpMaterial,scope.row)">
             </template>
           </el-table-column>
@@ -248,25 +248,25 @@
           </el-table-column>
           <el-table-column  label="Android包大小(M)" align="center" sortable="custom" prop="androidResourcePackageSize">
             <template slot-scope="scope">
-              {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}
+              {{((scope.row.androidResourcePackageSize/(1024*1024))+'').toFixed(2)}}
               <img v-if="scope.row.androidResourcePackageSize" src="@/assets/down.png" alt="" style="vertical-align: bottom;float: right;cursor: pointer;" @click="downAndroid(scope.row.androidMaterial,scope.row)">
             </template>
           </el-table-column>
           <el-table-column  label="IOS包大小(M)" align="center" sortable="custom" prop="iosResourcePackageSize">
             <template slot-scope="scope">
-              {{((scope.row.iosResourcePackageSize/(1024*1024))+'').slice(0,4)}}
+              {{((scope.row.iosResourcePackageSize/(1024*1024))+'').toFixed(2)}}
               <img v-if="scope.row.iosResourcePackageSize" src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downIos(scope.row.iosMaterial,scope.row)">
             </template>
           </el-table-column>
           <el-table-column  label="windows(UWP)包大小(M)" align="center" sortable="custom" prop="windowsResourcePackageSize">
             <template slot-scope="scope">
-              {{((scope.row.windowsResourcePackageSize/(1024*1024))+'').slice(0,4)}}
+              {{((scope.row.windowsResourcePackageSize/(1024*1024))+'').toFixed(2)}}
               <img  v-if="scope.row.windowsResourcePackageSize" src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downWindows(scope.row.windowsMaterial,scope.row)">
             </template>
           </el-table-column>
           <el-table-column  label="PC包大小(M)" align="center" sortable="custom" prop="uwpResourcePackageSize">
             <template slot-scope="scope">
-              {{((scope.row.uwpResourcePackageSize/(1024*1024))+'').slice(0,4)}}
+              {{((scope.row.uwpResourcePackageSize/(1024*1024))+'').toFixed(2)}}
               <img  v-if="scope.row.uwpResourcePackageSize" src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downuwp(scope.row.uwpMaterial,scope.row)">
             </template>
           </el-table-column>
@@ -334,25 +334,25 @@
           </el-table-column>
           <el-table-column  label="Android包大小(M)" align="center" sortable="custom" prop="androidResourcePackageSize">
             <template slot-scope="scope">
-              {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}
+              {{((scope.row.androidResourcePackageSize/(1024*1024))+'').toFixed(2)}}
               <img v-if="scope.row.androidResourcePackageSize" src="@/assets/down.png" alt="" style="vertical-align: bottom;float: right;cursor: pointer;" @click="downAndroid(scope.row.androidMaterial,scope.row)">
             </template>
           </el-table-column>
           <el-table-column  label="IOS包大小(M)" align="center" sortable="custom" prop="iosResourcePackageSize">
             <template slot-scope="scope">
-              {{((scope.row.iosResourcePackageSize/(1024*1024))+'').slice(0,4)}}
+              {{((scope.row.iosResourcePackageSize/(1024*1024))+'').toFixed(2)}}
               <img v-if="scope.row.iosResourcePackageSize" src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downIos(scope.row.iosMaterial,scope.row)">
             </template>
           </el-table-column>
           <el-table-column  label="windows(UWP)包大小(M)" align="center" sortable="custom" prop="windowsResourcePackageSize">
             <template slot-scope="scope">
-              {{((scope.row.windowsResourcePackageSize/(1024*1024))+'').slice(0,4)}}
+              {{((scope.row.windowsResourcePackageSize/(1024*1024))+'').toFixed(2)}}
               <img v-if="scope.row.windowsResourcePackageSize" src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downWindows(scope.row.windowsMaterial,scope.row)">
             </template>
           </el-table-column>
           <el-table-column  label="PC包大小(M)" align="center" sortable="custom" prop="uwpResourcePackageSize">
             <template slot-scope="scope">
-              {{((scope.row.uwpResourcePackageSize/(1024*1024))+'').slice(0,4)}}
+              {{((scope.row.uwpResourcePackageSize/(1024*1024))+'').toFixed(2)}}
               <img v-if="scope.row.uwpResourcePackageSize" src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downuwp(scope.row.uwpMaterial,scope.row)">
             </template>
           </el-table-column>
@@ -486,7 +486,7 @@
           </el-table-column>
           <el-table-column  label="资源包大小(M)" align="center" sortable="custom" prop="androidResourcePackageSize">
             <template slot-scope="scope">
-              {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}
+              {{((scope.row.androidResourcePackageSize/(1024*1024))+'').toFixed(2)}}
               <img src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downMusic(scope.row.androidMaterial,scope.row)">
             </template>
           </el-table-column>
@@ -548,7 +548,7 @@
           </el-table-column>
           <el-table-column prop="androidResourcePackageSize" label="素材包大小(m)" align="center" sortable="custom">
              <template slot-scope="scope">
-              {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,5)}}
+              {{((scope.row.androidResourcePackageSize/(1024*1024))+'').toFixed(2)}}
               <img src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" @click="downMusic(scope.row.androidMaterial,scope.row)">
             </template>
           </el-table-column>
