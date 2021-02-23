@@ -126,7 +126,7 @@
               </span>
             </template>
         </el-table-column>
-        <el-table-column prop="configFileId" label="配置文件" align="center"  :key="60" v-if="tagKey==101||tagKey==110&&playId!==11" >
+        <el-table-column prop="configFileId" label="配置文件" align="center"  :key="60" v-if="tagKey==101||tagKey==110" >
              <template slot-scope="scope">
               <span v-if="scope.row.configFileId">有</span>
               <span v-else>无</span>

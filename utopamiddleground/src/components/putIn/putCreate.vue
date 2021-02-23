@@ -993,14 +993,15 @@ treeDataTable(){
     if(this.isEdit){
     this.listData();
     this.dialogTableVisible = true;
-    document.getElementsByClassName('el-table__header-wrapper')[1].getElementsByClassName('el-checkbox')[0].style.display='none'
+    this.$nextTick(()=>{
+      document.getElementsByClassName('el-table__header-wrapper')[1].getElementsByClassName('el-checkbox')[0].style.display='none'
+    })
     this.isEditIndex=index
     this.replaceObj=row
     console.log(this.replaceObj,'edit this.replaceObj')
     }else{
 
     }
-    
   }
   },
    watch: {
