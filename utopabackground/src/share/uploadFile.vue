@@ -184,6 +184,33 @@ export default {
             })
           })():this.$message.error('视频格式错误');
         })():'';
+        //换成普通上穿接口2001-2-5
+        this.type=='videoCopy'?(()=>{
+          nameCopy=='mp4'?(()=>{
+            const loading = this.$loading({
+              lock: true,
+              text: '上传中',
+              spinner: 'el-icon-loading',
+              background: 'rgba(0, 0, 0, 0.7)'
+            });
+            const form = new FormData();
+            // 将选中文件追加到虚拟表单中
+            form.append("file", fileNode.files[0]);
+            //form.append("copyFile", fileNode.files[0]);
+            form.append("type", "file");
+            form.append("moduleCode", this.moduleCode);
+            uploadMaterial(form).then(res=>{
+              res.code?this.$message.error(res.msg):(()=>{
+                console.log(res,9999)
+                this.packageId = res.data.fileId;
+                this.inputPackage = res.data.originFileName;
+                this.size=res.data.size;
+                this.$emit('getSdkId',res.data.fileId,this.inputPackage,this.size,res.data.durationTime,'videoCopy');
+              })();
+              loading.close();
+            })
+          })():this.$message.error('视频格式错误');
+        })():'';
         //上传window包
         this.type=='windows'?(()=>{
           nameCopy=='utopa'?(()=>{
@@ -210,7 +237,7 @@ export default {
               })();
               loading.close();
             })
-          })():this.$message.error('windows包格式错误');
+          })():this.$message.error('windows(UWP)包格式错误');
         })():'';
        //上传uwp
        this.type=='uwp'?(()=>{

@@ -80,22 +80,22 @@
             </el-table-column>
             <el-table-column prop="androidResourcePackageSize" v-if="materialCategory==110" label="资源包大小(M)" align="center" sortable>
               <template slot-scope="scope">
-                {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
+                {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
             <el-table-column prop="androidResourcePackageSize" v-if="materialCategory!=110" label="Android资源包大小(M)" align="center" sortable>
               <template slot-scope="scope">
-                {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
+                {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
             <el-table-column prop="iosResourcePackageSize" v-if="materialCategory!=110" label="IOS资源包大小(M)" align="center" sortable>
               <template slot-scope="scope">
-                {{scope.row.iosResourcePackageSize?((scope.row.iosResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
+                {{scope.row.iosResourcePackageSize?((scope.row.iosResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
             <el-table-column prop="windowsResourcePackageSize" v-if="materialCategory!=110" label="Windows(UWP)资源包大小(M)" align="center" sortable>
               <template slot-scope="scope">
-                {{scope.row.windowsResourcePackageSize?((scope.row.windowsResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
+                {{scope.row.windowsResourcePackageSize?((scope.row.windowsResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
             <el-table-column prop="configFileId" label="配置文件" align="center">
@@ -290,6 +290,7 @@ export default {
       })
     },
     startTimeChange(time){
+      console.log(1111);
       if(!time){
         this.endTime='';
         return;
@@ -300,6 +301,13 @@ export default {
         this.endTime='';
         return;
       }
+      if(!this.selectProgram.durationTimeStr){
+        this.$message.error('所选素材节目时长为空，请重新选择');
+        this.startTime='';
+        this.endTime='';
+        return;
+      }
+      console.log(2222);
       let duration = this.selectProgram.durationTimeStr;
       let hour = duration.split(':')[0];
       let minute = duration.split(':')[1];
@@ -309,7 +317,12 @@ export default {
       let ye = timeObj.getFullYear();
       let mo = (timeObj.getMonth()+1).toString().padStart(2,'0');
       let da = timeObj.getDate().toString().padStart(2,'0');
-      let endTime = ye+'-'+mo+'-'+da+' '+timeObj.toLocaleString('chinese',{hour12:false}).split(' ')[1];
+      let ho = timeObj.getHours().toString().padStart(2,'0');
+      let min= timeObj.getMinutes().toString().padStart(2,'0');
+      let sec = timeObj.getSeconds().toString().padStart(2,'0');
+      // let endTime = ye+'-'+mo+'-'+da+' '+timeObj.toLocaleString('chinese',{hour12:false}).split(' ')[1];
+      let endTime = ye+'-'+mo+'-'+da+' '+ho+':'+min+':'+sec;
+      console.log(endTime,3333);
       if(Number(time.slice(11).split(':')[0])-Number(endTime.slice(11).split(':')[0])>0&&!(Number(endTime.slice(11).split(':')[0])==0&&Number(endTime.slice(11).split(':')[1])==0&&Number(endTime.slice(11).split(':')[2])==0)){
         this.$message.error('播放时间已跨天，请重新选择');
         this.startTime='';
@@ -317,6 +330,7 @@ export default {
         return;
       }
       this.endTime = endTime;
+      console.log(this.endTime,4444);
     },
     confirm(){
       if(this.programName===''){

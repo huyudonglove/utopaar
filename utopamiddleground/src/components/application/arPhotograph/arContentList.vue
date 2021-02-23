@@ -107,7 +107,7 @@ export default {
       this.delArr = arr.length?arr.map(v=>v.id):[];
     },
     dropDown(){
-      getArTypeDropDown({"playId":this.$route.path.slice(32,33)}).then(res=>{
+      getArTypeDropDown({"playId":this.$route.path.split('/')[4]}).then(res=>{
         if(res.code){
           this.$message.error(res.msg);
         }else{

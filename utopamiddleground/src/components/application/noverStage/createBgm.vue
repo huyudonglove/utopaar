@@ -274,7 +274,7 @@ export default {
       }     
     },
     confirm(){
-      this.choseMusic.map(v=>{v.duration = v.durationTimeStr;v.materialId = v.id;v.rank='';v.fileId = v.androidMaterial;v.musicId = (new Date()).valueOf();return v;})
+      this.choseMusic.map((v,i)=>{v.duration = v.durationTimeStr;v.materialId = v.id;v.rank='';v.fileId = v.androidMaterial;v.musicId = (new Date()).valueOf()+i;return v;})
       this.selectMusic=this.selectMusic.concat(this.choseMusic);
       this.$router.push({path:`${this.$route.path.slice(0,-10)}`,query:{id:this.$route.query.id,contentTime:this.$route.query.contentTime,activeIdx:this.$route.query.activeIdx,sceneId:this.$route.query.sceneId,sceneName:this.$route.query.sceneName,sceneTime:this.$route.query.sceneTime,selectModel:this.$route.query.selectModel,selectProgramList:this.$route.query.selectProgramList,selectMusic:JSON.stringify(this.selectMusic),oldQuery:this.$route.query.oldQuery}});
       this.reload();

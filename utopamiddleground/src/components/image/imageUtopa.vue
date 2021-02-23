@@ -74,7 +74,7 @@
                   <span v-if="items[0].recognizeType==2" class="title">空间识别</span>
                   <span v-if="items[0].platformType==0" class="h-button">Vuforia</span>
                   <span v-if="items[0].platformType==1" class="h-button">Easyar</span>
-                  <span v-if="items[0].platformType==2" class="h-button">Locus</span>
+                  <span v-if="items[0].platformType==2" class="h-button">LocusAR</span>
                 </span>
               </div>
               <div class="title">名称

@@ -67,22 +67,22 @@
             </el-table-column>
             <el-table-column v-if="tableTitle.package" :label="(tableTitle.module!='107'&&tableTitle.module!='100'&&tableTitle.module!='110'?'Android':'')+tableTitle.package+'(M)'" prop="androidResourcePackageSize" width="170" align="center" sortable>
               <template slot-scope="scope">
-                {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
+                {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
             <el-table-column v-if="tableTitle.package&&tableTitle.module!='107'&&tableTitle.module!='100'&&tableTitle.module!='110'" :label="'IOS'+tableTitle.package+'(M)'" prop="iosResourcePackageSize" width="165" align="center" sortable>
               <template slot-scope="scope">
-                {{scope.row.iosResourcePackageSize?((scope.row.iosResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
+                {{scope.row.iosResourcePackageSize?((scope.row.iosResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
             <el-table-column v-if="tableTitle.package&&tableTitle.module!='107'&&tableTitle.module!='100'&&tableTitle.module!='110'" :label="'Windows(UWP)'+tableTitle.package+'(M)'" prop="windowsResourcePackageSize" width="210" align="center" sortable>
               <template slot-scope="scope">
-                {{scope.row.windowsResourcePackageSize?((scope.row.windowsResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
+                {{scope.row.windowsResourcePackageSize?((scope.row.windowsResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
             <!-- <el-table-column v-if="tableTitle.package&&tableTitle.module!='101'&&tableTitle.module!='102'&&tableTitle.module!='103'" :label="'PC'+tableTitle.package+'(M)'" prop="uwpResourcePackageSize" width="210" align="center" sortable>
               <template slot-scope="scope">
-                {{scope.row.uwpResourcePackageSize?((scope.row.uwpResourcePackageSize/(1024*1024))+'').slice(0,4):''}}
+                {{scope.row.uwpResourcePackageSize?((scope.row.uwpResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column> -->
             <el-table-column v-if="tableTitle.setFile" :label="tableTitle.setFile" prop="configFileId" align="center" sortable>
