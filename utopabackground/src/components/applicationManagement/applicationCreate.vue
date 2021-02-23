@@ -248,7 +248,7 @@
               <span v-else>无</span>
             </template>
           </el-table-column>
-            <el-table-column  label="资源包大小(M)" width="150" align="center" v-if="tagKey ==100||tagKey ==107||tagKey ==110&&playId==11" :key="18" sortable="custom" prop="androidResourcePackageSize">
+            <el-table-column  label="资源包大小(M)" width="150" align="center" v-if="tagKey ==100||tagKey ==107||tagKey ==110" :key="18" sortable="custom" prop="androidResourcePackageSize">
               <template slot-scope="scope">
                   {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
@@ -412,6 +412,8 @@
         </el-table-column>
         <el-table-column prop="name" :label="`${tagValue}名称`" min-width="120" align="center" :key="31" sortable>
         </el-table-column>
+         <el-table-column prop="materialFormat" :label="`格式`" width="" align="center" :key="65" v-if="tagKey==100">
+          </el-table-column>
         <el-table-column prop="materialCategoryName" :label="'所属类别'" width="" align="center" :key="32">
         </el-table-column>
         <el-table-column prop="parentIdUrl" :label="`${tagValue}预览`" width="200" align="center" v-if="tagKey==100" :key="33">
