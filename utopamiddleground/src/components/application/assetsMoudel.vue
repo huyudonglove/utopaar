@@ -133,25 +133,31 @@
 
           </template>
           </el-table-column>
-          <el-table-column  label="资源包大小" width="150" align="center" v-if="tagKey ==100||tagKey ==107||tagKey ==110" :key="10" sortable="custom" prop="androidResourcePackageSize">
+          <el-table-column prop="configFileId" label="配置文件" align="center"  :key="60" v-if="tagKey==101||tagKey==110&&playId!==11" >
              <template slot-scope="scope">
-              {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
-
+              <span v-if="scope.row.configFileId">有</span>
+              <span v-else>无</span>
             </template>
           </el-table-column>
-          <el-table-column  label="Android资源包大小" width="150" align="center" v-if="tagKey ==101||tagKey ==102||tagKey ==103" :key="11" sortable="custom" prop="androidResourcePackageSize">
+          <el-table-column  label="资源包大小(M)" width="150" align="center" v-if="tagKey ==100||tagKey ==107||tagKey ==110" :key="10" sortable="custom" prop="androidResourcePackageSize">
              <template slot-scope="scope">
-              {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
+              {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))).toFixed(2):''}}
             </template>
           </el-table-column>
-           <el-table-column prop="iosResourcePackageSize" label="IOS资源包大小" width="140" align="center" v-if="tagKey ==101&&!equipmentEyeglass||tagKey ==102&&!equipmentEyeglass||tagKey ==103&&!equipmentEyeglass||tagKey ==105&&!equipmentEyeglass||tagKey ==106&&!equipmentEyeglass" :key="20" sortable="custom">
+           <el-table-column prop="iosResourcePackageSize" label="IOS资源包大小(M)" width="140" align="center" v-if="tagKey ==101&&!equipmentEyeglass||tagKey ==102&&!equipmentEyeglass||tagKey ==103&&!equipmentEyeglass||tagKey ==105&&!equipmentEyeglass||tagKey ==106&&!equipmentEyeglass||tagKey ==101&&playId==11||tagKey==110&&playId!==11" :key="20" sortable="custom">
               <template slot-scope="scope">
-                {{((scope.row.iosResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
+                 {{scope.row.iosResourcePackageSize?((scope.row.iosResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
-          <el-table-column prop="windowsResourcePackageSize" label="Windows(UWP)资源包大小" width="140" align="center" v-if="tagKey==101&&equipmentEyeglass||tagKey==102&&equipmentEyeglass||tagKey==103&&equipmentEyeglass" :key="40" sortable="custom">
+          <el-table-column  label="Android资源包大小(M)" width="150" align="center" v-if="tagKey ==101||tagKey ==102||tagKey ==103||tagKey ==110&&playId!==11" :key="11" sortable="custom" prop="androidResourcePackageSize">
+             <template slot-scope="scope">
+                {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))).toFixed(2):''}}
+            </template>
+          </el-table-column>
+          
+          <el-table-column prop="windowsResourcePackageSize" label="Windows(UWP)资源包大小(M)" width="140" align="center" v-if="tagKey==101&&equipmentEyeglass||tagKey==102&&equipmentEyeglass||tagKey==103&&equipmentEyeglass||tagKey ==101&&playId !==11" :key="40" sortable="custom">
               <template slot-scope="scope">
-                {{((scope.row.windowsResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
+                {{scope.row.windowsResourcePackageSize?((scope.row.windowsResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
           </el-table-column>
             <!-- <el-table-column prop="uwpResourcePackageSize" label="PC资源包大小" width="140" align="center" v-if="tagKey==101||tagKey==102||tagKey==103" :key="60" sortable="custom">

@@ -78,17 +78,17 @@
             <el-form-item :label="`投放方向${playId==12?'(手机端)':''}：`" required>
               <el-col :span="3">
                 <el-form-item prop="relationX">
-                  x：<el-input v-model="formSize.relationX" style="width:75%" ></el-input>
+                  α：<el-input v-model="formSize.relationX" style="width:75%" ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="3">
                 <el-form-item prop="relationY">
-                  y：<el-input v-model="formSize.relationY" style="width:75%"></el-input>
+                  β：<el-input v-model="formSize.relationY" style="width:75%"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="3">
                 <el-form-item prop="relationZ">
-                  z：<el-input v-model="formSize.relationZ" style="width:75%" ></el-input>
+                  γ：<el-input v-model="formSize.relationZ" style="width:75%" ></el-input>
                 </el-form-item>
               </el-col>
             </el-form-item>
@@ -112,17 +112,17 @@
             <el-form-item label="投放方向(眼镜端)：" v-if="playId==12" required>
               <el-col :span="3">
                 <el-form-item prop="relationGlassX">
-                  x：<el-input v-model="formSize.relationGlassX" style="width:75%" ></el-input>
+                  α：<el-input v-model="formSize.relationGlassX" style="width:75%" ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="3">
                 <el-form-item prop="relationGlassY">
-                  y：<el-input v-model="formSize.relationGlassY" style="width:75%"></el-input>
+                  β：<el-input v-model="formSize.relationGlassY" style="width:75%"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="3">
                 <el-form-item prop="relationGlassZ">
-                  z：<el-input v-model="formSize.relationGlassZ" style="width:75%" ></el-input>
+                  γ：<el-input v-model="formSize.relationGlassZ" style="width:75%" ></el-input>
                 </el-form-item>
               </el-col>
             </el-form-item>
@@ -488,9 +488,7 @@ export default {
     // console.log(this.$route.query.msg)
      inputAppList({}).then(res=>{
       this.options=res.data
-    })
-   
-    if(this.$route.query.id){
+       if(this.$route.query.id){
       this.isCreate=false
       this.formSize.relationId=this.$route.query.id
       inputInfo({id:this.$route.query.id}).then(res=>{
@@ -499,7 +497,9 @@ export default {
       this.formSize = Object.assign(this.formSize, currentRow);
       this.formSize.state=JSON.stringify(this.formSize.state)
       this.tableData=this.formSize.relationCarrierList;
-      this.playId = this.options.find(v=>v.id==this.formSize.backgroundAppId)?this.options.find(v=>v.id==this.formSize.backgroundAppId).playId:1
+      if(this.options){
+        this.playId = this.options.find(v=>v.id==this.formSize.backgroundAppId)?this.options.find(v=>v.id==this.formSize.backgroundAppId).playId:1
+      }
       if(this.options.length){
          this.isBs=this.options.filter(v=>v.id==this.formSize.backgroundAppId)[0].playId==7?true:false
 
@@ -516,7 +516,8 @@ export default {
         v.id=v.carrierId
         return v
       })
-      this.tableData.length?this.formSize.chooseTime=JSON.stringify(this.tableData[0].timeType):this.formSize.chooseTime=2
+      this.tableData.length?this.formSize.chooseTime=JSON.stringify(this.tableData[0].timeType):this.formSize.chooseTime='2'
+      
       this.$store.commit('timeSwitch/setValue',[this.formSize.startTime,this.formSize.endTime])
       this.isHasRepeatTime(this.tableData,null,this.tableData[0].timeType)
     })
@@ -524,6 +525,7 @@ export default {
     }else{
       this.$store.commit('timeSwitch/setValue',[])
     }
+    })
     await this.treeDataTable();
     if(this.$route.query.id){
       this.expandedKeys=[JSON.parse(this.$route.query.msg).assetId]
@@ -569,13 +571,18 @@ export default {
     ...mapActions('currentUserPower',['getUserPower']),
     handleSelectionChange(val) {
         if(!this.isEdit){
+          console.log(this.replaceObjCopy,'新增')
           this.multipleSelection = val;
         }else{
+          console.log('编辑')
           if(val.length>1){
+              console.log(val,'val')
               this.$refs.gridData.toggleRowSelection(val[0],false);
               this.replaceObjCopy=val.splice(0,1)[0]
+              console.log(this.replaceObjCopy,'this.replaceObjCopy全部先择')
             }else{
               this.replaceObjCopy=val[0]
+              console.log(this.replaceObjCopy222,'this.replaceObjCopy')
             }
         }
        
@@ -590,6 +597,8 @@ export default {
             }
            return v
           })
+        }else{
+          this.gridData=[]
         }
         this.total= res.data.total;
       });
@@ -617,7 +626,7 @@ export default {
         this.formSize.relationCarrierList.splice(this.isEditIndex,1,this.replaceObj)
         console.log(this.tableData)
        }else{
-       console.log(this.replaceObjCopy)
+       console.log(this.replaceObjCopy,'全选')
         this.replaceObj.name=this.replaceObjCopy.name;
         this.replaceObj.id=this.replaceObjCopy.id;
         this.replaceObj.carrierId=this.replaceObjCopy.id;
@@ -718,7 +727,7 @@ export default {
     },
     //判断是否有空时间控件
     isTimeEmpty(){
-      let isTime=this.formSize.relationCarrierList.filter(v=>v.carrierId =='')
+      let isTime=this.formSize.relationCarrierList.filter(v=>v.carrierId ==''||v.effectFrom =='')
         return isTime.length>0
     },
     //保存
@@ -902,6 +911,7 @@ export default {
 },
 
 changeTime(data){
+  console.log(111,222)
   if(data == this.formSize.chooseTime&&this.tableData.filter(v=>v.smallTime&&v.smallTime.length).length){
       this.$confirm('切换展示规则将清空所有时间设置, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -978,7 +988,8 @@ treeDataTable(){
       })
     },
   edit(index,row){
-    console.log(row,'row')
+    document.getElementsByClassName('el-table__header-wrapper')[1].getElementsByClassName('el-checkbox')[0].style.display='none'
+    console.log(row,'row','this.$refs.multipleTable',this.$refs.multipleTable)
     this.isEdit=true;
     if(this.isEdit){
     this.listData();
@@ -1000,6 +1011,7 @@ treeDataTable(){
       this.listData()
     },
     wd(){
+      console.log(this.wd,'wd')
       this.page=1;
       this.listData()
     },
@@ -1026,6 +1038,9 @@ treeDataTable(){
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style >
+  .el-table__header-wrapper  .el-checkbox{
+    /* display:none */
+  }
   .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
     background-color:rgb(228, 242, 255);
     
