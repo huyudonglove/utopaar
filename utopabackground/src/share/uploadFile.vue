@@ -313,6 +313,8 @@ export default {
           this.$emit('getSdkId',null,null,null,null,'windows');
       }else if(this.type=='uwp'){
           this.$emit('getSdkId',null,null,null,null,'uwp');
+      }else if(this.type=='videoCopy'){
+        this.$emit('getSdkId',null,null,null,null,'videoCopy');
       }else{
         this.$emit('getSdkId',null,null,null,null,'config');
       }
