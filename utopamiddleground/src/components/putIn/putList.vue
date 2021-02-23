@@ -91,9 +91,16 @@
               <span>{{scope.row.startTime}}---{{scope.row.endTime}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="id" label="投放位置" width="150" align="center">
+          <el-table-column prop="id" label="手机坐标" width="150" align="center">
              <template slot-scope="scope">
-              <span>x={{scope.row.positionX}},y={{scope.row.positionY}},z={{scope.row.positionZ}}</span>
+              <p>x={{scope.row.positionX}},y={{scope.row.positionY}},z={{scope.row.positionZ}}</p>
+              <p>α={{scope.row.relationX}},β={{scope.row.relationY}},γ={{scope.row.relationZ}}</p>
+            </template>
+          </el-table-column>
+          <el-table-column prop="id" label="眼镜坐标" width="150" align="center">
+             <template slot-scope="scope">
+              <p>x={{scope.row.positionGlassX !==null?scope.row.positionGlassX:'--'}},y={{scope.row.positionGlassY!==null?scope.row.positionGlassY:'--'}},z={{scope.row.positionGlassZ!==null?scope.row.positionGlassZ:'--'}}</p>
+               <p>α={{scope.row.relationGlassX!==null?scope.row.relationGlassX:'--'}},β={{scope.row.relationGlassY!==null?scope.row.relationGlassY:'--'}},γ={{scope.row.relationGlassZ!==null?scope.row.relationGlassZ:'--'}}</p>
             </template>
           </el-table-column>
           <el-table-column prop="id" label="投放状态" width="120" align="center">
@@ -183,7 +190,7 @@ export default {
     tableHeight:0,
     timeScope:[],
     expandedKeys:[],
-    isValid:null,
+    isValid:1,
     isShowTree:true,
     isExpand:false
     };
@@ -213,6 +220,9 @@ export default {
       this.timeScope=[]
     }
     if(query.assetId&&this.ableLength==0){
+      this.ableShow=false
+    }
+    if(query.assetId&&this.isValid!==2){
       this.ableShow=false
     }
     this.$nextTick(()=>{
@@ -252,6 +262,7 @@ export default {
         this.isValid=data.isValid
         this.expandedKeys=[this.assetId]
         this.ableShow=false
+        this.wd=''
         // this.listData()
       }
       },
@@ -354,6 +365,7 @@ export default {
         this.replace('timeState',this.timeState);
       },
       assetId(){
+        
         // console.log('assetId',this.assetId)
         this.$store.commit('pagination/setClickPage',1);
         this.replace('assetId',this.assetId);

@@ -1,9 +1,9 @@
 <template>
-  <div> 
+  <div v-if="versionListPower.length"> 
     <div v-if="$route.name=='versionList'">
       <div style="height:50px;border-bottom:1px solid #DFDCDC;">
         <span style="font-size:24px;font-weight:bold;color:#614a4d;">版本管理</span>
-        <el-button style="float:right;" type="primary" @click="showVersion=true">版本升级</el-button>
+        <el-button style="float:right;" type="primary" @click="showVersion=true" :disabled="!versionListPower[0].isCheck">版本升级</el-button>
       </div>
       <div>
         <div style="margin:20px 0px">
@@ -70,12 +70,12 @@
               <el-button
                 type="primary"
                 size="mini"
-                :disabled="new Date(scope.row.publishTime) * 1000 /1000<Date.now()"
+                :disabled="new Date(scope.row.publishTime) * 1000 /1000<Date.now()||!versionListPower[1].isCheck"
                 @click="edit(scope.row);">编辑</el-button>
               <el-button
                 type="danger"
                 size="mini"
-                :disabled="new Date(scope.row.publishTime) * 1000 /1000<Date.now()"
+                :disabled="new Date(scope.row.publishTime) * 1000 /1000<Date.now()||!versionListPower[3].isCheck"
                @click="edit(scope.row,1)"
               >删除</el-button>
             </template>
@@ -137,14 +137,10 @@ export default {
 })
   },
   mounted(){
-  this.$nextTick(()=>{
-      if(this.$refs.multipleTable.$el.style.maxHeight){
-
-      }
-  })
   },
   computed:{
   ...mapState('pagination',{page:'clickPage',limit:'limitPage'}),
+  ...mapState('currentUserPower',{versionListPower:'versionListPower'}),
   },
   methods:{
     changeUpadte(col){

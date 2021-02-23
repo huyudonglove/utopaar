@@ -141,40 +141,51 @@
                 </span>
               </template>
           </el-table-column>
-          <el-table-column prop="isLyric" label="是否包含歌词" width="80" align="center" v-if="tagKey==101" :key="17">
+          <el-table-column prop="isLyric" label="是否包含歌词" width="80" align="center" v-if="tagKey==101||tagKey==110" :key="38">
+          <template slot-scope="scope">
+            <span v-if="scope.row.isLyric==1">是</span>
+            <span v-if="!scope.row.isLyric" style="color:#FF644E">否</span>
+          </template>
+          </el-table-column>
+          <el-table-column prop="isLyric" label="是否包含歌词" width="80" align="center" v-if="tagKey==101||tagKey==110" :key="17">
             <template slot-scope="scope">
               <span v-if="scope.row.isLyric==1">是</span>
               <span v-if="!scope.row.isLyric" style="color:#FF644E">否</span>
             </template>
             </el-table-column>
-            <el-table-column  label="资源包大小" width="150" align="center" v-if="tagKey ==100||tagKey ==107" :key="18" sortable="custom" prop="androidResourcePackageSize">
+            <el-table-column prop="configFileId" label="配置文件" align="center"  :key="60" v-if="tagKey==101||tagKey==110&&playId!==11" >
+             <template slot-scope="scope">
+              <span v-if="scope.row.configFileId">有</span>
+              <span v-else>无</span>
+            </template>
+          </el-table-column>
+            <el-table-column  label="资源包大小(M)" width="150" align="center" v-if="tagKey ==100||tagKey ==107||tagKey ==110&&playId==11" :key="18" sortable="custom" prop="androidResourcePackageSize">
               <template slot-scope="scope">
-                {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
-                
+                   {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
-            <el-table-column  label="Android资源包大小" width="150" align="center" v-if="tagKey ==101||tagKey ==102||tagKey ==103" :key="19" sortable="custom" prop="androidResourcePackageSize">
+             <el-table-column prop="iosResourcePackageSize" label="IOS资源包大小(M)" width="140" align="center" v-if="tagKey ==101&&!equipmentEyeglass||tagKey ==102&&!equipmentEyeglass||tagKey ==103&&!equipmentEyeglass||tagKey ==105&&!equipmentEyeglass||tagKey ==106&&!equipmentEyeglass||tagKey ==101&&playId==11||tagKey==110&&playId!==11" :key="20" sortable="custom">
               <template slot-scope="scope">
-                {{((scope.row.androidResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
+                    {{scope.row.iosResourcePackageSize?((scope.row.iosResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
-            <el-table-column prop="iosResourcePackageSize" label="IOS资源包大小" width="140" align="center" v-if="tagKey ==101&&!equipmentEyeglass||tagKey ==102&&!equipmentEyeglass||tagKey ==103&&!equipmentEyeglass||tagKey ==105&&!equipmentEyeglass||tagKey ==106&&!equipmentEyeglass" :key="20" sortable="custom">
+            <el-table-column  label="Android资源包大小(M)" width="150" align="center" v-if="tagKey ==101||tagKey ==102||tagKey ==103||tagKey ==110&&playId!==11" :key="119" sortable="custom" prop="androidResourcePackageSize">
               <template slot-scope="scope">
-                {{((scope.row.iosResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
+                   {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
-            <el-table-column prop="windowsResourcePackageSize" label="Windows资源包" width="140" align="center" v-if="tagKey==101&&equipmentEyeglass||tagKey==102&&equipmentEyeglass||tagKey==103&&equipmentEyeglass" :key="40" sortable="custom">
+            <el-table-column prop="windowsResourcePackageSize" label="Windows(UWP)资源包(M)" width="140" align="center" v-if="tagKey==101&&equipmentEyeglass||tagKey==102&&equipmentEyeglass||tagKey==103&&equipmentEyeglass||tagKey ==101&&playId==12" :key="40" sortable="custom">
               <template slot-scope="scope">
-                {{((scope.row.windowsResourcePackageSize/(1024*1024))+'').slice(0,4)}}M
+                    {{scope.row.windowsResourcePackageSize?((scope.row.windowsResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
-            <el-table-column prop="unityVersion" :label="'unity版本'" width="120" align="center" v-if="tagKey==101||tagKey==102||tagKey==103" :key="Math.random()+13">
+            <el-table-column prop="unityVersion" :label="'unity版本'" width="120" align="center" v-if="tagKey==101||tagKey==102||tagKey==103" :key="131">
             </el-table-column>
-            <el-table-column prop="loadingLine" :label="'渲染管线'" width="120" align="center" v-if="tagKey==101||tagKey==102||tagKey==103" :key="Math.random()+14" >
+            <el-table-column prop="loadingLine" :label="'渲染管线'" width="120" align="center" v-if="tagKey==101||tagKey==102||tagKey==103" :key="141" >
             </el-table-column>
-            <el-table-column prop="viewType" :label="'动画类型'" width="120" align="center" v-if="tagKey==101||tagKey==102" :key="Math.random()+14" >
+            <el-table-column prop="viewType" :label="'动画类型'" width="120" align="center" v-if="tagKey==101||tagKey==102" :key="14" >
             </el-table-column>
-            <el-table-column prop="durationTimeStr" label="总时长" width align="center" v-if="tagKey==100||tagKey==101||tagKey ==105||tagKey ==106||tagKey ==107" :key="21" sortable="custom"></el-table-column>
+            <el-table-column prop="durationTimeStr" label="总时长" width align="center" v-if="tagKey==100||tagKey==101||tagKey ==105||tagKey ==106||tagKey ==107||tagKey ==110" :key="21" sortable="custom"></el-table-column>
             <el-table-column prop="createTime" label="创建时间" width="110" align="center"  :key="15" sortable="custom" ></el-table-column>
             <el-table-column prop="updateTime" label="修改时间" width="110" align="center" :key="116" sortable="custom" ></el-table-column>
             <el-table-column prop="state" label="状态"  align="center" width="80" >

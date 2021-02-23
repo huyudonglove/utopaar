@@ -39,7 +39,7 @@
             <el-button style="float: left; padding: 2px 0;margin-top:5px;" type="text" class="downIcon"></el-button>
           </div>
           <div  class="text item">
-           <el-form ref="formSize" :model="formSize" label-width="120px" >
+           <el-form ref="formSize" :model="formSize" label-width="150px" >
             <el-form-item label="选择应用：">
               {{formSize.name}}
             </el-form-item>
@@ -61,9 +61,9 @@
               z：{{formSize.positionZ}}
             </el-form-item>
             <el-form-item :label="`投放方向${playId==12?'(手机端)':''}：`">
-              x：{{formSize.relationX}},
-              y：{{formSize.relationY}},
-              z：{{formSize.relationZ}}
+              α：{{formSize.relationX}},
+              β：{{formSize.relationY}},
+              γ：{{formSize.relationZ}}
             </el-form-item>
             <el-form-item label="投放位置(眼镜端)：" v-if="playId==12">
               x：{{formSize.positionGlassX}},
@@ -71,9 +71,9 @@
               z：{{formSize.positionGlassZ}}
             </el-form-item>
             <el-form-item label="投放方向(眼镜端)：" v-if="playId==12">
-              x：{{formSize.relationGlassX}},
-              y：{{formSize.relationGlassY}},
-              z：{{formSize.relationGlassZ}}
+              α：{{formSize.relationGlassX}},
+              β：{{formSize.relationGlassY}},
+              γ：{{formSize.relationGlassZ}}
             </el-form-item>
             <el-form-item label="使用状态：">
                <el-radio v-model="formSize.state" label="1" :disabled="formSize.state==2">启用</el-radio>
@@ -163,7 +163,7 @@ import headNav from "@/share/headNav.vue";
 import {mapActions,mapState} from 'vuex';
 import timeSwitch from '../../share/timeSwitch'
 import singleTime from '../../share/singleTime'
-import {inputInfo,putInTree} from "../../http/request";
+import {inputInfo,putInTree,inputAppList} from "../../http/request";
 export default {
   name: "putInfo",
   inject:['replace','reload'],
@@ -215,17 +215,23 @@ export default {
     };
   },
  async created(){
-    inputInfo({id:this.$route.query.id}).then(res=>{
+   inputAppList({}).then(res=>{
+      this.options=res.data
+      inputInfo({id:this.$route.query.id}).then(res=>{
       let currentRow=res.data
       this.formSize = Object.assign(this.formSize, currentRow);
       this.formSize.state=JSON.stringify(this.formSize.state)
       this.tableData=this.formSize.relationCarrierList
+      if(this.options){
+        this.playId = this.options.find(v=>v.id==this.formSize.backgroundAppId)?this.options.find(v=>v.id==this.formSize.backgroundAppId).playId:1
+      }
       this.tableData.forEach((v,index)=>{
         v.smallTime=[v.startTime,v.endTime]
         v.id=v.carrierId
       })
       this.chooseTime=JSON.stringify(this.tableData[0].timeType)
       this.timeScope=[this.formSize.startTime,this.formSize.endTime]
+    })
     })
    this.getUserPower();
   await this.treeDataTable();
