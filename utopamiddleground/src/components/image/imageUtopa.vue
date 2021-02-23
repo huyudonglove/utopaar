@@ -125,7 +125,7 @@
                   <span v-if="items[1].recognizeType==2" class="title">空间识别</span>
                   <span v-if="items[1].platformType==0" class="h-button">Vuforia</span>
                   <span v-if="items[1].platformType==1" class="h-button">Easyar</span>
-                  <span v-if="items[1].platformType==2" class="h-button">Locus</span>
+                  <span v-if="items[1].platformType==2" class="h-button">LocusAR</span>
                 </span>
               </div>
               <div class="title">名称
@@ -178,7 +178,7 @@
                   <span v-if="items[2].recognizeType==2" class="title">空间识别</span>
                  <span v-if="items[2].platformType==0" class="h-button">Vuforia</span>
                   <span v-if="items[2].platformType==1" class="h-button">Easyar</span>
-                  <span v-if="items[2].platformType==2" class="h-button">Locus</span>
+                  <span v-if="items[2].platformType==2" class="h-button">LocusAR</span>
                 </span>
               </div>
               <div class="title">名称
@@ -229,7 +229,7 @@
                   <span v-if="items[3].recognizeType==2" class="title">空间识别</span>
                   <span v-if="items[3].platformType==0" class="h-button">Vuforia</span>
                   <span v-if="items[3].platformType==1" class="h-button">Easyar</span>
-                  <span v-if="items[3].platformType==2" class="h-button">Locus</span>
+                  <span v-if="items[3].platformType==2" class="h-button">LocusAR</span>
                 </span>
               </div>
               <div class="title">名称
@@ -548,7 +548,7 @@
             engine:[
               {name:'高通',val:0},
               {name:'Easyar',val:1},
-              {name:'locus',val:2}
+              {name:'locusAR',val:2}
             ],
             isValid:null,
             isShowTree:true,
