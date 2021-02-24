@@ -121,7 +121,13 @@
                 </span>
               </template>
           </el-table-column>
-          
+          <el-table-column  :label="`${tagValue}展示`" width="150" align="center" v-if="tagKey==110" :key="129">
+              <template slot-scope="scope">
+                <span style="cursor: pointer;" >
+                  <img :src="`/api/file/get/${scope.row.pic}`" alt=""  style="width:100px;height:100px" v-focus>
+                </span>
+              </template>
+          </el-table-column>
           <el-table-column  :label="`${tagValue}预览`" width="150" align="center" v-if="tagKey==105||tagKey==107" :key="14">
             <template slot-scope="scope">
                 <span style="cursor: pointer;" >

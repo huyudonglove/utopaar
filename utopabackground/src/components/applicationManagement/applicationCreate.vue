@@ -487,7 +487,7 @@
                 {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
-            <el-table-column prop="windowsResourcePackageSize" label="Windows(UWP)资源包(M)" width="140" align="center" v-if="tagKey==101&&equipmentEyeglass||tagKey==102&&equipmentEyeglass||tagKey==103&&equipmentEyeglass" :key="40" sortable="custom">
+            <el-table-column prop="windowsResourcePackageSize" label="Windows(UWP)资源包(M)" width="140" align="center" v-if="tagKey==101||tagKey==102&&equipmentEyeglass||tagKey==103&&equipmentEyeglass" :key="40" sortable="custom">
               <template slot-scope="scope">
                  {{scope.row.windowsResourcePackageSize?((scope.row.windowsResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
@@ -1119,22 +1119,28 @@ export default {
           this.formSize.moduleList=this.formSize.moduleList.filter(v=>v.materialIds&&v.materialIds.length>0)
           }
           })
-           for(let j = 0 ;j<this.multipleSelectionList.length;j++){
-          let idxArray2=this.multipleSelectionList.map(v=>v.id)
-          let index= this.tableData.map(v=>v.id).indexOf(idxArray2[j]);
           
-          this.$refs.multipleTable.toggleRowSelection(this.tableData[index]);
-          }
+          // for(let j = 0 ;j<this.multipleSelectionList.length;j++){
+          // let idxArray2=this.multipleSelectionList.map(v=>v.id)
+          // let index= this.tableData.map(v=>v.id).indexOf(idxArray2[j]);
+          // this.$refs.multipleTable.toggleRowSelection(this.tableData[index]);
+          // }
+            this.multipleSelectionList.forEach(row=>{
+              this.$refs.multipleTable.toggleRowSelection(row);
+          })
+          
       }if(this.playId ==7){
         // console.log(this.multipleSelectionList,'multipleSelectionList.length66666666666666666666666',this.tableData)
         
-          for(let j = 0 ;j<this.multipleSelectionList.length;j++){
-          let idxArray2=this.multipleSelectionList.map(v=>v.id)
-          let index= this.tableData.map(v=>v.id).indexOf(idxArray2[j]);
-          // console.log(index,'isssss')
-          this.$refs.multipleTable2.toggleRowSelection(this.tableData[index]);
-          }
-        
+          // for(let j = 0 ;j<this.multipleSelectionList.length;j++){
+          // let idxArray2=this.multipleSelectionList.map(v=>v.id)
+          // let index= this.tableData.map(v=>v.id).indexOf(idxArray2[j]);
+          // // console.log(index,'isssss')
+          // this.$refs.multipleTable2.toggleRowSelection(this.tableData[index]);
+          // }
+         this.multipleSelectionList.forEach(row=>{
+              this.$refs.multipleTable2.toggleRowSelection(row);
+          })
       } 
     },
     //批量取消
@@ -1154,7 +1160,6 @@ export default {
         else{
           switch (this.tagKey) {
         case 100:
-
           for(let i = 0 ;i<this.multipleSelectionAll100.length;i++){
           let idx= this.multipleSelectionAll100.map(v=>v.id).indexOf(idxArray[i]);
           this.multipleSelectionAll100.splice(idx,1,{})
