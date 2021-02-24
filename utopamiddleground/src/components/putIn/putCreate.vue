@@ -225,7 +225,7 @@
                   </el-table-column>
                 </el-table>
                 <div align="center" style="position:absolute;bottom:10px;background:#fff;left:50%;transform:translateX(-50%);width:100%">
-                <el-button :disabled="!formSize.backgroundAppId" @click="listData();dialogTableVisible = true;isEdit=false" style="width:100%" >+添加</el-button>
+                <el-button :disabled="!formSize.backgroundAppId" @click="addContent();" style="width:100%" >+添加</el-button>
               </div>
               </div>
             </el-form-item>
@@ -477,9 +477,9 @@ export default {
           startTime: [
             { required: true, message: '请投放选择时间', trigger: 'change' }
           ],
-          endTime: [
-            { required: true, message: '请投放选择时间', trigger: 'change' }
-          ],
+          // endTime: [
+          //   { required: true, message: '请投放选择时间', trigger: 'change' }
+          // ],
         }, 
       rowIndex:0
     };
@@ -571,18 +571,13 @@ export default {
     ...mapActions('currentUserPower',['getUserPower']),
     handleSelectionChange(val) {
         if(!this.isEdit){
-          console.log(this.replaceObjCopy,'新增')
           this.multipleSelection = val;
         }else{
-          console.log('编辑')
           if(val.length>1){
-              console.log(val,'val')
               this.$refs.gridData.toggleRowSelection(val[0],false);
               this.replaceObjCopy=val.splice(0,1)[0]
-              console.log(this.replaceObjCopy,'this.replaceObjCopy全部先择')
             }else{
               this.replaceObjCopy=val[0]
-              console.log(this.replaceObjCopy222,'this.replaceObjCopy')
             }
         }
        
@@ -626,7 +621,6 @@ export default {
         this.formSize.relationCarrierList.splice(this.isEditIndex,1,this.replaceObj)
         console.log(this.tableData)
        }else{
-       console.log(this.replaceObjCopy,'全选')
         this.replaceObj.name=this.replaceObjCopy.name;
         this.replaceObj.id=this.replaceObjCopy.id;
         this.replaceObj.carrierId=this.replaceObjCopy.id;
@@ -962,7 +956,14 @@ clearTime(){
         }).catch(() => {
         });
 },
-
+addContent(){
+  this.listData()
+  this.dialogTableVisible = true;
+  this.isEdit=false;
+  this.$nextTick(()=>{
+    document.getElementsByClassName('el-table__header-wrapper')[1].getElementsByClassName('el-checkbox')[0].style.display='block'
+  })
+},
 changeState(data){
   // console.log(data,'data')
   // let isHasState=this.$route.query.ableLength
@@ -988,19 +989,19 @@ treeDataTable(){
       })
     },
   edit(index,row){
-    document.getElementsByClassName('el-table__header-wrapper')[1].getElementsByClassName('el-checkbox')[0].style.display='none'
-    console.log(row,'row','this.$refs.multipleTable',this.$refs.multipleTable)
     this.isEdit=true;
     if(this.isEdit){
     this.listData();
     this.dialogTableVisible = true;
+    this.$nextTick(()=>{
+      document.getElementsByClassName('el-table__header-wrapper')[1].getElementsByClassName('el-checkbox')[0].style.display='none'
+    })
     this.isEditIndex=index
     this.replaceObj=row
     console.log(this.replaceObj,'edit this.replaceObj')
     }else{
 
     }
-    
   }
   },
    watch: {

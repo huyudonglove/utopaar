@@ -242,28 +242,28 @@
               <span v-if="!scope.row.isLyric" style="color:#FF644E">否</span>
             </template>
             </el-table-column>
-            <el-table-column prop="configFileId" label="配置文件" align="center"  :key="60" v-if="tagKey==101&&playId!==11" >
+            <el-table-column prop="configFileId" label="配置文件" align="center"  :key="60" v-if="tagKey==101||tagKey==110" >
              <template slot-scope="scope">
               <span v-if="scope.row.configFileId">有</span>
               <span v-else>无</span>
             </template>
           </el-table-column>
-            <el-table-column  label="资源包大小(M)" width="150" align="center" v-if="tagKey ==100||tagKey ==107||tagKey ==110&&playId==11" :key="18" sortable="custom" prop="androidResourcePackageSize">
+            <el-table-column  label="资源包大小(M)" width="150" align="center" v-if="tagKey ==100||tagKey ==107||tagKey ==110" :key="18" sortable="custom" prop="androidResourcePackageSize">
               <template slot-scope="scope">
                   {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
-             <el-table-column prop="iosResourcePackageSize" label="IOS资源包大小(M)" width="140" align="center" v-if="tagKey ==101&&!equipmentEyeglass||tagKey ==102&&!equipmentEyeglass||tagKey ==103&&!equipmentEyeglass||tagKey ==105&&!equipmentEyeglass||tagKey ==106&&!equipmentEyeglass||tagKey ==101&&playId==11||tagKey==110&&playId!==11" :key="20" sortable="custom">
+             <el-table-column prop="iosResourcePackageSize" label="IOS资源包大小(M)" width="140" align="center" v-if="tagKey ==101||tagKey ==102&&!equipmentEyeglass||tagKey ==103&&!equipmentEyeglass||tagKey ==105&&!equipmentEyeglass||tagKey ==106&&!equipmentEyeglass" :key="20" sortable="custom">
               <template slot-scope="scope">
                   {{scope.row.iosResourcePackageSize?((scope.row.iosResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
-            <el-table-column  label="Android资源包大小(M)" width="150" align="center" v-if="tagKey ==101||tagKey ==102||tagKey ==103||tagKey ==110&&playId!==11" :key="119" sortable="custom" prop="androidResourcePackageSize">
+            <el-table-column  label="Android资源包大小(M)" width="150" align="center" v-if="tagKey ==101||tagKey ==102||tagKey ==103" :key="119" sortable="custom" prop="androidResourcePackageSize">
               <template slot-scope="scope">
                  {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
-            <el-table-column prop="windowsResourcePackageSize" label="Windows(UWP)资源包(M)" width="140" align="center" v-if="tagKey==101&&equipmentEyeglass||tagKey==102&&equipmentEyeglass||tagKey==103&&equipmentEyeglass||tagKey ==101&&playId !==11" :key="40" sortable="custom">
+            <el-table-column prop="windowsResourcePackageSize" label="Windows(UWP)资源包(M)" width="140" align="center" v-if="tagKey==101||tagKey==102&&equipmentEyeglass||tagKey==103&&equipmentEyeglass" :key="40" sortable="custom">
               <template slot-scope="scope">
                   {{scope.row.windowsResourcePackageSize?((scope.row.windowsResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
@@ -412,6 +412,8 @@
         </el-table-column>
         <el-table-column prop="name" :label="`${tagValue}名称`" min-width="120" align="center" :key="31" sortable>
         </el-table-column>
+         <el-table-column prop="materialFormat" :label="`格式`" width="" align="center" :key="65" v-if="tagKey==100">
+          </el-table-column>
         <el-table-column prop="materialCategoryName" :label="'所属类别'" width="" align="center" :key="32">
         </el-table-column>
         <el-table-column prop="parentIdUrl" :label="`${tagValue}预览`" width="200" align="center" v-if="tagKey==100" :key="33">
@@ -464,28 +466,28 @@
               <span v-if="!scope.row.isLyric" style="color:#FF644E">否</span>
             </template>
             </el-table-column>
-            <el-table-column prop="configFileId" label="配置文件" align="center"  :key="60" v-if="tagKey==101||tagKey==110&&playId!==11" >
+            <el-table-column prop="configFileId" label="配置文件" align="center"  :key="60" v-if="tagKey==101||tagKey==110" >
              <template slot-scope="scope">
               <span v-if="scope.row.configFileId">有</span>
               <span v-else>无</span>
             </template>
           </el-table-column>
-            <el-table-column  label="资源包大小(M)" width="150" align="center" v-if="tagKey ==100||tagKey ==107||tagKey ==110&&playId==11" :key="18" sortable="custom" prop="androidResourcePackageSize">
+            <el-table-column  label="资源包大小(M)" width="150" align="center" v-if="tagKey ==100||tagKey ==107||tagKey ==110" :key="18" sortable="custom" prop="androidResourcePackageSize">
               <template slot-scope="scope">
                  {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
-             <el-table-column prop="iosResourcePackageSize" label="IOS资源包大小(M)" width="140" align="center" v-if="tagKey ==101&&!equipmentEyeglass||tagKey ==102&&!equipmentEyeglass||tagKey ==103&&!equipmentEyeglass||tagKey ==105&&!equipmentEyeglass||tagKey ==106&&!equipmentEyeglass||tagKey ==101&&playId==11||tagKey==110&&playId!==11" :key="20" sortable="custom">
+             <el-table-column prop="iosResourcePackageSize" label="IOS资源包大小(M)" width="140" align="center" v-if="tagKey ==101||tagKey ==102&&!equipmentEyeglass||tagKey ==103&&!equipmentEyeglass||tagKey ==105&&!equipmentEyeglass||tagKey ==106&&!equipmentEyeglass" :key="20" sortable="custom">
               <template slot-scope="scope">
                   {{scope.row.iosResourcePackageSize?((scope.row.iosResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
-            <el-table-column  label="Android资源包大小(M)" width="150" align="center" v-if="tagKey ==101||tagKey ==102||tagKey ==103||tagKey ==110&&playId!==11" :key="119" sortable="custom" prop="androidResourcePackageSize">
+            <el-table-column  label="Android资源包大小(M)" width="150" align="center" v-if="tagKey ==101||tagKey ==102||tagKey ==103" :key="119" sortable="custom" prop="androidResourcePackageSize">
               <template slot-scope="scope">
                 {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
             </el-table-column>
-            <el-table-column prop="windowsResourcePackageSize" label="Windows(UWP)资源包(M)" width="140" align="center" v-if="tagKey==101&&equipmentEyeglass||tagKey==102&&equipmentEyeglass||tagKey==103&&equipmentEyeglass||tagKey ==101&&playId !==11" :key="40" sortable="custom">
+            <el-table-column prop="windowsResourcePackageSize" label="Windows(UWP)资源包(M)" width="140" align="center" v-if="tagKey==101||tagKey==102&&equipmentEyeglass||tagKey==103&&equipmentEyeglass" :key="40" sortable="custom">
               <template slot-scope="scope">
                  {{scope.row.windowsResourcePackageSize?((scope.row.windowsResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
@@ -1117,22 +1119,28 @@ export default {
           this.formSize.moduleList=this.formSize.moduleList.filter(v=>v.materialIds&&v.materialIds.length>0)
           }
           })
-           for(let j = 0 ;j<this.multipleSelectionList.length;j++){
-          let idxArray2=this.multipleSelectionList.map(v=>v.id)
-          let index= this.tableData.map(v=>v.id).indexOf(idxArray2[j]);
           
-          this.$refs.multipleTable.toggleRowSelection(this.tableData[index]);
-          }
+          // for(let j = 0 ;j<this.multipleSelectionList.length;j++){
+          // let idxArray2=this.multipleSelectionList.map(v=>v.id)
+          // let index= this.tableData.map(v=>v.id).indexOf(idxArray2[j]);
+          // this.$refs.multipleTable.toggleRowSelection(this.tableData[index]);
+          // }
+            this.multipleSelectionList.forEach(row=>{
+              this.$refs.multipleTable.toggleRowSelection(row);
+          })
+          
       }if(this.playId ==7){
         // console.log(this.multipleSelectionList,'multipleSelectionList.length66666666666666666666666',this.tableData)
         
-          for(let j = 0 ;j<this.multipleSelectionList.length;j++){
-          let idxArray2=this.multipleSelectionList.map(v=>v.id)
-          let index= this.tableData.map(v=>v.id).indexOf(idxArray2[j]);
-          // console.log(index,'isssss')
-          this.$refs.multipleTable2.toggleRowSelection(this.tableData[index]);
-          }
-        
+          // for(let j = 0 ;j<this.multipleSelectionList.length;j++){
+          // let idxArray2=this.multipleSelectionList.map(v=>v.id)
+          // let index= this.tableData.map(v=>v.id).indexOf(idxArray2[j]);
+          // // console.log(index,'isssss')
+          // this.$refs.multipleTable2.toggleRowSelection(this.tableData[index]);
+          // }
+         this.multipleSelectionList.forEach(row=>{
+              this.$refs.multipleTable2.toggleRowSelection(row);
+          })
       } 
     },
     //批量取消
@@ -1152,7 +1160,6 @@ export default {
         else{
           switch (this.tagKey) {
         case 100:
-
           for(let i = 0 ;i<this.multipleSelectionAll100.length;i++){
           let idx= this.multipleSelectionAll100.map(v=>v.id).indexOf(idxArray[i]);
           this.multipleSelectionAll100.splice(idx,1,{})
@@ -1319,6 +1326,15 @@ export default {
         })
         }
         }if(id ==7){
+          this.multipleSelectionAll100=[]
+          this.multipleSelectionAll101=[]
+          this.multipleSelectionAll102=[]
+          this.multipleSelectionAll103=[]
+          this.multipleSelectionAll104=[]
+          this.multipleSelectionAll105=[]
+          this.multipleSelectionAll106=[]
+          this.multipleSelectionAll107=[]
+          this.multipleSelectionAll110=[]
           this.initPlayModule({...this.$route.query,playId:this.formSize.playId}).then(res=>{
           // if(!this.isCreate){
           //   this.changeData()
@@ -1467,6 +1483,7 @@ export default {
       this.replace('limit',this.limit);
   },
   wd(){
+    console.log(this.wd,'www')
     this.page=1;
     this.replace('wd',this.wd);
   },

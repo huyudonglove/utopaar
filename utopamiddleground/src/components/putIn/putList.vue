@@ -99,8 +99,8 @@
           </el-table-column>
           <el-table-column prop="id" label="眼镜坐标" width="150" align="center">
              <template slot-scope="scope">
-              <p>x={{scope.row.positionGlassX !==null?scope.row.positionGlassX:'--'}},y={{scope.row.positionGlassY!==null?scope.row.positionGlassY:'--'}},z={{scope.row.positionGlassZ!==null?scope.row.positionGlassZ:'--'}}</p>
-               <p>α={{scope.row.relationGlassX!==null?scope.row.relationGlassX:'--'}},β={{scope.row.relationGlassY!==null?scope.row.relationGlassY:'--'}},γ={{scope.row.relationGlassZ!==null?scope.row.relationGlassZ:'--'}}</p>
+              <p>x={{scope.row.positionGlassX !==''?scope.row.positionGlassX:'--'}},y={{scope.row.positionGlassY!==''?scope.row.positionGlassY:'--'}},z={{scope.row.positionGlassZ!==''?scope.row.positionGlassZ:'--'}}</p>
+               <p>α={{scope.row.relationGlassX!==''?scope.row.relationGlassX:'--'}},β={{scope.row.relationGlassY!==''?scope.row.relationGlassY:'--'}},γ={{scope.row.relationGlassZ!==''?scope.row.relationGlassZ:'--'}}</p>
             </template>
           </el-table-column>
           <el-table-column prop="id" label="投放状态" width="120" align="center">
