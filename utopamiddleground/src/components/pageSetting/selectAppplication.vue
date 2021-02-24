@@ -27,7 +27,7 @@
         </span> 
         <el-button type="info" @click="reset">重置</el-button>
       </el-row>
-      <el-table ref="multipleTable" :data="applicationList" border style="width: 100%" class="mt15 mb15" @selection-change="handleSelectionChange">
+      <el-table id='d1' ref="multipleTable" :data="applicationList" border style="width: 100%" class="mt15 mb15" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="50"></el-table-column>
         <el-table-column prop="id" label="ID" width="280" align="center"></el-table-column>
         <el-table-column prop="name" label="应用名称" align="center"></el-table-column>
@@ -191,9 +191,15 @@ export default {
   }
 }
 </script>
+<style >
+#d1>.el-table__header-wrapper  .el-checkbox{
+	display:none
+}
+</style>
 
 <style scoped>
 th label.el-checkbox{
   display: none;
 }
+
 </style>

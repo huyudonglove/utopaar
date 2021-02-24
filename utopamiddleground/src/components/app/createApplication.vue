@@ -64,7 +64,7 @@
                 <el-tag v-if="appId">{{app.filter(v=>v.id==appId)[0].name}}</el-tag>
 
               </div>
-              <div class="divContent" style="height: 220px;line-height: 220px;margin-top: 20px" v-if="appRow.playId==2">
+              <div class="divContent" style="height: 220px;line-height: 220px;margin-top: 20px" v-if="appRow.playId==2||appRow.playId==9||appRow.playId==11||appRow.playId==12">
                 <span class="labelSpan">水印图</span>
                 <el-upload
                   style="display: inline-block;"
@@ -79,7 +79,7 @@
                 </el-upload>
                 <div style="margin-left: 20px" class="el-upload__tip"><span style="color: #f56c6c;margin-right: 2px;">*</span>图片为png格式，小于100kb</div>
               </div>
-              <div class="divContent" v-if="appRow.playId==2">
+              <div class="divContent" v-if="appRow.playId==2||appRow.playId==9||appRow.playId==11||appRow.playId==12">
                 <span class="labelSpan" style="padding-left: 40px">是否启用水印</span>
                 <span>
                       <el-switch v-model="isMark" :active-value="1" :inactive-value="2"></el-switch>
