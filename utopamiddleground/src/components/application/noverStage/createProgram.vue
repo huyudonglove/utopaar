@@ -71,6 +71,14 @@
             <el-table-column type="selection" width="50" :selectable="(row)=>row.state==1" :reserve-selection="true"></el-table-column>
             <el-table-column prop="id" label="ID" width="50" align="center"></el-table-column>
             <el-table-column prop="name" :label="`${moduleName}名称`" align="center" sortable></el-table-column>
+            <el-table-column  :label="`${moduleName}展示`" align="center">
+            <template slot-scope="scope">
+              <span style="cursor: pointer;" >
+                <img :src="`/api/file/get/${scope.row.pic}`" alt=""  style="width:100px;height:100px" v-focus>
+              </span>
+            </template>
+          </el-table-column>
+
             <el-table-column prop="materialCategoryName" label="所属类别" align="center"></el-table-column>
             <el-table-column prop="isLyric" label="是否配置歌词" width="110" align="center">
               <template slot-scope="scope">
