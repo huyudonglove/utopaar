@@ -638,6 +638,7 @@ export default {
       
     },
     smallTimeChange(index,row,type){
+      console.log(row,'row')
       this.tableData[index].effectFrom =this.tableData[index].smallTime[0];
       this.tableData[index].effectTo =this.tableData[index].smallTime[1];
       this.formSize.relationCarrierList.splice(index,1,{carrierId:row.id,startTime:row.effectFrom,endTime:row.effectTo,timeType:parseInt(this.formSize.chooseTime),state:row.state})

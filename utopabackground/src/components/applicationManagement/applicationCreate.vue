@@ -100,7 +100,7 @@
             </span>
           </el-row>
           <!-- 数据展示 -->
-          <el-table :data="tableData" ref="multipleTable" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange"  :max-height="300" :min-height="250" border @sort-change="changeUpadte">
+          <el-table :data="tableData" ref="multipleTable" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" @select-all="selectAllCheck" @select="selectSinge" :max-height="300" :min-height="250" border @sort-change="changeUpadte">
           <el-table-column
           type="selection"
           align="center"
@@ -114,7 +114,7 @@
           type="selection"
           width="55"
           align="center"
-          :selectable="(row)=>multipleSelectionAll101.map(v=>v.id).indexOf(row.id)==-1&&row.state==1"
+          :selectable="(row)=>multipleSelectionAll100.map(v=>v.id).indexOf(row.id)==-1&&row.state==1"
           v-if="tagKey==101"
           :key="2"
           >
@@ -577,6 +577,7 @@ export default {
   inject:['replace','reload'],
   data(){
 	  return{
+      delPush:[],
       options:[],//玩法
       moduleDetail:[],//素材种类
       moduleDetail2:[],//素材种类
@@ -824,16 +825,19 @@ export default {
               break;
             case 101:
             // console.log(res,res,'res222')
-            this.multipleSelectionAll101=res.data.items||[]
+            this.multipleSelectionAll101=JSON.parse(JSON.stringify(res.data.items))||[]
             break;
             case 102:
             this.multipleSelectionAll102=res.data.items||[]
+            console.log(111,222,102)
             break;
             case 103:
             this.multipleSelectionAll103=res.data.items||[]
+            console.log(111,222,103)
             break;
             case 104:
             this.multipleSelectionAll104=res.data.items||[]
+            console.log(111,222,104)
             break;
             case 105:
             this.multipleSelectionAll105=res.data.items||[]
@@ -850,6 +854,7 @@ export default {
             default:
               break;
           }
+           
       })
       }
   })
@@ -887,13 +892,24 @@ export default {
     })
       }
     },
+    selectAllCheck(val){
+   
+    },
+    selectSinge(val){
+    },
+    fn(arr1,arr2){
+    },
 	  handleSelectionChange(val) {
+    console.log(val.map(v=>v.id),'val3333333333333322')
 		switch (this.tagKey) {
       case 100:
         this.multipleSelection100=this.multipleSelectionAll100.concat(val)
+        console.log('音乐',this.multipleSelection100)
         break;
       case 101:
+        
         this.multipleSelection101=this.multipleSelectionAll101.concat(val)
+        
         break;
         case 102:
         this.multipleSelection102=this.multipleSelectionAll102.concat(val)
@@ -951,7 +967,10 @@ export default {
       switch (this.tagCode) {
         case 100:
           if(this.multipleSelection100.length>0){
+          // console.log(this.fn(this.multipleSelectionAll100,this.delPush))
+          console.log(this.multipleSelection100,'multipleSelection100',this.delPush)
           this.multipleSelectionAll100=this.multipleSelection100;
+
           this.multipleSelectionAll100=this.uniqueChoose(this.multipleSelectionAll100)
           }else{
           this.selectAllCom()
@@ -1110,6 +1129,7 @@ export default {
       this.aa=true;
       // console.log(val,'seltlist')
       this.multipleSelectionList=val;
+      console.log(val.map(v=>v.id),'vallllwwwwwwww')
     },
     delAllCom(){
       if(this.playId !==7){
@@ -1160,14 +1180,19 @@ export default {
         else{
           switch (this.tagKey) {
         case 100:
+          console.log(this.multipleSelectionAll100,'this.multipleSelectionAll100')
           for(let i = 0 ;i<this.multipleSelectionAll100.length;i++){
           let idx= this.multipleSelectionAll100.map(v=>v.id).indexOf(idxArray[i]);
+          this.delPush.push(this.multipleSelectionAll100[idx])
           this.multipleSelectionAll100.splice(idx,1,{})
           }
           this.delAllCom()
           this.multipleSelectionAll100=this.multipleSelectionAll100.filter(v=>v.id)
+          this.delPush=this.delPush.filter(v=>v.id)
+          console.log(this.multipleSelectionAll100,'this.multipleSelectionAll100333')
           break;
         case 101:
+           console.log(this.multipleSelectionAll101,'this.multipleSelectionAll101')
           for(let i = 0 ;i<this.multipleSelectionAll101.length;i++){
           let idx= this.multipleSelectionAll101.map(v=>v.id).indexOf(idxArray[i]);
           this.multipleSelectionAll101.splice(idx,1,{})
@@ -1617,6 +1642,11 @@ export default {
     this.materialIdsAarray=this.multipleSelectionAll101.length>0?this.multipleSelectionAll101.map(v=>v.id):[]
     this.watchSelectAll()
     if(this.tagKey==101){this.electionFlag=this.multipleSelectionAll101;this.unique()}
+    // this.$nextTick(()=>{
+    //   this.multipleSelectionAll101.forEach(row=>{
+    //     this.$refs.multipleTable.toggleRowSelection(row);
+    //   })
+    // })
   },
   multipleSelectionAll102(){
     this.materialIdsAarray=this.multipleSelectionAll102.length>0?this.multipleSelectionAll102.map(v=>v.id):[]
@@ -1704,14 +1734,17 @@ export default {
     if(this.$route.name=='applicationCreate'){
     if(!this.isBs){
       // console.log(this.$route.query,'this.$route.query')
-		this.initModule({...this.$route.query,module:this.tagKey},).then(res=>{
+		this.initModule({...this.$route.query,module:this.tagKey}).then(res=>{
+      console.log(res,'res')
 		this.$store.commit('pagination/setTotal',this.total);
     })
     // this.loadingLine=this.$route.query.loadingLine
     // this.unityVersion=this.$route.query.unityVersion
     // this.viewTypeSelect=this.$route.query.viewTypeSelect
     }else{
-      this.initPlayModule({...this.$route.query,playId:this.formSize.playId}).then(res=>{})
+      this.initPlayModule({...this.$route.query,playId:this.formSize.playId}).then(res=>{
+        
+      })
     }
       }
     }
