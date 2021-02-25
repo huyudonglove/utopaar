@@ -67,7 +67,7 @@
             </el-cascader>
           </span>
           </el-row>
-          <el-table ref="programTable" :data="ainimationList" border style="width: 100%" class="mt15 mb15"  @selection-change="handleSelectionChange" @sort-change="changeTableSort" row-key="id">
+          <el-table ref="programTable" id='d2' :data="ainimationList" border style="width: 100%" class="mt15 mb15"  @selection-change="handleSelectionChange" @sort-change="changeTableSort" row-key="id">
             <el-table-column type="selection" width="50" :selectable="(row)=>row.state==1" :reserve-selection="true"></el-table-column>
             <el-table-column prop="id" label="ID" width="50" align="center"></el-table-column>
             <el-table-column prop="name" :label="`${moduleName}名称`" align="center" sortable></el-table-column>
@@ -445,7 +445,11 @@ export default {
   }
 }
 </script>
-
+<style >
+#d2>.el-table__header-wrapper  .el-checkbox{
+	display:none
+}
+</style>
 <style scoped>
 
 </style>
