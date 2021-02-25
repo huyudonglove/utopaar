@@ -22,7 +22,7 @@
       <el-form-item label="场景列表">
         <el-row class="tac" style="padding-bottom:10px;">
           <el-button type="primary" :disabled="!appPower[1].isCheck" @click="$router.push({path:`${$route.path.slice(0,-19)}/createscene`,query:{id:$route.query.id,contentTime:JSON.stringify(form.time),oldQuery:$route.query.oldQuery}});">新增场景</el-button>
-          <el-button type="danger" :disabled="!appPower[1].isCheck" @click="del">批量删除</el-button>
+          <el-button type="danger" :disabled="!appPower[1].isCheck||!delArr.length" @click="del">批量删除</el-button>
         </el-row>
         <el-table ref="stageRef" :data="form.sceneTable" border style="width: 100%" class="mt15 mb15" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="50"></el-table-column>
