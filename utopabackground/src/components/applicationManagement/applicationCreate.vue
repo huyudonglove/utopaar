@@ -100,7 +100,7 @@
             </span>
           </el-row>
           <!-- 数据展示 -->
-          <el-table :data="tableData" ref="multipleTable" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" @select-all="selectAllCheck" @select="selectSinge" :max-height="300" :min-height="250" border @sort-change="changeUpadte">
+          <el-table :data="tableData" ref="multipleTable" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" :max-height="300" :min-height="250" border @sort-change="changeUpadte">
           <el-table-column
           type="selection"
           align="center"
@@ -114,7 +114,7 @@
           type="selection"
           width="55"
           align="center"
-          :selectable="(row)=>multipleSelectionAll100.map(v=>v.id).indexOf(row.id)==-1&&row.state==1"
+          :selectable="(row)=>multipleSelectionAll101.map(v=>v.id).indexOf(row.id)==-1&&row.state==1"
           v-if="tagKey==101"
           :key="2"
           >
@@ -825,7 +825,7 @@ export default {
               break;
             case 101:
             // console.log(res,res,'res222')
-            this.multipleSelectionAll101=JSON.parse(JSON.stringify(res.data.items))||[]
+            this.multipleSelectionAll101=res.data.items||[]
             break;
             case 102:
             this.multipleSelectionAll102=res.data.items||[]
@@ -1059,8 +1059,11 @@ export default {
       this.formSize.moduleList.forEach((v,index)=>{
          if(this.tagCode==v.module){
          this.formSize.moduleList.splice(index,1,{})
-         this.$refs.multipleTable.toggleRowSelection(row); 
         }
+      })
+      let index=this.tableData.map(v=>v.id).indexOf(row.id)
+      this.$nextTick(()=>{
+        this.$refs.multipleTable.toggleRowSelection(this.tableData[index]);
       })
     },
     del(row,idx,ref){
@@ -1069,47 +1072,47 @@ export default {
         case 100:
         var i=this.multipleSelectionAll100.map(v=>v.id).indexOf(row.id)
         this.multipleSelectionAll100.splice(i, 1)
-        this.delCom(row)
+        this.delCom(row,idx)
         break;
         case 101:
         var i=this.multipleSelectionAll101.map(v=>v.id).indexOf(row.id)
         this.multipleSelectionAll101.splice(i, 1)
-        this.delCom(row)
+        this.delCom(row,idx)
         break;
         case 102:
         var i=this.multipleSelectionAll102.map(v=>v.id).indexOf(row.id)
         this.multipleSelectionAll102.splice(i, 1)
-        this.delCom(row)
+        this.delCom(row,idx)
         break;
         case 103:
         var i=this.multipleSelectionAll103.map(v=>v.id).indexOf(row.id)
         this.multipleSelectionAll103.splice(i, 1)
-        this.delCom(row)
+        this.delCom(row,idx)
         break;
         case 104:
         var i=this.multipleSelectionAll104.map(v=>v.id).indexOf(row.id)
         this.multipleSelectionAll104.splice(i, 1)
-        this.delCom(row)
+        this.delCom(row,idx)
         break;
         case 105:
         var i=this.multipleSelectionAll105.map(v=>v.id).indexOf(row.id)
         this.multipleSelectionAll105.splice(i, 1)
-        this.delCom(row)
+        this.delCom(row,idx)
         break;
         case 106:
         var i=this.multipleSelectionAll106.map(v=>v.id).indexOf(row.id)
         this.multipleSelectionAll106.splice(i, 1)
-        this.delCom(row)
+        this.delCom(row,idx)
         break;
         case 107:
         var i=this.multipleSelectionAll107.map(v=>v.id).indexOf(row.id)
         this.multipleSelectionAll107.splice(i, 1)
-        this.delCom(row)
+        this.delCom(row,idx)
         break;
         case 110:
         var i=this.multipleSelectionAll110.map(v=>v.id).indexOf(row.id)
         this.multipleSelectionAll110.splice(i, 1)
-        this.delCom(row)
+        this.delCom(row,idx)
         break;
           default:
            break;
@@ -1123,7 +1126,10 @@ export default {
      delCom2(row){
       let idx=this.formSize.identifyPhotosList.map(v=>v.id).indexOf(row.id)
       this.formSize.identifyPhotosList.splice(idx,1,{})
-      this.$refs.multipleTable2.toggleRowSelection(row); 
+      let index=this.tableData.map(v=>v.id).indexOf(row.id)
+      this.$nextTick(()=>{
+        this.$refs.multipleTable2.toggleRowSelection(this.tableData[index]);
+      })
     },
     selectList(val){
       this.aa=true;
@@ -1145,9 +1151,16 @@ export default {
           // let index= this.tableData.map(v=>v.id).indexOf(idxArray2[j]);
           // this.$refs.multipleTable.toggleRowSelection(this.tableData[index]);
           // }
-            this.multipleSelectionList.forEach(row=>{
+            
+           if(this.isCreate){
+
+           }else{
+             this.$nextTick(()=>{
+              this.multipleSelectionList.forEach(row=>{
               this.$refs.multipleTable.toggleRowSelection(row);
-          })
+              })
+              })
+           }
           
       }if(this.playId ==7){
         // console.log(this.multipleSelectionList,'multipleSelectionList.length66666666666666666666666',this.tableData)
@@ -1158,9 +1171,11 @@ export default {
           // // console.log(index,'isssss')
           // this.$refs.multipleTable2.toggleRowSelection(this.tableData[index]);
           // }
+          this.$nextTick(()=>{
          this.multipleSelectionList.forEach(row=>{
               this.$refs.multipleTable2.toggleRowSelection(row);
           })
+           })
       } 
     },
     //批量取消
@@ -1245,6 +1260,7 @@ export default {
           let idx= this.multipleSelectionAll107.map(v=>v.id).indexOf(idxArray[i]);
           this.multipleSelectionAll107.splice(idx,1,{})
           }
+
           this.delAllCom()
           this.multipleSelectionAll107=this.multipleSelectionAll107.filter(v=>v.id)
           break;
