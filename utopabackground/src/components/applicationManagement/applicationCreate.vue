@@ -1153,7 +1153,6 @@ export default {
           // }
             
            if(this.isCreate){
-
            }else{
              this.$nextTick(()=>{
               this.multipleSelectionList.forEach(row=>{
@@ -1171,11 +1170,14 @@ export default {
           // // console.log(index,'isssss')
           // this.$refs.multipleTable2.toggleRowSelection(this.tableData[index]);
           // }
+          if(this.isCreate){
+           }else{
           this.$nextTick(()=>{
          this.multipleSelectionList.forEach(row=>{
               this.$refs.multipleTable2.toggleRowSelection(row);
           })
            })
+           }
       } 
     },
     //批量取消
@@ -1195,7 +1197,6 @@ export default {
         else{
           switch (this.tagKey) {
         case 100:
-          console.log(this.multipleSelectionAll100,'this.multipleSelectionAll100')
           for(let i = 0 ;i<this.multipleSelectionAll100.length;i++){
           let idx= this.multipleSelectionAll100.map(v=>v.id).indexOf(idxArray[i]);
           this.delPush.push(this.multipleSelectionAll100[idx])
@@ -1204,10 +1205,8 @@ export default {
           this.delAllCom()
           this.multipleSelectionAll100=this.multipleSelectionAll100.filter(v=>v.id)
           this.delPush=this.delPush.filter(v=>v.id)
-          console.log(this.multipleSelectionAll100,'this.multipleSelectionAll100333')
           break;
         case 101:
-           console.log(this.multipleSelectionAll101,'this.multipleSelectionAll101')
           for(let i = 0 ;i<this.multipleSelectionAll101.length;i++){
           let idx= this.multipleSelectionAll101.map(v=>v.id).indexOf(idxArray[i]);
           this.multipleSelectionAll101.splice(idx,1,{})
