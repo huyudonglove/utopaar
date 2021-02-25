@@ -986,7 +986,9 @@
               msg.sortField=this.wordState;
               msg.sortType=this.upS;
             })();
-
+            if(msg.module!=100){
+               msg.materialFormat=''; 
+            }
             console.log(msg,7777)
             getTotal(msg).then(v=>{
               //console.log(v,8888)
@@ -1879,6 +1881,7 @@
             this.url='';
             this.moduleTreeVal='';
             this.moduleTreeSelect=[];
+           
             switch (this.$route.name) {
               case 'music':
                 this.type=100;
