@@ -143,7 +143,7 @@
               {{scope.row.androidResourcePackageSize?((scope.row.androidResourcePackageSize/(1024*1024))).toFixed(2):''}}
             </template>
           </el-table-column>
-           <el-table-column prop="iosResourcePackageSize" label="IOS资源包大小(M)" width="140" align="center" v-if="tagKey ==101||tagKey ==102&&!equipmentEyeglass||tagKey ==103&&!equipmentEyeglass||tagKey ==105&&!equipmentEyeglass||tagKey ==106&&!equipmentEyeglass" :key="20" sortable="custom">
+           <el-table-column prop="iosResourcePackageSize" label="IOS资源包大小(M)" width="140" align="center" v-if="tagKey ==101||tagKey ==102||tagKey ==103&&!equipmentEyeglass||tagKey ==105&&!equipmentEyeglass||tagKey ==106&&!equipmentEyeglass" :key="20" sortable="custom">
               <template slot-scope="scope">
                  {{scope.row.iosResourcePackageSize?((scope.row.iosResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
@@ -154,7 +154,7 @@
             </template>
           </el-table-column>
           
-          <el-table-column prop="windowsResourcePackageSize" label="Windows(UWP)资源包大小(M)" width="140" align="center" v-if="tagKey==101||tagKey==102&&equipmentEyeglass||tagKey==103&&equipmentEyeglass" :key="40" sortable="custom">
+          <el-table-column prop="windowsResourcePackageSize" label="Windows(UWP)资源包大小(M)" width="140" align="center" v-if="tagKey==101||tagKey==102||tagKey==103&&equipmentEyeglass" :key="40" sortable="custom">
               <template slot-scope="scope">
                 {{scope.row.windowsResourcePackageSize?((scope.row.windowsResourcePackageSize/(1024*1024))).toFixed(2):''}}
               </template>
