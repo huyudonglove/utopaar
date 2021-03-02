@@ -1881,7 +1881,7 @@
             this.url='';
             this.moduleTreeVal='';
             this.moduleTreeSelect=[];
-           
+            this.musicType='';
             switch (this.$route.name) {
               case 'music':
                 this.type=100;
