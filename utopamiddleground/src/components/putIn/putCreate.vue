@@ -518,7 +518,10 @@ export default {
       })
       this.tableData.length?this.formSize.chooseTime=JSON.stringify(this.tableData[0].timeType):this.formSize.chooseTime='2'
       
-      this.$store.commit('timeSwitch/setValue',[this.formSize.startTime,this.formSize.endTime])
+      if(this.formSize.startTime){
+         this.$store.commit('timeSwitch/setValue',[this.formSize.startTime,this.formSize.endTime])
+      }
+       
       this.isHasRepeatTime(this.tableData,null,this.tableData[0].timeType)
     })
     
@@ -916,9 +919,11 @@ changeTime(data){
           this.formSize.relationCarrierList=this.formSize.relationCarrierList.map(v=>{v.endTime='';v.startTime='';v.carrierId='';return v})
           this.tableData=this.tableData.map((v,index)=>{
             if(this.formSize.chooseTime=='1'){
-             v.smallTime=[]
+            //  v.smallTime=[]
+            v.smallTime !==undefined?v.smallTime=[]:null
             }else{
-             v.smallTime=null
+            //  v.smallTime=null
+            v.smallTime !==undefined?v.smallTime=null:null
             }
             v.startTime=''
             v.endTime='';
@@ -1021,8 +1026,10 @@ treeDataTable(){
         
     },
     timeScope(){
+      if(this.timeScope.length>0){
       this.formSize.startTime=this.timeScope[0]
       this.formSize.endTime=this.timeScope[1]
+      }
       
     },
     backgroundAppId(){
