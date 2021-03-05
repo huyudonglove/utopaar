@@ -55,7 +55,7 @@
               </el-option>
             </el-select>
             </el-form-item>
-            <el-form-item label="投放时间：" required prop="startTime">
+            <el-form-item label="投放时间：" required prop="startTime" :error='timeError'>
               <timeSwitch></timeSwitch>
             </el-form-item>
             <el-form-item :label="`投放位置${playId==12?'(手机端)':''}：`" required>
@@ -170,6 +170,8 @@
                       value-format="yyyy-MM-dd HH:mm:ss"
                       @change="smallTimeChange(scope.$index,scope.row,2)"
                       :clearable="false"
+                      :picker-options="pickerOptionsTime"
+                      :editable='false'
                       >
                     </el-time-picker>
                     </template>
@@ -207,6 +209,7 @@
                         @change="smallTimeChange(scope.$index,scope.row,1)"
                         :clearable="false"
                         :default-time="['00:00:00', '23:59:59']"
+                        :editable='false'
                         >
                       </el-date-picker>
                     </template>
@@ -475,13 +478,14 @@ export default {
             { required: true,validator: checkRelationZ,trigger: 'blur' }
           ],
           startTime: [
-            { required: true, message: '请投放选择时间', trigger: 'change' }
+            { required: true, message: '请选择投放时间', trigger: 'blur'}
           ],
           // endTime: [
           //   { required: true, message: '请投放选择时间', trigger: 'change' }
           // ],
         }, 
-      rowIndex:0
+      rowIndex:0,
+      timeError:''
     };
   },
   async created(){
@@ -526,7 +530,7 @@ export default {
     })
     
     }else{
-      this.$store.commit('timeSwitch/setValue',[])
+      // this.$store.commit('timeSwitch/setValue',[])
     }
     })
     await this.treeDataTable();
@@ -543,9 +547,9 @@ export default {
     }
     this.formSize.assetId=this.$route.query.assetId
     this.getUserPower();
-
 	},
-
+  mounted() {
+  },
   computed:{
     ...mapState('singleTime',{time:'endTime'}),
     ...mapState('timeSwitch',{timeScope:'value'}),
@@ -1035,6 +1039,10 @@ treeDataTable(){
     backgroundAppId(){
      
     }
+    },
+    destroyed() {
+       this.$store.commit('timeSwitch/setValue',[])
+       this.timeError=''
     },
    components: {
     navMenu,
