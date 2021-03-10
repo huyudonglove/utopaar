@@ -57,7 +57,7 @@
               <el-select :disabled="isSee" v-model="scope.row.relateType" style="width:120px;" @change="selectChange(scope.$index)">
                 <el-option v-for="(item,idx) in relateTypeList" :key="idx" :label="item.description" :value="item.code"></el-option>
               </el-select>
-              <el-input :disabled="isSee" v-if="scope.row.relateType=='2'" style="width:200px;" v-model="scope.row.relateContent" placeholder="请输入URL地址" maxlength="50"></el-input>
+              <el-input :disabled="isSee" v-if="scope.row.relateType=='2'" style="width:200px;" v-model="scope.row.relateContent" placeholder="请输入URL地址"></el-input>
               <el-input disabled v-if="scope.row.relateType=='1'||scope.row.relateType=='3'" style="width:200px;" v-model="scope.row.applicationName" maxlength="50"></el-input>
               <el-button :disabled="isSee" v-if="scope.row.relateType=='1'||scope.row.relateType=='3'" type="primary" plain size="mini" @click="applicationOpen(scope.$index)">选择</el-button>
             </template>

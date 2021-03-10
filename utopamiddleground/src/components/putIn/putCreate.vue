@@ -170,7 +170,6 @@
                       value-format="yyyy-MM-dd HH:mm:ss"
                       @change="smallTimeChange(scope.$index,scope.row,2)"
                       :clearable="false"
-                      :picker-options="pickerOptionsTime"
                       :editable='false'
                       >
                     </el-time-picker>
