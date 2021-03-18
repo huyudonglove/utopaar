@@ -49,7 +49,48 @@
                 <div style="cursor:pointer;" v-if="scope.row.provinceCityArea.split(',').length>2&&scope.row.relateType!='2'" @click="showCity(scope)">...</div>
                 <div style="cursor:pointer;" v-if="scope.row.provinceCityArea.split(',').length>2&&scope.row.relateType=='2'" @click="openCityDialog(scope)">...</div>
               </div>
-              <el-button size="mini" type="primary" plain :disabled="isSee" v-if="scope.row.relateType=='2'&&scope.row.provinceCityArea.split(',').length<=2" @click="openCityDialog(scope)">选择地区</el-button>
+              <el-button size="mini" type="primary" plain :disabled="isSee" v-if="scope.row.relateType=='2'&&scope.row.provinceCityArea.split(',').length<=2||moduleTypeX=='Module3'" @click="openCityDialog(scope)">选择地区</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column label="投放标题" align="center" v-if="moduleTypeX=='Module3'" >
+            <template slot-scope="scope">
+              <el-tooltip class="item ellipsis" effect="dark" :content="scope.row.releaseTitle" placement="top" :disabled="isCreate&&scope.row.releaseTitle.length<10">
+                <el-input
+                type="text"
+                placeholder="请输入投放标题"
+                v-model="scope.row.releaseTitle"
+              >
+              </el-input>
+              </el-tooltip>
+            </template>
+          </el-table-column>
+          <el-table-column label="描述" align="center" v-if="moduleTypeX=='Module3'">
+            <template slot-scope="scope">
+              <el-tooltip class="item ellipsis" effect="dark" :content="scope.row.remark" placement="top" :disabled="isCreate&&scope.row.remark.length<10">
+                <el-input
+                type="text"
+                placeholder="请输入投放标题"
+                v-model="scope.row.remark"
+              >
+              </el-input>
+              </el-tooltip>
+            </template>
+          </el-table-column>
+          <el-table-column label="地理位置" align="center" v-if="moduleTypeX=='Module3'">
+            <template slot-scope="scope">
+              <el-tooltip class="item ellipsis" effect="dark" :content="scope.row.address" placement="top" :disabled="isCreate&&scope.row.address.length<10">
+                <el-input
+                type="text"
+                placeholder="请输入地理位置"
+                v-model="scope.row.address"
+              >
+              </el-input>
+              </el-tooltip>
+            </template>
+          </el-table-column>
+          <el-table-column label="关联" width="230" v-if="moduleTypeX=='Module3'" align="center">
+            <template slot-scope="scope">
+              <el-input  style="width:200px;" v-model="scope.row.relateContent" placeholder="请输入URL地址"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="关联" width="420" v-if="moduleTypeX=='CyclePlay'||moduleTypeX=='Slide'||moduleTypeX=='ImageShow'" align="center">
@@ -221,7 +262,10 @@ export default {
         "relateContent":"",
         "applicationName":"",
         "provinceCityArea":"",
-        "cityIds":""
+        "cityIds":"",
+        "releaseTitle":"",
+        "remark":"",
+        "address":""
       }
     }
   },
@@ -469,6 +513,10 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style>
+.ellipsis input.el-input__inner{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
 </style>

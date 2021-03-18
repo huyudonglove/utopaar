@@ -26,6 +26,7 @@ import logout from '@/components/login/logout'
 import firstNav from '@/components/firstNav'
 import material from '@/components/material/material'
 import version from '@/components/version'
+import syncConfiguration from '@/components/syncConfiguration'
 Vue.use(Router)
 export default new Router({
   routes: [
@@ -226,6 +227,11 @@ export default new Router({
       path:'/version',
       name:'version',
       component:version
+    },
+    {
+      path:'/syncConfiguration',
+      name:'syncConfiguration',
+      component:syncConfiguration
     }
   ]
 })
