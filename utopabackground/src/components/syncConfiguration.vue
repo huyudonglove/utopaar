@@ -29,7 +29,7 @@
       <el-table-column prop="id" label="操作" width="250" align="center">
        <template slot-scope="scope">
           <el-button type="primary" size='mini' :disabled='scope.row.state !==1' @click="action(scope.row.relationId,1)">停止</el-button>
-          <el-button type="primary" size='mini' :disabled='scope.row.state==-1' v-if="scope.row.state==-1||scope.row.state==2" @click="action(scope.row.relationId,2)">启动</el-button>
+          <el-button type="primary" size='mini' :disabled='scope.row.state !==-1' v-if="scope.row.state==-1||scope.row.state==2" @click="action(scope.row.relationId,2)">启动</el-button>
           <el-button type="primary" size='mini' :disabled='scope.row.state!==1' v-if="scope.row.state==0||scope.row.state==1" @click="action(scope.row.relationId,3)">重启</el-button>
           <el-button type="danger" size='mini' :disabled='scope.row.state !==-1' @click="action(scope.row.relationId,4)">删除</el-button>
         </template>
