@@ -329,7 +329,7 @@
              <template slot-scope="scope">
               <span v-if="scope.row.configFileId">有</span>
               <span v-else>无</span>
-              <img src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" v-if="scope.row.configFileId"  @click="downConfig(scope.row.configFileName,scope.row)">
+              <img src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" v-if="scope.row.configFileId"  @click="downConfig(scope.row.configFileId,scope.row)">
             </template>
           </el-table-column>
           <el-table-column  label="Android包大小(M)" align="center" sortable="custom" prop="androidResourcePackageSize">
@@ -556,7 +556,7 @@
              <template slot-scope="scope">
               <span v-if="scope.row.configFileId">有</span>
               <span v-else>无</span>
-              <img src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" v-if="scope.row.configFileId"  @click="downConfig(scope.row.configFileName,scope.row)">
+              <img src="@/assets/down.png" alt="" style="float: right;cursor: pointer;" v-if="scope.row.configFileId"  @click="downConfig(scope.row.configFileId,scope.row)">
             </template>
           </el-table-column>
           <el-table-column prop="durationTimeStr" label="总时长" align="center" sortable="custom">
@@ -1802,6 +1802,7 @@
             aTag.click()
           },
           downConfig(id,row){
+            console.log(id,row,999)
             let url=`/static/${Base64.decode(id)}`;
             let aTag = document.createElement('a')
             aTag.download = row.configFileName;
