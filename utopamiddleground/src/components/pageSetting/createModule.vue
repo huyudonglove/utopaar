@@ -37,38 +37,22 @@
               {{scope.$index+1}}
             </template>
           </el-table-column>
-          <el-table-column label="投放内容" v-if="moduleTypeX=='CyclePlay'||moduleTypeX=='Slide'||moduleTypeX=='ImageShow'" align="center">
+          <el-table-column label="投放内容" v-if="moduleTypeX=='CyclePlay'||moduleTypeX=='Slide'||moduleTypeX=='ImageShow'||moduleTypeX=='Module3'" align="center" width='210' :key="1">
             <template slot-scope="scope">
               <uploadImg buttonName="图片" :isSee="isSee" :parentName="scope.row.releaseContent" :idx="scope.$index" moduleCode="ARModuleImg" @getImgId="getImgId"></uploadImg>
             </template>
           </el-table-column>
-          <el-table-column label="所属地区" align="center">
+          <el-table-column label="所属地区" align="center"  width="120" :key="2">
             <template slot-scope="scope">
               <div>
                 <div style="white-space:pre-line;">{{scope.row.provinceCityArea.split(',').slice(0,2).join('\n')}}</div>
                 <div style="cursor:pointer;" v-if="scope.row.provinceCityArea.split(',').length>2&&scope.row.relateType!='2'" @click="showCity(scope)">...</div>
                 <div style="cursor:pointer;" v-if="scope.row.provinceCityArea.split(',').length>2&&scope.row.relateType=='2'" @click="openCityDialog(scope)">...</div>
               </div>
-              <el-button size="mini" type="primary" plain :disabled="isSee" v-if="scope.row.relateType=='2'&&scope.row.provinceCityArea.split(',').length<=2" @click="openCityDialog(scope)">选择地区</el-button>
+              <el-button size="mini" type="primary" plain :disabled="isSee" v-if="scope.row.relateType=='2'&&scope.row.provinceCityArea.split(',').length<=2||moduleTypeX=='Module3'" @click="openCityDialog(scope)">选择地区</el-button>
             </template>
           </el-table-column>
-          <el-table-column label="关联" width="420" v-if="moduleTypeX=='CyclePlay'||moduleTypeX=='Slide'||moduleTypeX=='ImageShow'" align="center">
-            <template slot-scope="scope">
-              <el-select :disabled="isSee" v-model="scope.row.relateType" style="width:120px;" @change="selectChange(scope.$index)">
-                <el-option v-for="(item,idx) in relateTypeList" :key="idx" :label="item.description" :value="item.code"></el-option>
-              </el-select>
-              <el-input :disabled="isSee" v-if="scope.row.relateType=='2'" style="width:200px;" v-model="scope.row.relateContent" placeholder="请输入URL地址" maxlength="50"></el-input>
-              <el-input disabled v-if="scope.row.relateType=='1'||scope.row.relateType=='3'" style="width:200px;" v-model="scope.row.applicationName" maxlength="50"></el-input>
-              <el-button :disabled="isSee" v-if="scope.row.relateType=='1'||scope.row.relateType=='3'" type="primary" plain size="mini" @click="applicationOpen(scope.$index)">选择</el-button>
-            </template>
-          </el-table-column>
-          <el-table-column label="关联应用" v-if="moduleTypeX=='Module1'||moduleTypeX=='Module2'||moduleTypeX=='ApplicationList'" align="center">
-            <template slot-scope="scope">
-              <el-input disabled style="width:200px;" v-model="scope.row.applicationName" maxlength="50"></el-input>
-              <el-button :disabled="isSee" type="primary" plain size="mini" @click="applicationOpen(scope.$index)">选择</el-button>
-            </template>
-          </el-table-column>
-          <el-table-column label="个性化投放时间段" width="440" align="center">
+           <el-table-column label="个性化投放时间段" width="440" align="center" :key="3">
             <template slot-scope="scope">
               <el-checkbox :disabled="isSee" v-model="scope.row.isAbleSelectTime"></el-checkbox>
               <el-date-picker
@@ -82,8 +66,72 @@
                 end-placeholder="结束日期">
               </el-date-picker>      
             </template>
-          </el-table-column>          
-          <el-table-column label="操作" fixed="right" width="180" align="center">
+          </el-table-column>       
+          <el-table-column label="投放标题" align="center" v-if="moduleTypeX=='Module3'" :key="4">
+            <template slot-scope="scope">
+              <el-tooltip class="item ellipsis" effect="dark" :content="scope.row.releaseTitle" placement="top" :disabled="!scope.row.releaseTitle">
+                <el-input
+                type="text"
+                placeholder="请输入投放标题"
+                v-model="scope.row.releaseTitle"
+                :disabled="isSee"
+                maxlength="50"
+              >
+              </el-input>
+              </el-tooltip>
+            </template>
+          </el-table-column>
+          <el-table-column label="描述" align="center" v-if="moduleTypeX=='Module3'" :key="5">
+            <template slot-scope="scope">
+              <el-tooltip class="item ellipsis" effect="dark" :content="scope.row.remark" placement="top" :disabled="!scope.row.remark">
+                <el-input
+                type="text"
+                placeholder="请输入描述"
+                v-model="scope.row.remark"
+                :disabled="isSee"
+                maxlength="50"
+              >
+              </el-input>
+              </el-tooltip>
+            </template>
+          </el-table-column>
+          <el-table-column label="地理位置" align="center" v-if="moduleTypeX=='Module3'" :key="6">
+            <template slot-scope="scope">
+              <el-tooltip class="item ellipsis" effect="dark" :content="scope.row.address" placement="top" :disabled="!scope.row.address">
+                <el-input
+                type="text"
+                placeholder="请输入地理位置"
+                v-model="scope.row.address"
+                :disabled="isSee"
+                maxlength="50"
+              >
+              </el-input>
+              </el-tooltip>
+            </template>
+          </el-table-column>
+          <el-table-column label="关联" width="170" v-if="moduleTypeX=='Module3'" align="center" :key="7">
+            <template slot-scope="scope">
+              <el-input  style="width:140px;" v-model="scope.row.relateContent" placeholder="请输入URL地址" :disabled="isSee" maxlength="200"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="关联" width="" v-if="moduleTypeX=='CyclePlay'||moduleTypeX=='Slide'||moduleTypeX=='ImageShow'" align="center" :key="8">
+            <template slot-scope="scope">
+              <el-select :disabled="isSee" v-model="scope.row.relateType" style="width:120px;" @change="selectChange(scope.$index)">
+                <el-option v-for="(item,idx) in relateTypeList" :key="idx" :label="item.description" :value="item.code"></el-option>
+              </el-select>
+              <el-input :disabled="isSee" v-if="scope.row.relateType=='2'" style="width:200px;" v-model="scope.row.relateContent" placeholder="请输入URL地址" maxlength="200"></el-input>
+              <el-input disabled v-if="scope.row.relateType=='1'||scope.row.relateType=='3'" style="width:200px;" v-model="scope.row.applicationName" maxlength="50"></el-input>
+              <el-button :disabled="isSee" v-if="scope.row.relateType=='1'||scope.row.relateType=='3'" type="primary" plain size="mini" @click="applicationOpen(scope.$index)">选择</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column label="关联应用" v-if="moduleTypeX=='Module1'||moduleTypeX=='Module2'||moduleTypeX=='ApplicationList'" align="center" :key="9">
+            <template slot-scope="scope">
+              <el-input disabled style="width:200px;" v-model="scope.row.applicationName" maxlength="50"></el-input>
+              <el-button :disabled="isSee" type="primary" plain size="mini" @click="applicationOpen(scope.$index)">选择</el-button>
+            </template>
+          </el-table-column>
+            
+          <el-table-column label="操作" fixed="right" width="150" align="center">
             <template slot-scope="scope">
               <el-button type="danger" size="mini" :disabled="isSee" @click="del(scope.$index)">删除</el-button>
               <el-button type="primary" size="mini" :disabled="isSee" v-if="scope.$index==moduleList.length-1" @click="addRow()">添加</el-button>
@@ -217,11 +265,14 @@ export default {
         "id":"",
         "moduleId":this.$route.query.id?this.$route.query.id:'',
         "releaseContent":"",
-        "relateType":this.relateType,
+        "relateType":this.moduleTypeX !=='Module3'?this.relateType=this.relateType:this.relateType='2',
         "relateContent":"",
         "applicationName":"",
         "provinceCityArea":"",
-        "cityIds":""
+        "cityIds":"",
+        "releaseTitle":"",
+        "remark":"",
+        "address":""
       }
     }
   },
@@ -299,6 +350,7 @@ export default {
           resolve();
         })
         getDropdown({category:'relateType'}).then(res=>{
+          console.log('下拉框列表')
           this.relateTypeList = res.data.slice(0,2);
           this.relateType = this.relateTypeList[0].code;
         })
@@ -337,6 +389,7 @@ export default {
       this.moduleList[index].applicationName='';
       this.moduleList[index].provinceCityArea='';
       this.moduleList[index].cityIds='';
+      console.log(111,22,'关联')
       // this.moduleList[index].effectFrom='';
       // this.moduleList[index].effectTo='';
       // this.moduleList[index].isAbleSelectTime=false;
@@ -425,11 +478,21 @@ export default {
               this.$message.error('请选择关联应用或者输入关联地址');
               return;
             }
-            var isCity = this.moduleList.some(v=>v.provinceCityArea==="");
-            if(isCity){
-              this.$message.error('请选择所属地区');
-              return;
-            }
+            // var isReleaseTitle = this.moduleList.some(v=>v.releaseTitle==="");
+            // if(isReleaseTitle&&this.moduleTypeX=='Module3'){
+            //   this.$message.error('请输入投放标题');
+            //   return;
+            // }
+            // var isRemark = this.moduleList.some(v=>v.remark==="");
+            // if(isRemark&&this.moduleTypeX=='Module3'){
+            //   this.$message.error('请输入投放描述');
+            //   return;
+            // }
+            // var isAddress = this.moduleList.some(v=>v.address==="");
+            // if(isAddress&&this.moduleTypeX=='Module3'){
+            //   this.$message.error('请输入地理位置');
+            //   return;
+            // }
           }
           if(this.isCreate){
             createModule({"module":this.module,"contents":this.moduleList}).then(res=>{
@@ -469,6 +532,10 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style>
+.ellipsis input.el-input__inner{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
 </style>

@@ -360,6 +360,30 @@ export function applicationlistModule(params) {
 export function applicationToTree(params) {
   return http.get('/api/utopa/ar/material/category/toTree', params)
 }
+
+/** 游戏列表 w*/
+export function syncList(params) {
+  return http.post('/api/utopa/ar/syncInfo/list', params)
+}
+
+/** 启动游戏 w*/
+export function startGame(params) {
+  return loadRequest(`/api/utopa/ar/syncInfo/startGame?relationId=${params.relationId}`, params, '启动游戏', http, 'post')
+}
+/** 重启游戏 w*/
+export function restartGame(params) {
+  return loadRequest(`/api/utopa/ar/syncInfo/restartGame?relationId=${params.relationId}`, params, '重启游戏', http, 'post')
+}
+
+/** 停止游戏 w*/
+export function stopGame(params) {
+  return loadRequest(`/api/utopa/ar/syncInfo/stopGame?relationId=${params.relationId}`, params, '停止游戏', http, 'post')
+}
+/** 删除记录 w*/
+export function syncDelete(params) {
+  return loadRequest(`/api/utopa/ar/syncInfo/delete?relationId=${params.relationId}`, params, '删除记录', http, 'post')
+}
+
 /*获取素材*/
 const getTotal=(msg)=>{
   return http.post(`/api/utopa/ar/material/pageList`,msg)
