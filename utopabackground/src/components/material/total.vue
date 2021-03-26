@@ -1880,8 +1880,8 @@
           $route(){
             console.log(this.type,777);
             this.url='';
-            this.moduleTreeVal='';
-            this.moduleTreeSelect=[];
+            // this.moduleTreeVal='';
+            // this.moduleTreeSelect=[];
             this.musicType='';
             switch (this.$route.name) {
               case 'music':
@@ -1930,6 +1930,8 @@
             this.$store.commit('pagination/setLimitPage',20);
             this.wordState='';
             this.upS='';
+            this.moduleTreeVal='';
+            this.moduleTreeSelect=[];
           }
         },
         created() {
