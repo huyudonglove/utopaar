@@ -54,7 +54,7 @@
         <!-- <el-button type="primary" @click="selectAppLot">批量选择</el-button>
         <el-button type="info" @click="clearApp">批量取消</el-button> -->
       </el-row>
-      <el-table ref="multipleApp" border :cell-style="appCellStyle" :data="appTableTotal.slice((playPage - 1) * playLimit, playPage * playLimit)" tooltip-effect="dark" @selection-change="handleSelectionChange" row-key="id">
+      <el-table ref="multipleApp" border :cell-style="appCellStyle" :data="appTableTotal.slice((playPage - 1) * playLimit, playPage * playLimit)" tooltip-effect="dark" @selection-change="handleSelectionChange" row-key="id" @select-all='selectAll' @select='select' :header-cell-class-name="cellClass">
         <el-table-column type="selection" width="50" :reserve-selection="true"></el-table-column>
         <el-table-column prop="id" label="ID" width="200" align="center"></el-table-column>
         <el-table-column label="应用名称" prop="name" align="center"></el-table-column>
@@ -129,7 +129,7 @@
           </el-row>
         </div>
         <div>
-          <el-table ref="multiplePosition" border :cell-style="positionCellStyle" :data="positionTable" tooltip-effect="dark" @select="positionSelect" @select-all="positionSelectAll">
+          <el-table ref="multiplePosition" border :cell-style="positionCellStyle" :data="positionTable" tooltip-effect="dark" @select="positionSelect" @select-all="positionSelectAll" :header-cell-class-name="cellClass">
             <el-table-column type="selection" width="50"></el-table-column>
             <el-table-column prop="id" label="ID" width="200" align="center"></el-table-column>
             <el-table-column label="单元名称" prop="name" align="center"></el-table-column>
@@ -217,6 +217,8 @@ export default {
       positionPage:1,
       positionLimit:20,
       positionTotal:0,
+      appIdCopy:[], //备份应用ID
+      positionIdCopy:[],//备份选择的位置id数组
       provinceValue:'',
       provinceList:[],//省列表
       cityValue:'',
@@ -343,6 +345,11 @@ export default {
     },
   },
   methods:{
+     cellClass(row){
+     if (row.columnIndex === 0) {
+       return 'disableSelection'
+     }
+   },
     showMap(row){
       this.mapVisible=true;
       this.mapList[0].mapId=row.easyarMapId;
@@ -372,8 +379,25 @@ export default {
     appCurrentChange(value){
       this.playPage = value;
     },
+    selectAll(val){
+     let valId=val.map(v=>v.id)
+     let intersection = valId.filter( (item)=>this.appIdCopy.indexOf(item) !==-1 )
+    },
+    select(val,rows){
+     let index=this.appIdCopy.indexOf(rows.id)
+     if(this.appIdCopy.indexOf(rows.id) !==-1){
+        this.$confirm('是否确定取消分配?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+        }).then(() => {
+        this.appIdCopy.splice(index,1)
+        }).catch(() => {
+          this.$refs.multipleApp.toggleRowSelection(rows,true);        
+        });
+     }
+    },
     handleSelectionChange(val) {
-      this.appIdList=val.map(v=>v.id)
+      this.appIdList=val.map(v=>v.id) 
     },
     positionSizeChange(value){
       this.positionLimit = value;
@@ -382,11 +406,29 @@ export default {
       this.positionPage = value;
     },
     positionSelect(arr,row){
-      if(arr.map(v=>v.id).indexOf(row.id)==-1){
-        this.positionIdList = this.positionIdList.filter(v=>v!=row.id);
-      }else{
-        this.positionIdList.push(row.id);
-      }
+      let index=this.positionIdCopy.indexOf(row.id)
+     if(this.positionIdCopy.indexOf(row.id) !==-1){
+        this.$confirm('是否确定取消分配?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+        }).then(() => {
+          this.positionIdCopy.splice(index,1);
+         if(arr.map(v=>v.id).indexOf(row.id)==-1){
+         this.positionIdList = this.positionIdList.filter(v=>v!=row.id);
+          }else{
+            this.positionIdList.push(row.id);
+          }
+        }).catch(() => {
+          this.$refs.multiplePosition.toggleRowSelection(row,true); 
+        });
+
+     }else{
+        if(arr.map(v=>v.id).indexOf(row.id)==-1){
+         this.positionIdList = this.positionIdList.filter(v=>v!=row.id);
+          }else{
+            this.positionIdList.push(row.id);
+          }
+     }
     },
     positionSelectAll(arr){
       if(arr.length){
@@ -540,7 +582,9 @@ export default {
           this.loginUser=res.data.loginName;
           this.password = res.data.password;
           this.appIdList=res.data.appIds?res.data.appIds:[];
+          this.appIdCopy=this.appIdList
           this.positionIdList=res.data.positionIds?res.data.positionIds:[];
+          this.positionIdCopy=this.positionIdList
           this.isActive = res.data.isActive;
           this.status = res.data.status;
           this.appList('first');
@@ -598,7 +642,11 @@ export default {
   }
 }
 </script>
-
+<style>
+.disableSelection > .cell .el-checkbox__inner {
+  display: none;
+}
+</style>
 <style scoped>
 .is-hidden {
     position: absolute;

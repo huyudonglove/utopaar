@@ -124,6 +124,8 @@
           </el-table-column>
           <el-table-column prop="createTime" label="创建时间"  width="160" align="center">
           </el-table-column>
+           <el-table-column prop="updateTime" label="修改时间"  width="160" align="center">
+          </el-table-column>
           <el-table-column prop="id" label="操作" width="240" align="center">
             <template slot-scope="scope">
                <el-button
