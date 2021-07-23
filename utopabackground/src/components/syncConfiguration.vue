@@ -17,6 +17,7 @@
            </el-tooltip>
          </template>
       </el-table-column>
+      <el-table-column prop="carrierName" label="内容名称" width="" align="center"></el-table-column>
       <el-table-column prop="saasUserName" label="中台主账户名" width="180" align="center"></el-table-column>
       <el-table-column prop="state" label="状态" width="120" align="center">
          <template slot-scope="scope">
@@ -26,6 +27,8 @@
           <span v-if="scope.row.state==2">停止中</span>
         </template>
       </el-table-column>
+      <el-table-column prop="createTime" label="创建时间" width="180" align="center"></el-table-column>
+      <el-table-column prop="updateTime" label="修改时间" width="180" align="center"></el-table-column>
       <el-table-column prop="id" label="操作" width="250" align="center">
        <template slot-scope="scope">
           <el-button type="primary" size='mini' :disabled='scope.row.state !==1' @click="action(scope.row.relationId,1)">停止</el-button>
