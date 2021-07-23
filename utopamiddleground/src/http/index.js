@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Message } from 'element-ui';
+import { Message,Loading } from 'element-ui';
 import VueCookies from 'vue-cookies'
 axios.defaults.timeout = 300000;
 axios.defaults.baseURL = '';
@@ -104,7 +104,13 @@ export default {
   },
   post(url,data = {}){
     return new Promise((resolve,reject) => {
-
+      // let options={
+      //   lock: true,
+      //   text: 'Loading',
+      //   spinner: 'el-icon-loading',
+      //   background: 'rgba(0, 0, 0, 0.7)'
+      // }
+      // let lo=Loading.service(options);
       if (url == '/api/file/upload'){
         const instance=axios.create({
           withCredentials: true
@@ -114,15 +120,19 @@ export default {
             "Authorization": VueCookies.get('middlegroundToken')
           }})
           .then(response => {
+            //lo.close()
             resolve(response.data);
           },err => {
+            //lo.close()
             reject(err)
           })
       }else{
         axios.post(url,data)
           .then(response => {
+            //lo.close()
             resolve(response.data);
           }, err => {
+            //lo.close()
             reject(err)
           })
       }
