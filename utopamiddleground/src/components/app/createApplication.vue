@@ -85,6 +85,13 @@
                       <el-switch v-model="isMark" :active-value="1" :inactive-value="2"></el-switch>
                     </span>
               </div>
+              <div class="divContent"  v-if="appRow.playId==12">
+                <span class="labelSpan"><span style="color: #f56c6c;margin-right: 2px;">*</span>加载方式</span>
+                <span>
+                    <el-radio v-model="loadType" :label="1">后加载</el-radio>
+                    <el-radio v-model="loadType" :label="2">预加载</el-radio>
+                </span>
+              </div>
               <div style="margin-bottom: 20px">
                 <span class="labelSpan"><span style="color: #f56c6c;margin-right: 2px;">*</span>投放位置</span>
                 <div style="margin-left: 150px;min-height: 80px;margin-top: 10px;margin-bottom:10px;font-size: 14px;color: #606266;width: 900px;" >
@@ -407,7 +414,8 @@
         showTree:false,
         assetUnitIdCopy:'',
         isClick:false,
-        showTable:true
+        showTable:true,
+        loadType:1
       }
     },
     methods:{
@@ -445,6 +453,10 @@
           recognizeType:this.recognizeType,
           platformType:this.platformType,
           assetUnitId:this.assetUnitId,
+          loadType:this.loadType
+        }
+        if(this.relateTypeId!=12){
+            msg.loadType=null
         }
         msg.name?(()=>{
           msg.coverImage?(()=>{
@@ -969,6 +981,9 @@
               this.assetUnitId=res.data.assetUnitId
               this.assetUnitIdCopy=res.data.assetUnitId
               this.parentNameUrl=res.data.assetUnitName
+              if(res.data.relateTypeId==12){
+                  this.loadType=res.data.loadType
+              }
             }
           }
         )

@@ -1,6 +1,6 @@
 <template>
     <div>
-      欢迎登录Utopa AR 后台
+      欢迎登录Utopa XR 后台
     </div>
 </template>
 

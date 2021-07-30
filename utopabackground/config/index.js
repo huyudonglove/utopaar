@@ -12,17 +12,17 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://10.5.28.148:30086',
+        target: 'https://dev.utopaxr.com:30086',
         changeOrigin: true,
         pathRewrite: {'^/api': ''}
       },
       '/getMusic':{
-        target: 'http://10.5.28.158:9000',
+        target: 'https://dev.utopaxr.com:10086',
         changeOrigin: true,
         pathRewrite: { '^/getMusic': '' },
       },
       '/static':{
-        target: 'http://10.5.28.158:31564',
+        target: 'https://dev.utopaxr.com:10086',
         changeOrigin: true,
         pathRewrite: { '^/static': '/static' }
       }

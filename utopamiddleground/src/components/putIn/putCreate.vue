@@ -150,14 +150,14 @@
                 <el-button type="primary" v-if="!isCreate" style="float:right" @click="clearTime()">清空列表</el-button>
               </div>
               <div>
-                <el-table  :data="tableData" ref="multipleTable" tooltip-effect="dark" style="width: 100%;position:relative;padding-bottom:56px;" v-if="formSize.chooseTime=='2'" :key="1">
+                <el-table  :data="tableData" :row-class-name="rowStyle" ref="multipleTable" tooltip-effect="dark" style="width: 100%;position:relative;padding-bottom:56px;" v-if="formSize.chooseTime=='2'" :key="showTable">
                   <el-table-column prop="id" label="内容ID" width="120" align="center">
                   </el-table-column>
                   <el-table-column prop="name" label="内容名称"  align="center" v-if="!isBs" :key="74">
                   </el-table-column>
                   <el-table-column prop="identifyPhotoName" label="内容名称"  align="center" v-if="isBs" :key="76">
                   </el-table-column>
-                  <el-table-column label="展示时间" width="" align="center" >
+                  <el-table-column label="展示时间(段)" width="" align="center" >
                     <template slot-scope="scope">
                       <el-time-picker
                       is-range
@@ -188,14 +188,14 @@
                     </template>
                   </el-table-column>
                 </el-table>
-                <el-table  :data="tableData" ref="multipleTable2" tooltip-effect="dark" style="width: 100%;position:relative;padding-bottom:56px;"  v-if="formSize.chooseTime=='1'" :key="2">
+                <el-table  :data="tableData" :row-class-name="rowStyle" ref="multipleTable2" tooltip-effect="dark" style="width: 100%;position:relative;padding-bottom:56px;"  v-if="formSize.chooseTime=='1'" :key="showTable">
                   <el-table-column prop="id" label="内容ID" width="120" align="center">
                   </el-table-column>
                    <el-table-column prop="name" label="内容名称"  align="center" v-if="!isBs" :key="74">
                   </el-table-column>
                   <el-table-column prop="identifyPhotoName" label="内容名称"  align="center" v-if="isBs" :key="76">
                   </el-table-column>
-                   <el-table-column  label="展示时间" width="" align="center" >
+                   <el-table-column  label="展示时间(天)" width="" align="center" >
                     <template slot-scope="scope">
                       <el-date-picker
                         v-model="scope.row.smallTime"
@@ -484,7 +484,9 @@ export default {
           // ],
         }, 
       rowIndex:0,
-      timeError:''
+      timeError:'',
+      resCopy:{},
+      showTable:false
     };
   },
   async created(){
@@ -495,11 +497,13 @@ export default {
       this.isCreate=false
       this.formSize.relationId=this.$route.query.id
       inputInfo({id:this.$route.query.id}).then(res=>{
+          this.resCopy=JSON.parse(JSON.stringify(res.data));
       let currentRow={...res.data,relationCarrierList:res.data.relationCarrierList.map(v=>{v.smallTime=[];v.st=v.startTime;
         v.et=v.endTime; return v})}
       this.formSize = Object.assign(this.formSize, currentRow);
       this.formSize.state=JSON.stringify(this.formSize.state)
       this.tableData=this.formSize.relationCarrierList;
+    
       if(this.options){
         this.playId = this.options.find(v=>v.id==this.formSize.backgroundAppId)?this.options.find(v=>v.id==this.formSize.backgroundAppId).playId:1
       }
@@ -516,7 +520,9 @@ export default {
           v.identifyPhotoName=v.name
         }
         v.smallTime=[v.startTime,v.endTime]
+        v.copyId=v.id
         v.id=v.carrierId
+        v.changeState=1
         return v
       })
       this.tableData.length?this.formSize.chooseTime=JSON.stringify(this.tableData[0].timeType):this.formSize.chooseTime='2'
@@ -574,6 +580,14 @@ export default {
    },
   },
   methods: {
+    rowStyle(row){
+      console.log(row);
+      let j;
+      if(row.row.changeState==2){
+        j="dis"
+      }
+      return j
+    },
     ...mapActions('currentUserPower',['getUserPower']),
     handleSelectionChange(val) {
         if(!this.isEdit){
@@ -647,7 +661,7 @@ export default {
       console.log(row,'row')
       this.tableData[index].effectFrom =this.tableData[index].smallTime[0];
       this.tableData[index].effectTo =this.tableData[index].smallTime[1];
-      this.formSize.relationCarrierList.splice(index,1,{carrierId:row.id,startTime:row.effectFrom,endTime:row.effectTo,timeType:parseInt(this.formSize.chooseTime),state:row.state})
+      this.formSize.relationCarrierList.splice(index,1,{carrierId:row.id,startTime:row.effectFrom,endTime:row.effectTo,timeType:parseInt(this.formSize.chooseTime),state:row.state,copyId:row.copyId})
       if(!this.isHasRepeatTime(this.tableData,index,type)){
       let idx=this.allEndTime.indexOf(this.endTimeArr[this.rowIndex])
       let indx=this.allStartTime.indexOf(this.startTimeArr[this.rowIndex])
@@ -698,6 +712,10 @@ export default {
       this.allEndTime=[];//排序后的结束时间数组
     },
     del(index){
+      console.log(index,8888888888);
+      this.tableData[index].changeState=2;
+      this.showTable=!this.showTable;
+      console.log(this.tableData)
       let idxS=0;
       let idxE=0;
       let indexS=0;
@@ -733,6 +751,7 @@ export default {
     },
     //保存
      submitForm(formName) {
+       
         this.$refs[formName].validate((valid) => {
           if (valid&&this.formSize.relationCarrierList.length&&!this.isTimeEmpty()) {
             inputAdd(this.formSize).then(res=>{
@@ -748,14 +767,29 @@ export default {
       },
     // updateForm
     updateForm(formName) {
+       let formSizeC=JSON.parse(JSON.stringify(this.formSize))
+       let arr=[]
+       this.formSize.relationCarrierList.map(v=>{
+          if(!(v.changeState&&v.changeState==2)){
+            arr.push(v)
+          }
+       })
+       arr=JSON.parse(JSON.stringify(arr))
+       arr.map(v=>{
+         if(v.copyId){
+           v.id=v.copyId
+         }
+       });
+       formSizeC.relationCarrierList=arr;
+       console.log(arr,formSizeC,66666666666)
         // console.log(this.isTimeEmpty(),'jiance')
         this.$refs[formName].validate((valid) => {
-          if (valid&&this.formSize.relationCarrierList.length&&!this.isTimeEmpty()) {
-            inputUpdate(this.formSize).then(res=>{
+          if (valid&&formSizeC.relationCarrierList.length&&!this.isTimeEmpty()) {
+            inputUpdate(formSizeC).then(res=>{
             res.code?this.$message.error(res.msg):this.goTo()
             this.reload()
             })
-          }else if(!this.formSize.relationCarrierList.length){
+          }else if(!formSizeC.relationCarrierList.length){
             this.$message.error('请至少选择一个内容计划');
           }else if(this.isTimeEmpty()){
             this.$message.error('有计划时间未填写');
@@ -940,7 +974,7 @@ changeTime(data){
             this.allEndTime=[];//排序后的结束时间数组
             return v;
           })
-   
+          console.log(this.tableData,8888888888)
         }).catch(() => {
             if(this.formSize.chooseTime=='1'){
               this.formSize.chooseTime='2'
@@ -1006,6 +1040,7 @@ treeDataTable(){
       document.getElementsByClassName('el-table__header-wrapper')[1].getElementsByClassName('el-checkbox')[0].style.display='none'
     })
     this.isEditIndex=index
+    
     this.replaceObj=row
     console.log(this.replaceObj,'edit this.replaceObj')
     }else{
@@ -1054,6 +1089,9 @@ treeDataTable(){
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style >
+.dis{
+  display: none;
+}
   .el-table__header-wrapper  .el-checkbox{
     /* display:none */
   }
@@ -1063,6 +1101,7 @@ treeDataTable(){
 }
 </style>
 <style scoped>
+
   .el-main{
     padding-top: 10px;
   }

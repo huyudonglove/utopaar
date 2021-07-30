@@ -10,6 +10,7 @@
       <el-table-column prop="materialId" label="素材ID" width="120" align="center" ></el-table-column>
       <el-table-column prop="materialName" label="素材名称" width="" align="center"></el-table-column>
       <el-table-column prop="relationId" label="投放ID" width="180" align="center"></el-table-column>
+      <el-table-column prop="gameId" label="游戏ID" width="180" align="center"></el-table-column>
       <el-table-column prop="locationName" label="投放位置" width="180" align="center">
          <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" :content="scope.row.parentNameUrl" placement="top">
@@ -31,10 +32,10 @@
       <el-table-column prop="updateTime" label="修改时间" width="180" align="center"></el-table-column>
       <el-table-column prop="id" label="操作" width="250" align="center">
        <template slot-scope="scope">
-          <el-button type="primary" size='mini' :disabled='scope.row.state !==1' @click="action(scope.row.relationId,1)">停止</el-button>
-          <el-button type="primary" size='mini' :disabled='scope.row.state !==-1' v-if="scope.row.state==-1||scope.row.state==2" @click="action(scope.row.relationId,2)">启动</el-button>
-          <el-button type="primary" size='mini' :disabled='scope.row.state!==1' v-if="scope.row.state==0||scope.row.state==1" @click="action(scope.row.relationId,3)">重启</el-button>
-          <el-button type="danger" size='mini' :disabled='scope.row.state !==-1' @click="action(scope.row.relationId,4)">删除</el-button>
+          <el-button type="primary" size='mini' :disabled='scope.row.state !==1' @click="action(scope.row.gameId,1)">停止</el-button>
+          <el-button type="primary" size='mini' :disabled='scope.row.state !==-1' v-if="scope.row.state==-1||scope.row.state==2" @click="action(scope.row.gameId,2)">启动</el-button>
+          <el-button type="primary" size='mini' :disabled='scope.row.state!==1' v-if="scope.row.state==0||scope.row.state==1" @click="action(scope.row.gameId,3)">重启</el-button>
+          <el-button type="danger" size='mini' :disabled='scope.row.state !==-1' @click="action(scope.row.gameId,4)">删除</el-button>
         </template>
       </el-table-column>
       <el-table-column prop="msg" label="提示" width="" align="center"></el-table-column>
@@ -126,7 +127,7 @@ export default {
     },
     action(id,type){
       if(type==1){
-        stopGame({relationId:id}).then(res=>{
+        stopGame({gameId:id}).then(res=>{
           if(res.code){
               this.$message.error(res.msg);
             }else{
@@ -134,7 +135,7 @@ export default {
             }
         })
       }else if(type==2){
-         startGame({relationId:id}).then(res=>{
+         startGame({gameId:id}).then(res=>{
             if(res.code){
                 this.$message.error(res.msg);
             }else{
@@ -142,7 +143,7 @@ export default {
           }
         })
       }else if(type==3){
-         restartGame({relationId:id}).then(res=>{
+         restartGame({gameId:id}).then(res=>{
             if(res.code){
               this.$message.error(res.msg);
               }else{
@@ -150,7 +151,7 @@ export default {
               }
         })
       }else if(type==4){
-         syncDelete({relationId:id}).then(res=>{
+         syncDelete({gameId:id}).then(res=>{
             if(res.code){
                 this.$message.error(res.msg);
               }else{

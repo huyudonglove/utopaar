@@ -12,12 +12,12 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://10.5.28.148:30086',
+        target: 'https://dev.utopaxr.com:30086',
         changeOrigin: true,
         pathRewrite: {'^/api': ''}
       },
       '/static':{
-        target:'http://10.5.28.158:31564',
+        target:'https://dev.utopaxr.com:31564',
         changeOrigin: true,
         pathRewrite: {'^/static': '/static'}
       }

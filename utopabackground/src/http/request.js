@@ -368,20 +368,20 @@ export function syncList(params) {
 
 /** 启动游戏 w*/
 export function startGame(params) {
-  return loadRequest(`/api/utopa/ar/syncInfo/startGame?relationId=${params.relationId}`, params, '启动游戏', http, 'post')
+  return loadRequest(`/api/utopa/ar/syncInfo/startGame?gameId=${params.gameId}`, params, '启动游戏', http, 'post')
 }
 /** 重启游戏 w*/
 export function restartGame(params) {
-  return loadRequest(`/api/utopa/ar/syncInfo/restartGame?relationId=${params.relationId}`, params, '重启游戏', http, 'post')
+  return loadRequest(`/api/utopa/ar/syncInfo/restartGame?gameId=${params.gameId}`, params, '重启游戏', http, 'post')
 }
 
 /** 停止游戏 w*/
 export function stopGame(params) {
-  return loadRequest(`/api/utopa/ar/syncInfo/stopGame?relationId=${params.relationId}`, params, '停止游戏', http, 'post')
+  return loadRequest(`/api/utopa/ar/syncInfo/stopGame?gameId=${params.gameId}`, params, '停止游戏', http, 'post')
 }
 /** 删除记录 w*/
 export function syncDelete(params) {
-  return loadRequest(`/api/utopa/ar/syncInfo/delete?relationId=${params.relationId}`, params, '删除记录', http, 'post')
+  return loadRequest(`/api/utopa/ar/syncInfo/delete?gameId=${params.gameId}`, params, '删除记录', http, 'post')
 }
 
 /*获取素材*/
